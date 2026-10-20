@@ -17,7 +17,7 @@ task.spawn(function()
 end)
 
 -- [[ ϟϟ AWD HUB INTRO // OVERDRIVE v2 (legacy, inactive) ]] --
-local function awdShowIntroLegacy()
+function awdShowIntroLegacy()
     local parentGui = CoreGui
     pcall(function() parentGui = game:GetService("CoreGui") end)
 
@@ -407,7 +407,7 @@ local function awdShowIntroLegacy()
 end
 
 -- [[ AWD HUB INTRO // NEON GATE v3 (legacy, inactive) ]] --
-local function awdShowIntroLegacyV3()
+function awdShowIntroLegacyV3()
     local gui = Instance.new("ScreenGui")
     gui.Name = "AWD_NeonGateIntro"
     gui.ResetOnSpawn = false
@@ -473,7 +473,7 @@ local function awdShowIntroLegacyV3()
 end
 
 -- [[ AWD HUB INTRO // SIGNAL VAULT v4 (legacy, inactive) ]] --
-local function awdShowIntroLegacyV4()
+function awdShowIntroLegacyV4()
     local gui = Instance.new("ScreenGui")
     gui.Name, gui.ResetOnSpawn, gui.IgnoreGuiInset = "AWD_SignalVault", false, true
     gui.DisplayOrder, gui.ZIndexBehavior = 999999, Enum.ZIndexBehavior.Global
@@ -521,7 +521,7 @@ local function awdShowIntroLegacyV4()
 end
 
 -- [[ AWD HUB INTRO // NIGHT DRIVE v5 (legacy, inactive) ]] --
-local function awdShowIntroLegacyV5()
+function awdShowIntroLegacyV5()
     local gui = Instance.new("ScreenGui")
     gui.Name, gui.ResetOnSpawn, gui.IgnoreGuiInset = "AWD_NightDriveIntro", false, true
     gui.DisplayOrder, gui.ZIndexBehavior = 999999, Enum.ZIndexBehavior.Global
@@ -579,7 +579,7 @@ end
 
 -- [[ AWD HUB INTRO // A-10 THUNDERBOLT II CINEMATIC ]] --
 -- Replaces only the active intro. All unrelated hub functions remain untouched.
-local function awdShowIntro()
+function awdShowIntro()
     local gui = Instance.new("ScreenGui")
     gui.Name = "AWD_A10CinematicIntro"
     gui.ResetOnSpawn = false
@@ -768,7 +768,7 @@ parachuteEnabled = false
 parachuteConnection = nil
 parachuteTrack = nil
 
-local function runParachute(button)
+function runParachute(button)
     local player = game.Players.LocalPlayer
     local char = player.Character or player.CharacterAdded:Wait()
     local humanoid = char:WaitForChild("Humanoid")
@@ -815,7 +815,7 @@ end
 fullbrightEnabled = false
 oldLighting = {}
 
-local function runFullbright(button)
+function runFullbright(button)
     local Lighting = game:GetService("Lighting")
     fullbrightEnabled = not fullbrightEnabled
     button.Text = fullbrightEnabled and "FullBright: ON" or "FullBright: OFF"
@@ -841,7 +841,7 @@ local function runFullbright(button)
     end
 end
 
-local function runGrapple()
+function runGrapple()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/0Ben1/fe/main/obf_E872F3ky4888TSVdj6Adgi1hSLtM038AyxVpTVw07QA3QUDcI3sxmuD869hYR4id.lua.txt"))()
 end
 
@@ -874,7 +874,7 @@ colorPresets = {
 }
 friendCache = {}
 
-local function isFriend(target)
+function isFriend(target)
     if friendCache[target.UserId] ~= nil then
         return friendCache[target.UserId]
     end
@@ -885,7 +885,7 @@ local function isFriend(target)
     return friendCache[target.UserId]
 end
 
-local function getESPColor(target)
+function getESPColor(target)
     if espUseFriendColor and isFriend(target) then
         return espFriendColor
     end
@@ -897,7 +897,7 @@ local function getESPColor(target)
     return Color3.fromRGB(255, 255, 255)
 end
 
-local function clearESP()
+function clearESP()
     for _, obj in pairs(espObjects) do
         if obj.box then pcall(game.Destroy, obj.box) end
         if obj.billboard then pcall(game.Destroy, obj.billboard) end
@@ -906,7 +906,7 @@ local function clearESP()
     espObjects = {}
 end
 
-local function buildESP(target, useChams)
+function buildESP(target, useChams)
     if not espEnabled or target == player then return end
     local char = target.Character
     if not char then return end
@@ -1044,7 +1044,7 @@ local function buildESP(target, useChams)
     espObjects[target] = obj
 end
 
-local function updateAllESP()
+function updateAllESP()
     if not espEnabled then return end
     for p, obj in pairs(espObjects) do
         pcall(function()
@@ -1117,7 +1117,7 @@ local function updateAllESP()
     end
 end
 
-local function runFly()
+function runFly()
     local UserInputService = game:GetService("UserInputService")
     local isMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
  
@@ -1128,17 +1128,17 @@ local function runFly()
     end
 end
 
-local function runInfiniteYield()
+function runInfiniteYield()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
 end
 
-local function runananistwaffendivisionAI()
+function runananistwaffendivisionAI()
     pcall(function()
         loadstring(game:HttpGet("https://pastebin.com/raw/x6G1dmEZ"))()
     end)
 end
 
-local function runananistwaffendivisionPew()
+function runananistwaffendivisionPew()
     local ok, err = pcall(function()
         local source = game:HttpGet("https://pastebin.com/raw/fsZRgdrB")
         local fn = loadstring(source)
@@ -1158,7 +1158,7 @@ local function runananistwaffendivisionPew()
     end
 end
 
-local function runSpiderWeb1()
+function runSpiderWeb1()
     local player = game.Players.LocalPlayer
     local backpack = player:FindFirstChild("Backpack")
     if not backpack then return end
@@ -1225,7 +1225,7 @@ local function runSpiderWeb1()
     end)
 end
 
-local function runSpiderWeb2()
+function runSpiderWeb2()
     local player = game.Players.LocalPlayer
     local backpack = player:FindFirstChild("Backpack")
     if not backpack then return end
@@ -1319,12 +1319,12 @@ workspaceExplorerRoot = workspace
 workspaceExplorerFrame = nil
 workspaceExplorerSearch = nil
 
-local function getCharacterHumanoid()
+function getCharacterHumanoid()
     local char = player.Character
     return char and char:FindFirstChildOfClass("Humanoid")
 end
 
-local function getCharacterRoot()
+function getCharacterRoot()
     local char = player.Character
     return char and char:FindFirstChild("HumanoidRootPart")
 end
@@ -1338,11 +1338,11 @@ local kosatkaSavedCharacter = nil
 local kosatkaAntiFall = nil
 local kosatkaHeight = 0.5
 
-local function setKosatkaHeight(value)
+function setKosatkaHeight(value)
     kosatkaHeight = math.clamp(tonumber(value) or 0.5, 0, 8)
 end
 
-local function saveKosatkaCollision(char)
+function saveKosatkaCollision(char)
     kosatkaSavedCollision = {}
     if not char then return end
     for _, obj in ipairs(char:GetDescendants()) do
@@ -1353,7 +1353,7 @@ local function saveKosatkaCollision(char)
     end
 end
 
-local function forceKosatkaNoclip(char)
+function forceKosatkaNoclip(char)
     if not char then return end
     for _, obj in ipairs(char:GetDescendants()) do
         if obj:IsA("BasePart") then
@@ -1364,7 +1364,7 @@ local function forceKosatkaNoclip(char)
     end
 end
 
-local function restoreKosatkaCollision()
+function restoreKosatkaCollision()
     for obj, oldState in pairs(kosatkaSavedCollision) do
         if obj and obj.Parent then
             pcall(function()
@@ -1377,7 +1377,7 @@ local function restoreKosatkaCollision()
     kosatkaSavedCharacter = nil
 end
 
-local function stopKosatka()
+function stopKosatka()
     kosatkaEnabled = false
 
     if kosatkaConn then
@@ -1401,7 +1401,7 @@ local function stopKosatka()
 
 end
 
-local function getKosatkaSurfaceY(root, char)
+function getKosatkaSurfaceY(root, char)
     if not root then return nil end
 
     local params = RaycastParams.new()
@@ -1416,7 +1416,7 @@ local function getKosatkaSurfaceY(root, char)
     return result and result.Position.Y or nil
 end
 
-local function startKosatka()
+function startKosatka()
     local char = player.Character
     local root = getCharacterRoot()
     local head = char and char:FindFirstChild("Head")
@@ -1510,7 +1510,7 @@ local function startKosatka()
     end)
 end
 
-local function toggleKosatka(state)
+function toggleKosatka(state)
     if state then
         startKosatka()
     else
@@ -1518,7 +1518,7 @@ local function toggleKosatka(state)
     end
 end
 
-local function setWalkSpeed(value)
+function setWalkSpeed(value)
     movementWalkSpeed = value
     local hum = getCharacterHumanoid()
     if hum and not freezeCharacterEnabled then
@@ -1526,7 +1526,7 @@ local function setWalkSpeed(value)
     end
 end
 
-local function setJumpPower(value)
+function setJumpPower(value)
     movementJumpPower = value
     local hum = getCharacterHumanoid()
     if hum and not freezeCharacterEnabled then
@@ -1535,12 +1535,12 @@ local function setJumpPower(value)
     end
 end
 
-local function setGravity(value)
+function setGravity(value)
     movementGravity = value
     workspace.Gravity = value
 end
 
-local function toggleInfiniteJump(state)
+function toggleInfiniteJump(state)
     infiniteJumpEnabled = state
     if infiniteJumpConn then
         infiniteJumpConn:Disconnect()
@@ -1557,7 +1557,7 @@ local function toggleInfiniteJump(state)
     end
 end
 
-local function toggleNoclip(state)
+function toggleNoclip(state)
     noclipEnabled = state
     if noclipConn then
         noclipConn:Disconnect()
@@ -1586,7 +1586,7 @@ local function toggleNoclip(state)
     end
 end
 
-local function toggleFreezeCharacter(state)
+function toggleFreezeCharacter(state)
     freezeCharacterEnabled = state
     local char = player.Character
     local hum = getCharacterHumanoid()
@@ -1627,7 +1627,7 @@ local function toggleFreezeCharacter(state)
     end
 end
 
-local function resetCharacter()
+function resetCharacter()
     local hum = getCharacterHumanoid()
     if hum then
         hum.Health = 0
@@ -1637,7 +1637,7 @@ local function resetCharacter()
     end
 end
 
-local function teleportToInstance(instance)
+function teleportToInstance(instance)
     if not instance then return false end
     local root = getCharacterRoot()
     if not root then return false end
@@ -1661,7 +1661,7 @@ local function teleportToInstance(instance)
     return false
 end
 
-local function bringInstanceToPlayer(instance)
+function bringInstanceToPlayer(instance)
     if not instance then return false end
     local root = getCharacterRoot()
     if not root then return false end
@@ -1699,14 +1699,14 @@ local function bringInstanceToPlayer(instance)
     return false
 end
 
-local function saveCurrentLocation(name)
+function saveCurrentLocation(name)
     local root = getCharacterRoot()
     if not root or not name or name == "" then return false end
     savedLocations[name] = root.CFrame
     return true
 end
 
-local function teleportToSavedLocation(name)
+function teleportToSavedLocation(name)
     local root = getCharacterRoot()
     local cf = savedLocations[name]
     if root and cf then
@@ -1719,7 +1719,7 @@ antiVoidEnabled = false
 antiVoidConn = nil
 lastSafePos = nil
 
-local function startAntiVoid()
+function startAntiVoid()
     if antiVoidConn then antiVoidConn:Disconnect() end
     antiVoidConn = RunService.Heartbeat:Connect(function()
         if not antiVoidEnabled then return end
@@ -1738,11 +1738,11 @@ local function startAntiVoid()
     end)
 end
 
-local function stopAntiVoid()
+function stopAntiVoid()
     if antiVoidConn then antiVoidConn:Disconnect(); antiVoidConn = nil end
 end
 
-local function toggleAntiAFK(state)
+function toggleAntiAFK(state)
     antiAFKEnabled = state
     if antiAFKEnabled then
         if antiAFKConn then antiAFKConn:Disconnect() end
@@ -1999,13 +1999,13 @@ local registry = {
 
 local currentTheme = "ϟϟ Theme"
 
-local function registerObj(obj, category)
+function registerObj(obj, category)
     if registry[category] then
         table.insert(registry[category], obj)
     end
 end
 
-local function applyTheme(themeName)
+function applyTheme(themeName)
     local cfg = themeData[themeName]
     if not cfg then return end
     currentTheme = themeName
@@ -2204,7 +2204,7 @@ blurHolder.BackgroundTransparency = 1
 blurHolder.Parent = screenGui
 blurHolder.Name = "BlurHolder"
 
-local function updateBlur()
+function updateBlur()
     if not mainFrame or not blurHolder then return end
     pcall(function()
         local absPos = mainFrame.AbsolutePosition
@@ -2265,7 +2265,7 @@ title.TextXAlignment = Enum.TextXAlignment.Left
 title.ZIndex = 6
 registerObj(title, "Text")
 
-local function smoothTween(obj, props, duration)
+function smoothTween(obj, props, duration)
     if not obj then return end
     pcall(function()
         TweenService:Create(obj, TweenInfo.new(duration or 0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), props):Play()
@@ -2400,7 +2400,7 @@ local tabs = {}
 local activeTab = nil
 local tabSwitchToken = 0
 
-local function CreateTab(name)
+function CreateTab(name)
     local tabBtn = Instance.new("TextButton", tabNav)
     tabBtn.Name = "Nav_" .. name:gsub("%W", "")
     tabBtn.Size = UDim2.new(1, 0, 0, 38)
@@ -2493,7 +2493,7 @@ local function CreateTab(name)
     return scroll, tabData
 end
 
-local function AddButton(parent, text, callback)
+function AddButton(parent, text, callback)
     local btn = Instance.new("TextButton", parent)
     btn.Size = UDim2.new(1, -10, 0, 38)
     btn.BackgroundColor3 = Color3.fromRGB(22, 22, 27)
@@ -2546,7 +2546,7 @@ local function AddButton(parent, text, callback)
     return btn
 end
 
-local function AddToggle(parent, text, defaultState, callback)
+function AddToggle(parent, text, defaultState, callback)
     local frame = Instance.new("Frame", parent)
     frame.Size = UDim2.new(1, -10, 0, 38)
     frame.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
@@ -2734,7 +2734,7 @@ rgbBox.FocusLost:Connect(function()
     end
 end)
 
-local function AddColorPicker(parent, text, defaultColor, callback)
+function AddColorPicker(parent, text, defaultColor, callback)
     local frame = Instance.new("Frame", parent)
     frame.Size = UDim2.new(1, -10, 0, 38)
     frame.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
@@ -2777,7 +2777,7 @@ local function AddColorPicker(parent, text, defaultColor, callback)
     return function(col) cBtn.BackgroundColor3 = col end
 end
 
-local function AddTextBox(parent, placeholder, callback)
+function AddTextBox(parent, placeholder, callback)
     local box = Instance.new("TextBox", parent)
     box.Size = UDim2.new(1, -10, 0, 35)
     box.BackgroundColor3 = Color3.fromRGB(18, 18, 23)
@@ -2808,7 +2808,7 @@ local function AddTextBox(parent, placeholder, callback)
     return box
 end
 
-local function AddSlider(parent, text, min, max, default, callback)
+function AddSlider(parent, text, min, max, default, callback)
     local frame = Instance.new("Frame", parent)
     frame.Size = UDim2.new(1, -10, 0, 58)
     frame.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
@@ -2917,7 +2917,7 @@ local function AddSlider(parent, text, min, max, default, callback)
 end
 
 
-local function AddLabel(parent, text, tall)
+function AddLabel(parent, text, tall)
     local box = Instance.new("TextLabel", parent)
     box.Size = UDim2.new(1, 0, 0, tall and 60 or 28)
     box.BackgroundTransparency = 1
@@ -3205,7 +3205,7 @@ function AA.stopLoop()
     if AA.loopConn then AA.loopConn:Disconnect(); AA.loopConn = nil end
 end
 
-local function stopAimbot()
+function stopAimbot()
     AA.silentAim = false; AA.wallhack = false; AA.aimLock = false; AA.triggerBot = false
     AA.hold.aimLock = false; AA.hold.triggerBot = false
     AA.stopLoop()
@@ -3304,10 +3304,10 @@ if not AA._holdPoll then
 end
 
 -- compat wrappers used by UI/config
-local function AnanistanAimSetupSilentHook() AA.setupSilent() end
-local function AnanistanAimStopLoop() AA.stopLoop() end
-local function AnanistanAimFeatureActive(f) return AA.active(f) end
-local function AnanistanAimSyncAliases() end
+function AnanistanAimSetupSilentHook() AA.setupSilent() end
+function AnanistanAimStopLoop() AA.stopLoop() end
+function AnanistanAimFeatureActive(f) return AA.active(f) end
+function AnanistanAimSyncAliases() end
 
 -- Keybind Değişkenleri-- Keybind Değişkenleri
 local menuToggleKey = Enum.KeyCode.Insert
@@ -3317,17 +3317,17 @@ local settingMenuKey = false
 
 
 -- [[ SERVER / REJOIN / SERVER HOP / SERVER FINDER / USER SNIPE ]] --
-local function notify(title, text)
+function notify(title, text)
     pcall(function()
         game.StarterGui:SetCore("SendNotification", {Title = title, Text = text, Duration = 4})
     end)
 end
 
-local function getRequestFunction()
+function getRequestFunction()
     return (syn and syn.request) or request or http_request
 end
 
-local function requestJson(url)
+function requestJson(url)
     local req = getRequestFunction()
     if not req then return nil end
     local ok, response = pcall(function()
@@ -3339,13 +3339,13 @@ local function requestJson(url)
     return pcall(function() return HttpService:JSONDecode(body) end) and HttpService:JSONDecode(body) or nil
 end
 
-local function rejoinServer()
+function rejoinServer()
     pcall(function()
         TeleportService:Teleport(game.PlaceId, player)
     end)
 end
 
-local function getPublicServers(placeId, cursor)
+function getPublicServers(placeId, cursor)
     local url = string.format("https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100", tostring(placeId))
     if cursor and cursor ~= "" then
         url = url .. "&cursor=" .. HttpService:UrlEncode(cursor)
@@ -3353,7 +3353,7 @@ local function getPublicServers(placeId, cursor)
     return requestJson(url)
 end
 
-local function serverHop(targetMaxPlayers)
+function serverHop(targetMaxPlayers)
     local placeId = game.PlaceId
     local cursor = ""
     local candidates = {}
@@ -3381,7 +3381,7 @@ local function serverHop(targetMaxPlayers)
     end)
 end
 
-local function findServerByPlayerCount(count)
+function findServerByPlayerCount(count)
     count = tonumber(count)
     if not count then
         notify("AWD Hub", "Geçerli oyuncu sayısı gir")
@@ -3414,7 +3414,7 @@ local function findServerByPlayerCount(count)
     end
 end
 
-local function userSnipe(placeId, username)
+function userSnipe(placeId, username)
     placeId = tonumber(placeId)
     if not placeId or not username or username == "" then
         notify("Kullanıcı Snipe", "PlaceId ve kullanıcı adı gerekli")
@@ -3441,7 +3441,7 @@ local function userSnipe(placeId, username)
     end)
 end
 
-local function getServerInfoText()
+function getServerInfoText()
     return string.format(
         "PlaceId: %s\nOyuncular: %d/%d\nJobId: %s",
         tostring(game.PlaceId),
@@ -3983,102 +3983,417 @@ _G.ananistwaffendivisionBodycamClearAll = function()
 end
 
 -- Oyuncular tabı
-_G.ananistwaffendivisionTabPlayersTitle = AddLabel(_G.ananistwaffendivisionTabPlayers, "Oyuncular")
-_G.ananistwaffendivisionTabPlayersHint = AddLabel(_G.ananistwaffendivisionTabPlayers, "Sunucudaki oyunculara ışınlanabilir veya onları izleyebilirsin", true)
-_G.ananistwaffendivisionBodycamPlayersScroll = Instance.new("ScrollingFrame", _G.ananistwaffendivisionTabPlayers)
-_G.ananistwaffendivisionBodycamPlayersScroll.Size = UDim2.new(1, -10, 0, 330)
-_G.ananistwaffendivisionBodycamPlayersScroll.BackgroundTransparency = 1
-_G.ananistwaffendivisionBodycamPlayersScroll.ScrollBarThickness = 5
-_G.ananistwaffendivisionBodycamPlayersScroll.CanvasSize = UDim2.new(0,0,0,0)
-_G.ananistwaffendivisionBodycamPlayersScroll.Parent = _G.ananistwaffendivisionTabPlayers
-_G.ananistwaffendivisionBodycamPlayersLayout = Instance.new("UIListLayout", _G.ananistwaffendivisionBodycamPlayersScroll)
-_G.ananistwaffendivisionBodycamPlayersLayout.Padding = UDim.new(0, 6)
-_G.ananistwaffendivisionBodycamPlayersLayout.SortOrder = Enum.SortOrder.LayoutOrder
-_G.ananistwaffendivisionBodycamPlayersLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-    _G.ananistwaffendivisionBodycamPlayersScroll.CanvasSize = UDim2.new(0,0,0,_G.ananistwaffendivisionBodycamPlayersLayout.AbsoluteContentSize.Y + 10)
+-- [[ ANANIST WAFFEN DIVISION - ADVANCED PLAYERS TAB ]] --
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+_G.ananistwaffendivisionOrbitDistance = _G.ananistwaffendivisionOrbitDistance or 12
+_G.ananistwaffendivisionOrbitSpeed = _G.ananistwaffendivisionOrbitSpeed or 1
+_G.ananistwaffendivisionOrbitTarget = nil
+_G.ananistwaffendivisionOrbitConnection = nil
+_G.ananistwaffendivisionOrbitAngle = 0
+
+-- Eski orbit bağlantısını temizle
+if _G.ananistwaffendivisionOrbitConnection then
+    _G.ananistwaffendivisionOrbitConnection:Disconnect()
+    _G.ananistwaffendivisionOrbitConnection = nil
+end
+
+-- Ana başlık
+_G.ananistwaffendivisionTabPlayersTitle =
+    AddLabel(_G.ananistwaffendivisionTabPlayers, "Oyuncular")
+
+_G.ananistwaffendivisionTabPlayersHint =
+    AddLabel(
+        _G.ananistwaffendivisionTabPlayers,
+        "Oyuncuları görüntüle ve karakter kontrollerini yönet",
+        true
+    )
+
+-- Yenile butonu EN ÜSTTE
+_G.ananistwaffendivisionTabPlayersRefresh = AddButton(
+    _G.ananistwaffendivisionTabPlayers,
+    "Listeyi Yenile",
+    function()
+        if _G.ananistwaffendivisionRefreshPlayersTab then
+            _G.ananistwaffendivisionRefreshPlayersTab()
+        end
+    end
+)
+
+-- Orbit ayar paneli
+local orbitPanel = Instance.new("Frame")
+orbitPanel.Name = "OrbitSettings"
+orbitPanel.Size = UDim2.new(1, -10, 0, 105)
+orbitPanel.BackgroundColor3 = Color3.fromRGB(27, 29, 40)
+orbitPanel.BorderSizePixel = 0
+orbitPanel.Visible = false
+orbitPanel.Parent = _G.ananistwaffendivisionTabPlayers
+Instance.new("UICorner", orbitPanel).CornerRadius = UDim.new(0, 8)
+
+local orbitTitle = Instance.new("TextLabel")
+orbitTitle.Size = UDim2.new(1, -16, 0, 22)
+orbitTitle.Position = UDim2.new(0, 8, 0, 4)
+orbitTitle.BackgroundTransparency = 1
+orbitTitle.Text = "ORBIT SETTINGS"
+orbitTitle.TextColor3 = Color3.fromRGB(210, 215, 240)
+orbitTitle.Font = Enum.Font.GothamBold
+orbitTitle.TextSize = 12
+orbitTitle.TextXAlignment = Enum.TextXAlignment.Left
+orbitTitle.Parent = orbitPanel
+
+function createSlider(name, y, minValue, maxValue, defaultValue, callback)
+    local holder = Instance.new("Frame")
+    holder.Size = UDim2.new(1, -16, 0, 32)
+    holder.Position = UDim2.new(0, 8, 0, y)
+    holder.BackgroundTransparency = 1
+    holder.Parent = orbitPanel
+
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(0.42, 0, 0, 17)
+    label.BackgroundTransparency = 1
+    label.Text = name
+    label.TextColor3 = Color3.fromRGB(220, 220, 235)
+    label.Font = Enum.Font.GothamMedium
+    label.TextSize = 11
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Parent = holder
+
+    local valueLabel = Instance.new("TextLabel")
+    valueLabel.Size = UDim2.new(0.22, 0, 0, 17)
+    valueLabel.Position = UDim2.new(0.78, 0, 0, 0)
+    valueLabel.BackgroundTransparency = 1
+    valueLabel.TextColor3 = Color3.fromRGB(120, 190, 255)
+    valueLabel.Font = Enum.Font.GothamBold
+    valueLabel.TextSize = 11
+    valueLabel.TextXAlignment = Enum.TextXAlignment.Right
+    valueLabel.Parent = holder
+
+    local track = Instance.new("Frame")
+    track.Size = UDim2.new(1, 0, 0, 5)
+    track.Position = UDim2.new(0, 0, 0, 23)
+    track.BackgroundColor3 = Color3.fromRGB(55, 58, 75)
+    track.BorderSizePixel = 0
+    track.Parent = holder
+    Instance.new("UICorner", track).CornerRadius = UDim.new(1, 0)
+
+    local fill = Instance.new("Frame")
+    fill.Size = UDim2.new(
+        (defaultValue - minValue) / (maxValue - minValue), 0, 1, 0
+    )
+    fill.BackgroundColor3 = Color3.fromRGB(80, 145, 235)
+    fill.BorderSizePixel = 0
+    fill.Parent = track
+    Instance.new("UICorner", fill).CornerRadius = UDim.new(1, 0)
+
+    local knob = Instance.new("Frame")
+    knob.Size = UDim2.new(0, 13, 0, 13)
+    knob.AnchorPoint = Vector2.new(0.5, 0.5)
+    knob.Position = UDim2.new(fill.Size.X.Scale, 0, 0.5, 0)
+    knob.BackgroundColor3 = Color3.fromRGB(240, 245, 255)
+    knob.BorderSizePixel = 0
+    knob.Parent = track
+    Instance.new("UICorner", knob).CornerRadius = UDim.new(1, 0)
+
+    local hitbox = Instance.new("TextButton")
+    hitbox.Size = UDim2.new(1, 0, 1, 0)
+    hitbox.BackgroundTransparency = 1
+    hitbox.Text = ""
+    hitbox.Parent = track
+
+    local dragging = false
+    local currentValue = defaultValue
+
+    local function update(inputX)
+        local width = track.AbsoluteSize.X
+        if width <= 0 then return end
+
+        local alpha = math.clamp(
+            (inputX - track.AbsolutePosition.X) / width, 0, 1
+        )
+
+        currentValue = minValue + alpha * (maxValue - minValue)
+        currentValue = math.floor(currentValue * 10 + 0.5) / 10
+
+        local normalized = (currentValue - minValue) / (maxValue - minValue)
+        fill.Size = UDim2.new(normalized, 0, 1, 0)
+        knob.Position = UDim2.new(normalized, 0, 0.5, 0)
+        valueLabel.Text = tostring(currentValue)
+        callback(currentValue)
+    end
+
+    valueLabel.Text = tostring(defaultValue)
+
+    hitbox.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1
+            or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            update(input.Position.X)
+        end
+    end)
+
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
+        if dragging and (
+            input.UserInputType == Enum.UserInputType.MouseMovement
+            or input.UserInputType == Enum.UserInputType.Touch
+        ) then
+            update(input.Position.X)
+        end
+    end)
+
+    game:GetService("UserInputService").InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1
+            or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = false
+        end
+    end)
+end
+
+createSlider("Mesafe", 29, 4, 40, _G.ananistwaffendivisionOrbitDistance, function(value)
+    _G.ananistwaffendivisionOrbitDistance = value
 end)
 
-_G.ananistwaffendivisionRefreshPlayersTab = function()
-    local scroll = _G.ananistwaffendivisionBodycamPlayersScroll
-    if not scroll then return end
-    for _, child in ipairs(scroll:GetChildren()) do
-        if not child:IsA("UIListLayout") then child:Destroy() end
+createSlider("Hız", 65, 0.2, 5, _G.ananistwaffendivisionOrbitSpeed, function(value)
+    _G.ananistwaffendivisionOrbitSpeed = value
+end)
+
+-- Oyuncu listesi
+_G.ananistwaffendivisionBodycamPlayersScroll =
+    Instance.new("ScrollingFrame")
+
+local scroll = _G.ananistwaffendivisionBodycamPlayersScroll
+scroll.Name = "PlayersList"
+scroll.Size = UDim2.new(1, -10, 0, 260)
+scroll.BackgroundTransparency = 1
+scroll.BorderSizePixel = 0
+scroll.ScrollBarThickness = 5
+scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+scroll.Parent = _G.ananistwaffendivisionTabPlayers
+
+local listLayout = Instance.new("UIListLayout")
+listLayout.Padding = UDim.new(0, 6)
+listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+listLayout.Parent = scroll
+
+listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    scroll.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 8)
+end)
+
+function stopOrbit()
+    if _G.ananistwaffendivisionOrbitConnection then
+        _G.ananistwaffendivisionOrbitConnection:Disconnect()
+        _G.ananistwaffendivisionOrbitConnection = nil
     end
+
+    _G.ananistwaffendivisionOrbitTarget = nil
+    orbitPanel.Visible = false
+end
+
+function startOrbit(target)
+    stopOrbit()
+
+    if target == Players.LocalPlayer then
+        return
+    end
+
+    _G.ananistwaffendivisionOrbitTarget = target
+    _G.ananistwaffendivisionOrbitAngle = 0
+    orbitPanel.Visible = true
+
+    _G.ananistwaffendivisionOrbitConnection = RunService.RenderStepped:Connect(function(dt)
+        if not target.Parent then
+            stopOrbit()
+            return
+        end
+
+        local character = Players.LocalPlayer.Character
+        local targetCharacter = target.Character
+
+        local root = character and character:FindFirstChild("HumanoidRootPart")
+        local targetRoot = targetCharacter and targetCharacter:FindFirstChild("HumanoidRootPart")
+        local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+        if not root or not targetRoot or not humanoid or humanoid.Health <= 0 then
+            return
+        end
+
+        _G.ananistwaffendivisionOrbitAngle +=
+            dt * _G.ananistwaffendivisionOrbitSpeed
+
+        local distance = _G.ananistwaffendivisionOrbitDistance
+        local angle = _G.ananistwaffendivisionOrbitAngle
+
+        local offset = Vector3.new(
+            math.cos(angle) * distance,
+            3,
+            math.sin(angle) * distance
+        )
+
+        -- Yalnızca kendi karakterini hareket ettirir.
+        root.CFrame = CFrame.lookAt(
+            targetRoot.Position + offset,
+            targetRoot.Position
+        )
+    end)
+end
+
+_G.ananistwaffendivisionRefreshPlayersTab = function()
+    for _, child in ipairs(scroll:GetChildren()) do
+        if child:IsA("Frame") and child.Name == "PlayerRow" then
+            child:Destroy()
+        end
+    end
+
     for _, target in ipairs(Players:GetPlayers()) do
         local row = Instance.new("Frame")
-        row.Size = UDim2.new(1, -8, 0, 66)
-        row.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
+        row.Name = "PlayerRow"
+        row.Size = UDim2.new(1, -8, 0, 72)
+        row.BackgroundColor3 = Color3.fromRGB(32, 35, 48)
         row.BorderSizePixel = 0
+        row.LayoutOrder = target.UserId
         row.Parent = scroll
-        Instance.new("UICorner", row).CornerRadius = UDim.new(0, 8)
+
+        Instance.new("UICorner", row).CornerRadius = UDim.new(0, 9)
+
+        local stroke = Instance.new("UIStroke")
+        stroke.Color = Color3.fromRGB(57, 63, 82)
+        stroke.Thickness = 1
+        stroke.Parent = row
 
         local avatar = Instance.new("ImageLabel")
-        avatar.Size = UDim2.new(0, 50, 0, 50)
-        avatar.Position = UDim2.new(0, 8, 0.5, -25)
-        avatar.BackgroundTransparency = 1
+        avatar.Size = UDim2.new(0, 48, 0, 48)
+        avatar.Position = UDim2.new(0, 9, 0.5, -24)
+        avatar.BackgroundColor3 = Color3.fromRGB(45, 48, 62)
+        avatar.BorderSizePixel = 0
         avatar.Parent = row
-        pcall(function()
-            local image = Players:GetUserThumbnailAsync(target.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
-            avatar.Image = image
+        Instance.new("UICorner", avatar).CornerRadius = UDim.new(0, 8)
+
+        task.spawn(function()
+            local ok, image = pcall(function()
+                return Players:GetUserThumbnailAsync(
+                    target.UserId,
+                    Enum.ThumbnailType.HeadShot,
+                    Enum.ThumbnailSize.Size100x100
+                )
+            end)
+
+            if ok and avatar.Parent then
+                avatar.Image = image
+            end
         end)
 
         local name = Instance.new("TextLabel")
-        name.Size = UDim2.new(1, -205, 1, 0)
-        name.Position = UDim2.new(0, 68, 0, 0)
+        name.Size = UDim2.new(1, -220, 0, 24)
+        name.Position = UDim2.new(0, 65, 0, 9)
         name.BackgroundTransparency = 1
-        name.Text = target.DisplayName .. "\n@" .. target.Name
-        name.TextColor3 = Color3.fromRGB(220,220,240)
-        name.Font = Enum.Font.GothamMedium
+        name.Text = target.DisplayName
+        name.TextColor3 = Color3.fromRGB(235, 238, 250)
+        name.Font = Enum.Font.GothamBold
         name.TextSize = 12
         name.TextXAlignment = Enum.TextXAlignment.Left
-        name.TextYAlignment = Enum.TextYAlignment.Center
+        name.TextTruncate = Enum.TextTruncate.AtEnd
         name.Parent = row
 
-        local teleportBtn = Instance.new("TextButton")
-        teleportBtn.Size = UDim2.new(0, 58, 0, 30)
-        teleportBtn.Position = UDim2.new(1, -125, 0.5, -15)
-        teleportBtn.BackgroundColor3 = Color3.fromRGB(50, 110, 65)
-        teleportBtn.Text = "Teleport"
-        teleportBtn.TextColor3 = Color3.fromRGB(255,255,255)
-        teleportBtn.Font = Enum.Font.GothamBold
-        teleportBtn.TextSize = 9
-        teleportBtn.Parent = row
-        Instance.new("UICorner", teleportBtn).CornerRadius = UDim.new(0, 6)
-        teleportBtn.MouseButton1Click:Connect(function()
-            local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-            local targetRoot = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+        local username = Instance.new("TextLabel")
+        username.Size = UDim2.new(1, -220, 0, 20)
+        username.Position = UDim2.new(0, 65, 0, 33)
+        username.BackgroundTransparency = 1
+        username.Text = "@" .. target.Name
+        username.TextColor3 = Color3.fromRGB(145, 153, 175)
+        username.Font = Enum.Font.Gotham
+        username.TextSize = 10
+        username.TextXAlignment = Enum.TextXAlignment.Left
+        username.TextTruncate = Enum.TextTruncate.AtEnd
+        username.Parent = row
+
+        local function makeButton(text, width, xOffset, color, callback)
+            local button = Instance.new("TextButton")
+            button.Size = UDim2.new(0, width, 0, 27)
+            button.Position = UDim2.new(1, xOffset, 0.5, -13)
+            button.BackgroundColor3 = color
+            button.BorderSizePixel = 0
+            button.Text = text
+            button.TextColor3 = Color3.new(1, 1, 1)
+            button.Font = Enum.Font.GothamBold
+            button.TextSize = 10
+            button.Parent = row
+
+            Instance.new("UICorner", button).CornerRadius = UDim.new(0, 6)
+
+            button.MouseButton1Click:Connect(callback)
+            return button
+        end
+
+        makeButton("Teleport", 57, -188, Color3.fromRGB(49, 115, 76), function()
+            if target == Players.LocalPlayer then return end
+
+            local root = Players.LocalPlayer.Character
+                and Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+            local targetRoot = target.Character
+                and target.Character:FindFirstChild("HumanoidRootPart")
+
             if root and targetRoot then
-                root.CFrame = targetRoot.CFrame + Vector3.new(0, 3, 0)
+                root.CFrame = targetRoot.CFrame * CFrame.new(0, 3, 0)
             end
         end)
 
-        local viewBtn = Instance.new("TextButton")
-        viewBtn.Size = UDim2.new(0, 58, 0, 30)
-        viewBtn.Position = UDim2.new(1, -62, 0.5, -15)
-        viewBtn.BackgroundColor3 = Color3.fromRGB(65, 75, 110)
-        viewBtn.Text = "View"
-        viewBtn.TextColor3 = Color3.fromRGB(255,255,255)
-        viewBtn.Font = Enum.Font.GothamBold
-        viewBtn.TextSize = 11
-        viewBtn.Parent = row
-        Instance.new("UICorner", viewBtn).CornerRadius = UDim.new(0, 6)
-        viewBtn.MouseButton1Click:Connect(function()
-            local humanoid = target.Character and target.Character:FindFirstChildOfClass("Humanoid")
-            if humanoid then
-                workspace.CurrentCamera.CameraSubject = humanoid
+        makeButton("View", 48, -126, Color3.fromRGB(65, 83, 130), function()
+            local camera = workspace.CurrentCamera
+            local humanoid = target.Character
+                and target.Character:FindFirstChildOfClass("Humanoid")
+
+            if camera and humanoid then
+                camera.CameraSubject = humanoid
             end
         end)
+
+        local orbitButton
+        orbitButton = makeButton("Orbital cannon ON", 68, -73, Color3.fromRGB(90, 80, 145), function()
+            if _G.ananistwaffendivisionOrbitTarget == target then
+                stopOrbit()
+                orbitButton.Text = "Orbital cannon ON"
+                orbitButton.BackgroundColor3 = Color3.fromRGB(90, 80, 145)
+            else
+                for _, otherRow in ipairs(scroll:GetChildren()) do
+                    if otherRow:IsA("Frame") then
+                        for _, button in ipairs(otherRow:GetChildren()) do
+                            if button:IsA("TextButton") and button.Text == "Orbital cannon OFF" then
+                                button.Text = "Orbital cannon ON"
+                                button.BackgroundColor3 = Color3.fromRGB(90, 80, 145)
+                            end
+                        end
+                    end
+                end
+
+                startOrbit(target)
+                orbitButton.Text = "Orbital Cannon OFF"
+                orbitButton.BackgroundColor3 = Color3.fromRGB(45, 145, 95)
+            end
+        end)
+
+        if target == Players.LocalPlayer then
+            orbitButton.Text = "sen abi sen babapro"
+            orbitButton.BackgroundColor3 = Color3.fromRGB(65, 68, 80)
+            orbitButton.Active = false
+        end
     end
 end
-
-_G.ananistwaffendivisionTabPlayersRefresh = AddButton(_G.ananistwaffendivisionTabPlayers, "Oyuncu Listesini Yenile", _G.ananistwaffendivisionRefreshPlayersTab)
 
 Players.PlayerAdded:Connect(function()
     task.defer(_G.ananistwaffendivisionRefreshPlayersTab)
 end)
-Players.PlayerRemoving:Connect(function()
+
+Players.PlayerRemoving:Connect(function(leavingPlayer)
+    if _G.ananistwaffendivisionOrbitTarget == leavingPlayer then
+        stopOrbit()
+    end
+
     task.defer(_G.ananistwaffendivisionRefreshPlayersTab)
 end)
+
+_G.ananistwaffendivisionRefreshPlayersTab()
 
 -- Bodycam tabı kaldırıldı
 if false then
@@ -4131,7 +4446,7 @@ _G.ananistwaffendivisionRefreshPlayersTab()
 AddLabel(tabMain, "AnanistWaffen Division // ban yerseniz idgaf // eğer alttaki kişilerden biri değilseniz napay (siktirin gidin)", true)
 AddLabel(tabMain, "babapro yapımcılar")
 
-local function AddCreatorCard(parent, displayName, profileUsername)
+function AddCreatorCard(parent, displayName, profileUsername)
     local card = Instance.new("TextButton", parent)
     card.Size = UDim2.new(1, -10, 0, 62)
     card.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
@@ -4253,7 +4568,7 @@ AddCreatorCard(tabMain, "l*ccey", "babaanne_para198")
 AddCreatorCard(tabMain, "em*r", "Emodka123321")
 AddCreatorCard(tabMain, "*fra", "Afraistee12")
 AddCreatorCard(tabMain, "d*mir", "XxDemir_3555")
-local function AddCreatorCard(parent, imageId, textContent)
+function AddCreatorCard(parent, imageId, textContent)
     -- Ana kart (İkiliyi yan yana tutmak için)
     local card = Instance.new("Frame")
     card.Size = UDim2.new(1, 0, 0, 50)
@@ -4597,7 +4912,7 @@ gameLibraryData.Btn.LayoutOrder = 5
 local gameOldLayout = gameLibrary:FindFirstChildOfClass("UIListLayout")
 if gameOldLayout then gameOldLayout:Destroy() end
 gameLibrary.CanvasSize = UDim2.new(0, 0, 0, 410)
-local function gameNew(class, props, parent)
+function gameNew(class, props, parent)
     local o = Instance.new(class)
     for k, v in pairs(props or {}) do o[k] = v end
     o.Parent = parent
@@ -4622,7 +4937,7 @@ local games = {
     {"Evil Morty", "OTHER", function() pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/6GH3j1Vj"))() end) end},
 }
 local selectedGame = "TÜM OYUNLAR"
-local function buildGameCards(filter)
+function buildGameCards(filter)
     for _, c in ipairs(gameGrid:GetChildren()) do if not c:IsA("UIGridLayout") then c:Destroy() end end
     for _, gameInfo in ipairs(games) do
         if filter == "TÜM OYUNLAR" or filter == gameInfo[2] then
@@ -4828,7 +5143,7 @@ scriptLibraryData.Btn.LayoutOrder = 12
 local oldScriptLayout = scriptLibrary:FindFirstChildOfClass("UIListLayout")
 if oldScriptLayout then oldScriptLayout:Destroy() end
 scriptLibrary.CanvasSize = UDim2.new(0, 0, 0, 610)
-local function libNew(class, props, parent)
+function libNew(class, props, parent)
     local o = Instance.new(class)
     for k, v in pairs(props or {}) do o[k] = v end
     o.Parent = parent
@@ -4850,7 +5165,7 @@ local nameInput = libNew("TextBox", {Size = UDim2.new(1, -24, 0, 31), Position =
 libNew("UICorner", {CornerRadius = UDim.new(0, 7)}, nameInput)
 local codeInput = libNew("TextBox", {Size = UDim2.new(1, -24, 0, 92), Position = UDim2.new(0, 12, 0, 79), BackgroundColor3 = Color3.fromRGB(15, 15, 19), BorderSizePixel = 0, PlaceholderText = "Lua kodunu buraya yapıştır...", PlaceholderColor3 = Color3.fromRGB(105, 105, 118), Text = "", TextColor3 = Color3.fromRGB(220, 225, 235), Font = Enum.Font.Code, TextSize = 12, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, MultiLine = true, ClearTextOnFocus = false, ZIndex = 7}, editor)
 libNew("UICorner", {CornerRadius = UDim.new(0, 7)}, codeInput)
-local function libAction(text, x, color)
+function libAction(text, x, color)
     local b = libNew("TextButton", {Size = UDim2.new(0, 92, 0, 30), Position = UDim2.new(0, x, 1, -40), BackgroundColor3 = color, BorderSizePixel = 0, Text = text, TextColor3 = Color3.fromRGB(255, 255, 255), Font = Enum.Font.GothamBold, TextSize = 10, ZIndex = 7}, editor)
     libNew("UICorner", {CornerRadius = UDim.new(0, 7)}, b); return b
 end
@@ -4859,20 +5174,20 @@ local runLibBtn = libAction("ÇALIŞTIR", 112, Color3.fromRGB(55, 85, 145))
 local copyLibBtn = libAction("KOPYALA", 212, Color3.fromRGB(65, 65, 76))
 local deleteLibBtn = libAction("SİL", 312, Color3.fromRGB(145, 50, 55))
 local libraryData, editingLibraryName = {}, nil
-local function loadLibraryData()
+function loadLibraryData()
     if isfile and isfile("ananite_hub_scripts.json") then
         local ok, decoded = pcall(function() return HttpService:JSONDecode(readfile("ananite_hub_scripts.json")) end)
         if ok and type(decoded) == "table" then return decoded end
     end
     return {}
 end
-local function saveLibraryData()
+function saveLibraryData()
     if writefile then pcall(function() writefile("ananite_hub_scripts.json", HttpService:JSONEncode(libraryData)) end) end
 end
-local function clearGrid()
+function clearGrid()
     for _, child in ipairs(scriptGrid:GetChildren()) do if not child:IsA("UIGridLayout") then child:Destroy() end end
 end
-local function makeScriptCard(name, source, builtin)
+function makeScriptCard(name, source, builtin)
     local card = libNew("TextButton", {BackgroundColor3 = Color3.fromRGB(19, 19, 23), BorderSizePixel = 0, Text = "", AutoButtonColor = false, ZIndex = 7}, scriptGrid)
     libNew("UICorner", {CornerRadius = UDim.new(0, 10)}, card)
     libNew("UIStroke", {Color = Color3.fromRGB(94, 94, 112), Transparency = .3}, card)
@@ -4885,7 +5200,7 @@ local function makeScriptCard(name, source, builtin)
         libraryStatus.Text = builtin and ("HAZIR SCRIPT: " .. name) or ("DÜZENLENİYOR: " .. name)
     end)
 end
-local function rebuildLibrary()
+function rebuildLibrary()
     clearGrid()
     makeScriptCard("Bodycam", "loadstring(game:HttpGet(\"https://pastebin.com/raw/HSQ9dyXt\"))()", true)
     makeScriptCard("Telekinesis", "loadstring(game:HttpGet(\"https://pastebin.com/raw/QAsFzqSh\"))()", true)
