@@ -4930,6 +4930,8 @@ local gameGridLayout = gameNew("UIGridLayout", {CellSize = UDim2.new(0, 145, 0, 
 local gameTitle = gameNew("TextLabel", {Size = UDim2.new(1, -162, 0, 22), Position = UDim2.new(0, 153, 0, 64), BackgroundTransparency = 1, Text = "TÜM OYUNLAR", TextColor3 = Color3.fromRGB(175, 185, 220), Font = Enum.Font.Code, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 6}, gameLibrary)
 local games = {
     {"Ftap", "Sandbox", function() pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/JBT1fMAu"))() end) end},
+    {"Ftap I Füze", "Sandbox", function() pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/MkxjDhL3"))() end) end},
+    {"Ftap I Roket", "Sandbox", function() pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/JfuiC4za"))() end) end},
     {"Blackhawk Rescue Mission 5", "FPS", function() pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/zfgWDHXC"))() end) end},
     {"Evade", "Survival", function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Emerson2-creator/Scripts-Roblox/refs/heads/main/EvadeScript.lua"))() end) end},
     {"Katil Porbo", "Survival", function() pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/vS3pSfXF", true))() end) end},
