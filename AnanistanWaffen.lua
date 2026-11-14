@@ -4929,15 +4929,61 @@ local gameGrid = gameNew("ScrollingFrame", {Size = UDim2.new(1, -162, 0, 292), P
 local gameGridLayout = gameNew("UIGridLayout", {CellSize = UDim2.new(0, 145, 0, 100), CellPadding = UDim2.new(0, 10, 0, 10), SortOrder = Enum.SortOrder.LayoutOrder}, gameGrid)
 local gameTitle = gameNew("TextLabel", {Size = UDim2.new(1, -162, 0, 22), Position = UDim2.new(0, 153, 0, 64), BackgroundTransparency = 1, Text = "TÜM OYUNLAR", TextColor3 = Color3.fromRGB(175, 185, 220), Font = Enum.Font.Code, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 6}, gameLibrary)
 local games = {
-    {"Ftap", "Sandbox", function() pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/JBT1fMAu"))() end) end},
-    {"Ftap I Füze", "Sandbox", function() pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/MkxjDhL3"))() end) end}
-    {"Ftap I Eşya", "Sandbox", function() pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/nnwZSezd"))() end) end},
-    {"Ftap I Roket", "Sandbox", function() pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/JfuiC4za"))() end) end},
-    {"Blackhawk Rescue Mission 5", "FPS", function() pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/zfgWDHXC"))() end) end},
-    {"Evade", "Survival", function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Emerson2-creator/Scripts-Roblox/refs/heads/main/EvadeScript.lua"))() end) end},
-    {"Katil Porbo", "Survival", function() pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/vS3pSfXF", true))() end) end},
-    {"Animal Hospital", "Horror", function() pcall(function() loadstring(game:HttpGet("https://gist.githubusercontent.com/NoxScriptsZeN/92555dca436989a077ed25b172d4bc78/raw"))() end) end},
-    {"Evil Morty", "OTHER", function() pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/6GH3j1Vj"))() end) end},
+
+    {"Ftap", "Sandbox", function()
+        pcall(function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/JBT1fMAu"))()
+        end)
+    end},
+
+    {"Ftap I Füze", "Sandbox", function()
+        pcall(function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/MkxjDhL3"))()
+        end)
+    end},
+
+    {"Ftap I Eşya", "Sandbox", function()
+        pcall(function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/nnwZSezd"))()
+        end)
+    end},
+
+    {"Ftap I Roket", "Sandbox", function()
+        pcall(function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/JfuiC4za"))()
+        end)
+    end},
+
+    {"Blackhawk Rescue Mission 5", "FPS", function()
+        pcall(function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/zfgWDHXC"))()
+        end)
+    end},
+
+    {"Evade", "Survival", function()
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Emerson2-creator/Scripts-Roblox/refs/heads/main/EvadeScript.lua"))()
+        end)
+    end},
+
+    {"Katil Porbo", "Survival", function()
+        pcall(function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/vS3pSfXF", true))()
+        end)
+    end},
+
+    {"Animal Hospital", "Horror", function()
+        pcall(function()
+            loadstring(game:HttpGet("https://gist.githubusercontent.com/NoxScriptsZeN/92555dca436989a077ed25b172d4bc78/raw"))()
+        end)
+    end},
+
+    {"Evil Morty", "OTHER", function()
+        pcall(function()
+            loadstring(game:HttpGet("https://pastebin.com/raw/6GH3j1Vj"))()
+        end)
+    end},
+
 }
 local selectedGame = "TÜM OYUNLAR"
 function buildGameCards(filter)
