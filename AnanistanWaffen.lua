@@ -5281,29 +5281,118 @@ AddButton(tabMain, "Script Reload", function()
     end)
 end)
 
+
 -- Görseller
+
+--// THIRD PERSON + CHARACTER VISIBILITY
+
+local thirdPersonEnabled = false
+local thirdPersonRenderName = "Hub_ThirdPersonVisibility"
+
+local function setThirdPerson(state)
+    thirdPersonEnabled = state
+
+    RunService:UnbindFromRenderStep(thirdPersonRenderName)
+
+    if state then
+        player.CameraMode = Enum.CameraMode.Classic
+        player.CameraMinZoomDistance = 0.5
+        player.CameraMaxZoomDistance = 30
+
+        RunService:BindToRenderStep(
+            thirdPersonRenderName,
+            Enum.RenderPriority.Camera.Value + 1,
+            function()
+                local character = player.Character
+                local camera = workspace.CurrentCamera
+
+                if not character or not camera then return end
+
+                local head = character:FindFirstChild("Head")
+                if not head then return end
+
+                local distance = (camera.CFrame.Position - head.Position).Magnitude
+                local firstPerson = distance < 1.5
+
+                for _, obj in ipairs(character:GetDescendants()) do
+                    if obj:IsA("BasePart") and obj.Name ~= "HumanoidRootPart" then
+                        obj.LocalTransparencyModifier = firstPerson and 1 or 0
+                    end
+                end
+            end
+        )
+    else
+        player.CameraMode = Enum.CameraMode.Classic
+        player.CameraMinZoomDistance = 0.5
+        player.CameraMaxZoomDistance = 128
+
+        if player.Character then
+            for _, obj in ipairs(player.Character:GetDescendants()) do
+                if obj:IsA("BasePart") then
+                    obj.LocalTransparencyModifier = 0
+                end
+            end
+        end
+    end
+end
+
+player.CharacterAdded:Connect(function()
+    task.wait(0.5)
+
+    if thirdPersonEnabled then
+        setThirdPerson(true)
+    end
+end)
+
+AddLabel(tabVisuals, "Kamera")
+
+local thirdPersonToggle = AddToggle(
+    tabVisuals,
+    "Force Third Person + Character Visibility",
+    false,
+    function(state)
+        setThirdPerson(state)
+    end
+)
+
+--// ESP
+
 AddLabel(tabVisuals, "ESP")
+
 espKeyBtn = AddButton(tabVisuals, "ESP Aç/Kapat: [T]", function() end)
 espKeyLabel = espKeyBtn:FindFirstChildOfClass("TextLabel")
+
 local updateESPUIs = {}
 
 updateESPUIs.master = AddToggle(tabVisuals, "ESP Aktif", espEnabled, function(state)
     espEnabled = state
+
     if espEnabled then
-        for _, conn in pairs(espConnections) do if conn then conn:Disconnect() end end
+        for _, conn in pairs(espConnections) do
+            if conn then conn:Disconnect() end
+        end
+
         espConnections = {}
+
         local function setupForPlayer(p)
             if p == player then return end
+
             table.insert(espConnections, p.CharacterAdded:Connect(function(char)
                 local root = char:WaitForChild("HumanoidRootPart", 10)
                 if root and espEnabled then buildESP(p) end
             end))
+
             if p.Character then
                 pcall(function() buildESP(p) end)
             end
         end
-        for _, p in pairs(Players:GetPlayers()) do setupForPlayer(p) end
+
+        for _, p in pairs(Players:GetPlayers()) do
+            setupForPlayer(p)
+        end
+
         table.insert(espConnections, Players.PlayerAdded:Connect(setupForPlayer))
+
         table.insert(espConnections, Players.PlayerRemoving:Connect(function(p)
             if espObjects[p] then
                 if espObjects[p].box then pcall(game.Destroy, espObjects[p].box) end
@@ -5312,42 +5401,73 @@ updateESPUIs.master = AddToggle(tabVisuals, "ESP Aktif", espEnabled, function(st
                 espObjects[p] = nil
             end
         end))
+
         if not espLoopThread then
             espLoopThread = task.spawn(function()
                 local refreshTimer = 0
+
                 while espEnabled do
                     pcall(updateAllESP)
+
                     refreshTimer = refreshTimer + 0.2
+
                     if refreshTimer >= 30 then
                         refreshTimer = 0
                         clearESP()
                     end
+
                     task.wait(0.2)
                 end
             end)
         end
     else
         clearESP()
-        if espLoopThread then task.cancel(espLoopThread); espLoopThread = nil end
-        for _, conn in pairs(espConnections) do if conn then conn:Disconnect() end end
+
+        if espLoopThread then
+            task.cancel(espLoopThread)
+            espLoopThread = nil
+        end
+
+        for _, conn in pairs(espConnections) do
+            if conn then conn:Disconnect() end
+        end
+
         espConnections = {}
     end
 end)
 
-updateESPUIs.isim = AddToggle(tabVisuals, "İsim Çiz", espShowNames, function(s) espShowNames = s end)
-updateESPUIs.health = AddToggle(tabVisuals, "Sağlık Çubuğu", espShowHealth, function(s) espShowHealth = s end)
-updateESPUIs.chams = AddToggle(tabVisuals, "Chams", espShowChams, function(s) espShowChams = s end)
-updateESPUIs.kutu = AddToggle(tabVisuals, "Kutu (Box)", espShowBoxes, function(s) espShowBoxes = s end)
-updateESPUIs.env = AddToggle(tabVisuals, "Envanter Gör", espShowInventory, function(s) espShowInventory = s end)
+updateESPUIs.isim = AddToggle(tabVisuals, "İsim Çiz", espShowNames, function(s)
+    espShowNames = s
+end)
+
+updateESPUIs.health = AddToggle(tabVisuals, "Sağlık Çubuğu", espShowHealth, function(s)
+    espShowHealth = s
+end)
+
+updateESPUIs.chams = AddToggle(tabVisuals, "Chams", espShowChams, function(s)
+    espShowChams = s
+end)
+
+updateESPUIs.kutu = AddToggle(tabVisuals, "Kutu (Box)", espShowBoxes, function(s)
+    espShowBoxes = s
+end)
+
+updateESPUIs.env = AddToggle(tabVisuals, "Envanter Gör", espShowInventory, function(s)
+    espShowInventory = s
+end)
 
 AddLabel(tabVisuals, "ESP Mesafe Ayarı")
+
 local setDistSlider, distBox
+
 setDistSlider = AddSlider(tabVisuals, "Mesafe (Slider)", 0, 25000, espMaxDistance, function(val)
     espMaxDistance = val
     if distBox then distBox.Text = tostring(val) end
 end)
+
 distBox = AddTextBox(tabVisuals, "Mesafe Gir (Sayı)", function(txt)
     local val = tonumber(txt:match("%d+"))
+
     if val then
         val = math.clamp(val, 0, 25000)
         espMaxDistance = val
@@ -5355,67 +5475,112 @@ distBox = AddTextBox(tabVisuals, "Mesafe Gir (Sayı)", function(txt)
         setDistSlider(val)
     end
 end)
+
 distBox.Text = tostring(espMaxDistance)
 
--- Workspace İsim ESP (Görseller sekmesine ek)
+--// WORKSPACE İSİM ESP
+
 AddLabel(tabVisuals, "Workspace İsim ESP")
-_G.ananistwaffendivisionWorkspaceNameESPBoxVisuals = AddTextBox(tabVisuals, "Workspace obje adı gir...", function(text)
-    pcall(function()
-        _G.ananistwaffendivisionNameSearchWorkspaceESP(text)
-    end)
-end)
+
+_G.ananistwaffendivisionWorkspaceNameESPBoxVisuals = AddTextBox(
+    tabVisuals,
+    "Workspace obje adı gir...",
+    function(text)
+        pcall(function()
+            _G.ananistwaffendivisionNameSearchWorkspaceESP(text)
+        end)
+    end
+)
+
 AddButton(tabVisuals, "İsim ESP Temizle", function()
     pcall(function()
         _G.ananistwaffendivisionClearWorkspaceESP()
     end)
+
     if _G.ananistwaffendivisionWorkspaceNameESPBoxVisuals then
         _G.ananistwaffendivisionWorkspaceNameESPBoxVisuals.Text = ""
     end
 end)
 
+--// ESP RENK YÖNETİMİ
+
 AddLabel(tabVisuals, "ESP Renk Yönetimi")
-updateESPUIs.friend = AddToggle(tabVisuals, "Arkadaş Rengi Kullan", espUseFriendColor, function(s) espUseFriendColor = s end)
-local setFriendColorUI = AddColorPicker(tabVisuals, "Arkadaş Rengi", espFriendColor, function(c) espFriendColor = c end)
+
+updateESPUIs.friend = AddToggle(tabVisuals, "Arkadaş Rengi Kullan", espUseFriendColor, function(s)
+    espUseFriendColor = s
+end)
+
+local setFriendColorUI = AddColorPicker(tabVisuals, "Arkadaş Rengi", espFriendColor, function(c)
+    espFriendColor = c
+end)
 
 updateESPUIs.customColor = AddToggle(tabVisuals, "ESP Rengi Kullan", espUseCustomColor, function(s)
     espUseCustomColor = s
-    if s then 
-        espUseTeamColor = false 
+
+    if s then
+        espUseTeamColor = false
         updateESPUIs.teamColor(false)
     end
 end)
-local setEspColorUI = AddColorPicker(tabVisuals, "ESP Rengi", espCustomColor, function(c) espCustomColor = c; espUseCustomColor = true; espUseTeamColor = false; updateESPUIs.customColor(true); updateESPUIs.teamColor(false) end)
+
+local setEspColorUI = AddColorPicker(tabVisuals, "ESP Rengi", espCustomColor, function(c)
+    espCustomColor = c
+    espUseCustomColor = true
+    espUseTeamColor = false
+
+    updateESPUIs.customColor(true)
+    updateESPUIs.teamColor(false)
+end)
 
 updateESPUIs.teamColor = AddToggle(tabVisuals, "Takım Rengi Kullan", espUseTeamColor, function(s)
     espUseTeamColor = s
+
     if s then
         espUseCustomColor = false
         updateESPUIs.customColor(false)
     end
 end)
 
+--// ÇEVRE
+
 AddLabel(tabVisuals, "Çevre")
+
 updateESPUIs.bright = AddToggle(tabVisuals, "FullBright", false, function(state)
     local fakeBtn = {Text = ""}
     fullbrightEnabled = not state
     runFullbright(fakeBtn)
 end)
 
+--// ESP TUŞ ATAMA
+
 espKeyBtn.MouseButton1Click:Connect(function()
     if settingESPKey or settingMenuKey then return end
+
     settingESPKey = true
-    if espKeyLabel then espKeyLabel.Text = " ESP Tuşu: Tuşa bas..." end
+
+    if espKeyLabel then
+        espKeyLabel.Text = " ESP Tuşu: Tuşa bas..."
+    end
+
     local conn
+
     conn = UIS.InputBegan:Connect(function(inp, gp)
         if inp.UserInputType ~= Enum.UserInputType.Keyboard then return end
         if gp then return end
+
         espToggleKey = inp.KeyCode
+
         local keyName = tostring(inp.KeyCode):gsub("Enum.KeyCode.", "")
-        if espKeyLabel then espKeyLabel.Text = " ESP Aç/Kapat: [" .. keyName .. "]" end
+
+        if espKeyLabel then
+            espKeyLabel.Text = " ESP Aç/Kapat: [" .. keyName .. "]"
+        end
+
         settingESPKey = false
         conn:Disconnect()
     end)
 end)
+
 -- Ayarlar (Yeni Tema Sistemi Buraya Eklendi)
 AddLabel(tabDesigner, "Temalar")
 AddLabel(tabDesigner, "Temalar — Strangers & Freaks")
@@ -6890,3 +7055,4 @@ _G.ananistwaffendivisionReload = function()
         loadstring(_G.ananistwaffendivisionReloadSource)()
     end)
 end
+
