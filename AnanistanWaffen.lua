@@ -1,14 +1,13 @@
--- [[ ϟϟ AWD HUB ϟϟ ]] --
+-- [[ ϟϟ AWD HUB // COMMAND CENTER EDITION ϟϟ ]] --
 
-local UIS = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
-local CoreGui = game:GetService("CoreGui")
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local HttpService = game:GetService("HttpService")
-local TeleportService = game:GetService("TeleportService")
-local player = Players.LocalPlayer
-
+UIS = game:GetService("UserInputService")
+TweenService = game:GetService("TweenService")
+CoreGui = game:GetService("CoreGui")
+Players = game:GetService("Players")
+RunService = game:GetService("RunService")
+HttpService = game:GetService("HttpService")
+TeleportService = game:GetService("TeleportService")
+player = Players.LocalPlayer
 
 task.spawn(function()
     pcall(function()
@@ -60,7 +59,6 @@ function awdShowIntroLegacy()
         return obj
     end
 
-    -- Full black stage
     local bg = make("Frame", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundColor3 = Color3.fromRGB(2, 2, 6),
@@ -68,7 +66,6 @@ function awdShowIntroLegacy()
         BackgroundTransparency = 0,
     }, gui)
 
-    -- Vignette layers
     local vig = make("Frame", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundColor3 = Color3.fromRGB(0, 0, 0),
@@ -77,7 +74,6 @@ function awdShowIntroLegacy()
         ZIndex = 2,
     }, bg)
 
-    -- Animated grid
     local grid = make("Frame", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
@@ -111,7 +107,6 @@ function awdShowIntroLegacy()
         tw(y, {BackgroundTransparency = 0.98}, 1.4 + i * 0.04, Enum.EasingStyle.Sine)
     end
 
-    -- Multiple scan lines
     local function makeScan(delay, speed, thick, alpha)
         local scan = make("Frame", {
             Size = UDim2.new(1, 0, 0, thick or 2),
@@ -131,7 +126,6 @@ function awdShowIntroLegacy()
     makeScan(0.55, 1.15, 1, 0.85)
     makeScan(1.1, 1.55, 3, 0.88)
 
-    -- Top / bottom bars
     local topBar = make("Frame", {
         Size = UDim2.new(0, 0, 0, 2),
         Position = UDim2.new(0.5, 0, 0, 24),
@@ -151,7 +145,6 @@ function awdShowIntroLegacy()
     tw(topBar, {Size = UDim2.new(0.78, 0, 0, 2)}, 0.7, Enum.EasingStyle.Quint)
     tw(bottomBar, {Size = UDim2.new(0.55, 0, 0, 1)}, 0.85, Enum.EasingStyle.Quint)
 
-    -- Center stage
     local center = make("Frame", {
         Size = UDim2.new(1, -40, 1, -80),
         Position = UDim2.new(0.5, 0, 0.5, 0),
@@ -161,7 +154,6 @@ function awdShowIntroLegacy()
         ZIndex = 10,
     }, bg)
 
-    -- Expanding rings
     local rings = {}
     local ringSpecs = {
         {size = 280, stroke = Color3.fromRGB(140, 150, 180), thick = 1, t = 0.72, rotSpeed = 18},
@@ -188,7 +180,6 @@ function awdShowIntroLegacy()
         tw(ring, {Size = UDim2.new(0, spec.size, 0, spec.size)}, 0.75 + i * 0.08, Enum.EasingStyle.Back)
     end
 
-    -- Crosshair
     local crossH = make("Frame", {
         Size = UDim2.new(0, 0, 0, 1),
         Position = UDim2.new(0.5, 0, 0.46, 0),
@@ -210,7 +201,6 @@ function awdShowIntroLegacy()
     tw(crossH, {Size = UDim2.new(0, 340, 0, 1), BackgroundTransparency = 0.15}, 0.55, Enum.EasingStyle.Quart)
     tw(crossV, {Size = UDim2.new(0, 1, 0, 340), BackgroundTransparency = 0.15}, 0.55, Enum.EasingStyle.Quart)
 
-    -- Core pulse
     local core = make("Frame", {
         Size = UDim2.new(0, 4, 0, 4),
         Position = UDim2.new(0.5, 0, 0.46, 0),
@@ -222,7 +212,6 @@ function awdShowIntroLegacy()
     make("UICorner", {CornerRadius = UDim.new(1, 0)}, core)
     tw(core, {Size = UDim2.new(0, 14, 0, 14)}, 0.45, Enum.EasingStyle.Back)
 
-    -- Logo
     local logoShadow = make("TextLabel", {
         Size = UDim2.new(1, 0, 0, 90),
         Position = UDim2.new(0, 4, 0.46, -48),
@@ -272,7 +261,6 @@ function awdShowIntroLegacy()
         ZIndex = 17,
     }, center)
 
-    -- Progress
     local progressBack = make("Frame", {
         Size = UDim2.new(0, 380, 0, 3),
         Position = UDim2.new(0.5, 0, 0.78, 0),
@@ -289,7 +277,6 @@ function awdShowIntroLegacy()
         ZIndex = 18,
     }, progressBack)
 
-    -- Corner tags
     make("TextLabel", {
         Size = UDim2.new(0, 240, 0, 18),
         Position = UDim2.new(0, 22, 1, -42),
@@ -312,7 +299,6 @@ function awdShowIntroLegacy()
         ZIndex = 18,
     }, bg)
 
-    -- Continuous ring spin
     task.spawn(function()
         while gui and gui.Parent do
             for _, r in ipairs(rings) do
@@ -324,7 +310,6 @@ function awdShowIntroLegacy()
         end
     end)
 
-    -- Core pulse loop
     task.spawn(function()
         while gui and gui.Parent do
             tw(core, {Size = UDim2.new(0, 18, 0, 18)}, 0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
@@ -335,7 +320,6 @@ function awdShowIntroLegacy()
         end
     end)
 
-    -- Progress stages + typewriter
     tw(progress, {Size = UDim2.new(0.18, 0, 1, 0)}, 0.3, Enum.EasingStyle.Quint)
     task.wait(0.25)
     tw(progress, {Size = UDim2.new(0.42, 0, 1, 0)}, 0.38, Enum.EasingStyle.Quint)
@@ -357,7 +341,6 @@ function awdShowIntroLegacy()
         task.wait(0.038)
     end
 
-    -- Glitch flash on logo
     for _ = 1, 3 do
         logo.TextTransparency = 0.35
         task.wait(0.04)
@@ -374,7 +357,6 @@ function awdShowIntroLegacy()
     tw(core, {Size = UDim2.new(0, 22, 0, 22)}, 0.3, Enum.EasingStyle.Back)
     task.wait(0.55)
 
-    -- Exit sequence
     local flash = make("Frame", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundColor3 = Color3.fromRGB(245, 248, 255),
@@ -577,18 +559,61 @@ function awdShowIntroLegacyV5()
     task.wait(.42); pcall(function() gui:Destroy() end)
 end
 
--- [[ AWD HUB INTRO // A-10 THUNDERBOLT II CINEMATIC ]] --
--- Replaces only the active intro. All unrelated hub functions remain untouched.
-function awdShowIntro()
+-- [[ ϟϟ AWD HUB // FULLSCREEN INTRO v6 — COMMAND CENTER ϟϟ ]] --
+AWD_ENABLE_FULLSCREEN_INTRO = true
+
+function awdShowFullscreenIntro()
+    local parentGui = CoreGui
+    pcall(function() parentGui = game:GetService("CoreGui") end)
+
     local gui = Instance.new("ScreenGui")
-    gui.Name = "AWD_A10CinematicIntro"
+    gui.Name = "AWD_FullscreenIntro"
     gui.ResetOnSpawn = false
     gui.IgnoreGuiInset = true
-    gui.DisplayOrder = 999999
+    gui.DisplayOrder = 2147483647
     gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
-    pcall(function() gui.Parent = CoreGui end)
-    if not gui.Parent then pcall(function() gui.Parent = player:WaitForChild("PlayerGui", 5) end) end
+    pcall(function() gui.Parent = parentGui end)
+    if not gui.Parent then
+        pcall(function() gui.Parent = player:WaitForChild("PlayerGui", 5) end)
+    end
     if not gui.Parent then return end
+
+    -- Intro boyunca çalacak açılış sesi
+    local introSound
+    pcall(function()
+        introSound = Instance.new("Sound")
+        introSound.Name = "AWD_IntroSound"
+        introSound.SoundId = "rbxassetid://127997181362733"
+        introSound.Volume = 1
+        introSound.Looped = false
+        introSound.Parent = game:GetService("SoundService")
+        introSound:Play()
+    end)
+
+    local finished = false
+    local skipConn
+
+    local function finish()
+        if finished then return end
+        finished = true
+        if skipConn then pcall(function() skipConn:Disconnect() end); skipConn = nil end
+        if introSound then
+            pcall(function()
+                introSound:Stop()
+                introSound:Destroy()
+            end)
+            introSound = nil
+        end
+        local fade = Instance.new("Frame")
+        fade.Size = UDim2.fromScale(1, 1)
+        fade.BackgroundColor3 = Color3.new(0, 0, 0)
+        fade.BackgroundTransparency = 0
+        fade.BorderSizePixel = 0
+        fade.ZIndex = 999
+        fade.Parent = gui
+        TweenService:Create(fade, TweenInfo.new(0.32), {BackgroundTransparency = 1}):Play()
+        task.delay(0.36, function() pcall(function() gui:Destroy() end) end)
+    end
 
     local function make(class, props, parent)
         local obj = Instance.new(class)
@@ -596,162 +621,132 @@ function awdShowIntro()
         obj.Parent = parent
         return obj
     end
-    local function tween(obj, props, duration, style, direction)
-        if not obj or not obj.Parent then return nil end
-        local ok, tw = pcall(function()
-            return TweenService:Create(obj, TweenInfo.new(duration, style or Enum.EasingStyle.Quint, direction or Enum.EasingDirection.Out), props)
+
+    local function tw(o, props, duration, style, direction)
+        local ok, t = pcall(function()
+            return TweenService:Create(o, TweenInfo.new(duration or 0.4, style or Enum.EasingStyle.Quint, direction or Enum.EasingDirection.Out), props)
         end)
-        if ok and tw then tw:Play(); return tw end
-        return nil
+        if ok and t then t:Play(); return t end
     end
-    local function waitFor(seconds)
-        local startTime = os.clock()
-        while os.clock() - startTime < seconds do
-            if not gui.Parent then return end
-            RunService.RenderStepped:Wait()
+
+    local bg = make("Frame", {Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.fromRGB(2, 3, 8), BorderSizePixel = 0, ZIndex = 1}, gui)
+    local vig = make("Frame", {Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.new(0, 0, 0), BackgroundTransparency = 0.15, BorderSizePixel = 0, ZIndex = 2}, bg)
+    local vigGrad = Instance.new("UIGradient", vig)
+    vigGrad.Rotation = 90
+    vigGrad.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(10, 20, 38)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(2, 3, 8)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(4, 10, 22))
+    })
+    vigGrad.Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 0.15),
+        NumberSequenceKeypoint.new(0.5, 0.55),
+        NumberSequenceKeypoint.new(1, 0.30)
+    })
+
+    local grid = make("Frame", {Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, BorderSizePixel = 0, ZIndex = 3}, bg)
+    for i = 0, 24 do
+        local v = make("Frame", {Size = UDim2.new(0, 1, 1, 0), Position = UDim2.new(i / 24, 0, 0, 0), BackgroundColor3 = Color3.fromRGB(45, 80, 130), BackgroundTransparency = 0.94, BorderSizePixel = 0, ZIndex = 3}, grid)
+        tw(v, {BackgroundTransparency = 0.97}, 1.4 + i * 0.02, Enum.EasingStyle.Sine)
+    end
+    for i = 0, 14 do
+        local h = make("Frame", {Size = UDim2.new(1, 0, 0, 1), Position = UDim2.new(0, 0, i / 14, 0), BackgroundColor3 = Color3.fromRGB(45, 80, 130), BackgroundTransparency = 0.94, BorderSizePixel = 0, ZIndex = 3}, grid)
+        tw(h, {BackgroundTransparency = 0.97}, 1.2 + i * 0.03, Enum.EasingStyle.Sine)
+    end
+
+    local orbA = make("Frame", {Size = UDim2.fromOffset(520, 520), Position = UDim2.new(0.5, -260, 0.5, -260), BackgroundColor3 = Color3.fromRGB(70, 130, 220), BackgroundTransparency = 1, BorderSizePixel = 0, ZIndex = 4}, bg)
+    Instance.new("UICorner", orbA).CornerRadius = UDim.new(1, 0)
+    local orbAGrad = Instance.new("UIGradient", orbA)
+    orbAGrad.Rotation = 45
+    orbAGrad.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, 0.35), NumberSequenceKeypoint.new(0.55, 0.88), NumberSequenceKeypoint.new(1, 1)})
+    tw(orbA, {BackgroundTransparency = 0.86, Size = UDim2.fromOffset(760, 760), Position = UDim2.new(0.5, -380, 0.5, -380)}, 1.8, Enum.EasingStyle.Sine)
+
+    local rings = {}
+    for i, spec in ipairs({{300, 0.70, 20}, {210, 0.50, -28}, {145, 0.60, 38}}) do
+        local ring = make("Frame", {Size = UDim2.fromOffset(0, 0), Position = UDim2.new(0.5, 0, 0.46, 0), AnchorPoint = Vector2.new(0.5, 0.5), BackgroundTransparency = 1, BorderSizePixel = 0, ZIndex = 5 + i}, bg)
+        Instance.new("UICorner", ring).CornerRadius = UDim.new(1, 0)
+        local stroke = Instance.new("UIStroke", ring)
+        stroke.Color = Color3.fromRGB(180, 210, 255)
+        stroke.Thickness = 1.4
+        stroke.Transparency = spec[2]
+        table.insert(rings, {obj = ring, target = spec[1], speed = spec[3]})
+        tw(ring, {Size = UDim2.fromOffset(spec[1], spec[1])}, 0.85, Enum.EasingStyle.Back)
+    end
+
+    local crossH = make("Frame", {Size = UDim2.new(0, 0, 0, 1), Position = UDim2.new(0.5, 0, 0.46, 0), AnchorPoint = Vector2.new(0.5, 0.5), BackgroundColor3 = Color3.fromRGB(220, 230, 255), BackgroundTransparency = 0.85, BorderSizePixel = 0, ZIndex = 9}, bg)
+    local crossV = make("Frame", {Size = UDim2.new(0, 1, 0, 0), Position = UDim2.new(0.5, 0, 0.46, 0), AnchorPoint = Vector2.new(0.5, 0.5), BackgroundColor3 = Color3.fromRGB(220, 230, 255), BackgroundTransparency = 0.85, BorderSizePixel = 0, ZIndex = 9}, bg)
+    tw(crossH, {Size = UDim2.new(0, 440, 0, 1), BackgroundTransparency = 0.15}, 0.55, Enum.EasingStyle.Quart)
+    tw(crossV, {Size = UDim2.new(0, 1, 0, 440), BackgroundTransparency = 0.15}, 0.55, Enum.EasingStyle.Quart)
+
+    local core = make("Frame", {Size = UDim2.fromOffset(4, 4), Position = UDim2.new(0.5, 0, 0.46, 0), AnchorPoint = Vector2.new(0.5, 0.5), BackgroundColor3 = Color3.fromRGB(255, 255, 255), BorderSizePixel = 0, ZIndex = 10}, bg)
+    Instance.new("UICorner", core).CornerRadius = UDim.new(1, 0)
+    tw(core, {Size = UDim2.fromOffset(16, 16)}, 0.5, Enum.EasingStyle.Back)
+
+    local logo = make("TextLabel", {Size = UDim2.new(1, 0, 0, 100), Position = UDim2.new(0, 0, 0.46, -60), BackgroundTransparency = 1, Font = Enum.Font.GothamBlack, TextSize = 72, TextColor3 = Color3.fromRGB(250, 250, 255), TextStrokeTransparency = 0.5, TextTransparency = 1, Text = "", ZIndex = 12}, bg)
+    local sub = make("TextLabel", {Size = UDim2.new(1, 0, 0, 28), Position = UDim2.new(0, 0, 0.63, 0), BackgroundTransparency = 1, Font = Enum.Font.GothamMedium, TextSize = 15, TextColor3 = Color3.fromRGB(170, 185, 220), TextTransparency = 1, Text = "ANANISTAN WAFFEN DIVISION", ZIndex = 12}, bg)
+    local status = make("TextLabel", {Size = UDim2.new(1, 0, 0, 20), Position = UDim2.new(0, 0, 0.70, 0), BackgroundTransparency = 1, Font = Enum.Font.Code, TextSize = 12, TextColor3 = Color3.fromRGB(110, 130, 165), TextTransparency = 1, Text = "", ZIndex = 12}, bg)
+
+    local progressBack = make("Frame", {Size = UDim2.fromOffset(440, 3), Position = UDim2.new(0.5, 0, 0.80, 0), AnchorPoint = Vector2.new(0.5, 0), BackgroundColor3 = Color3.fromRGB(45, 55, 80), BackgroundTransparency = 0.2, BorderSizePixel = 0, ZIndex = 12}, bg)
+    local progress = make("Frame", {Size = UDim2.new(0, 0, 1, 0), BackgroundColor3 = Color3.fromRGB(245, 250, 255), BorderSizePixel = 0, ZIndex = 13}, progressBack)
+
+    make("TextLabel", {Size = UDim2.new(0, 280, 0, 18), Position = UDim2.new(0, 24, 1, -44), BackgroundTransparency = 1, Font = Enum.Font.Code, TextSize = 11, TextColor3 = Color3.fromRGB(95, 110, 140), Text = "AWD  //  SECURE SESSION", ZIndex = 12}, bg)
+    make("TextLabel", {Size = UDim2.new(0, 300, 0, 18), Position = UDim2.new(1, -324, 1, -44), BackgroundTransparency = 1, Font = Enum.Font.Code, TextSize = 11, TextColor3 = Color3.fromRGB(95, 110, 140), TextXAlignment = Enum.TextXAlignment.Right, Text = "LOCAL  //  BOOT SEQUENCE", ZIndex = 12}, bg)
+
+    local skipLbl = make("TextLabel", {Size = UDim2.new(0, 260, 0, 22), Position = UDim2.new(0.5, -130, 1, -78), BackgroundTransparency = 1, Font = Enum.Font.Code, TextSize = 11, TextColor3 = Color3.fromRGB(120, 135, 165), Text = "PRESS  [SPACE]  TO SKIP", TextTransparency = 1, ZIndex = 14}, bg)
+    tw(skipLbl, {TextTransparency = 0}, 0.45)
+
+    skipConn = UIS.InputBegan:Connect(function(input, processed)
+        if processed then return end
+        if input.KeyCode == Enum.KeyCode.Space or input.KeyCode == Enum.KeyCode.Escape or input.UserInputType == Enum.UserInputType.MouseButton1 then
+            finish()
         end
-    end
+    end)
 
-    -- A-10 GAU-8 sound starts immediately with the cinematic.
-    local gunSound = make("Sound", {
-        Name = "A10WarthogGunIntroSound",
-        SoundId = "rbxassetid://127997181362733",
-        Volume = 1,
-        PlaybackSpeed = 1,
-        Looped = false,
-    }, gui)
-    pcall(function() gunSound:Play() end)
-
-    local bg = make("Frame", {Name="CinematicBackdrop", Size=UDim2.fromScale(1,1), BackgroundColor3=Color3.fromRGB(3,5,8), BorderSizePixel=0}, gui)
-    make("UIGradient", {Rotation=90, Color=ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(24,31,39)),
-        ColorSequenceKeypoint.new(0.48, Color3.fromRGB(7,10,14)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(1,2,4))
-    })}, bg)
-
-    -- Horizon haze and cinematic vignette.
-    local haze = make("Frame", {Size=UDim2.new(1,0,0.38,0), Position=UDim2.new(0,0,0.29,0), BackgroundColor3=Color3.fromRGB(95,105,111), BackgroundTransparency=1, BorderSizePixel=0, ZIndex=2}, bg)
-    make("UIGradient", {Rotation=90, Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,1),NumberSequenceKeypoint.new(0.5,0.62),NumberSequenceKeypoint.new(1,1)})}, haze)
-    local vignette = make("Frame", {Size=UDim2.fromScale(1,1), BackgroundColor3=Color3.new(0,0,0), BackgroundTransparency=0.3, BorderSizePixel=0, ZIndex=30}, bg)
-    make("UIGradient", {Rotation=0, Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,0.12),NumberSequenceKeypoint.new(0.5,1),NumberSequenceKeypoint.new(1,0.12)})}, vignette)
-
-    -- Fast cloud / speed streaks give the plane a low-altitude fly-by feel.
-    for i=1,28 do
-        local y = math.random(8,92)/100
-        local streak = make("Frame", {
-            AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.new(math.random(-20,100)/100,0,y,0),
-            Size=UDim2.new(math.random(8,28)/100,0,0,math.random(1,2)),
-            BackgroundColor3=Color3.fromRGB(148,158,164), BackgroundTransparency=math.random(76,92)/100,
-            BorderSizePixel=0, ZIndex=3
-        }, bg)
-        tween(streak, {Position=UDim2.new(-0.35,0,y,0), BackgroundTransparency=1}, math.random(45,95)/100, Enum.EasingStyle.Linear)
-    end
-
-    -- Use the provided A-10 image asset instead of drawing an aircraft from UI shapes.
-    -- Roblox ImageLabel has no native horizontal-flip property. A 180-degree rotation
-    -- reverses the aircraft's left/right direction (and also turns the image upside down).
-    -- For a true horizontal-only mirror, upload a pre-mirrored copy and replace this asset ID.
-    local aircraft = make("ImageLabel", {
-        Name = "A10ThunderboltImage",
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        Position = UDim2.new(1.28, 0, 0.34, 0),
-        Size = UDim2.new(0, 610, 0, 250),
-        BackgroundTransparency = 1,
-        Image = "rbxassetid://16302689073",
-        ImageColor3 = Color3.fromRGB(255, 255, 255),
-        ImageTransparency = 0,
-        ScaleType = Enum.ScaleType.Fit,
-        ResampleMode = Enum.ResamplerMode.Default,
-        Rotation = 173,
-        ZIndex = 6,
-    }, bg)
-    local aircraftGlow = make("Frame", {
-        Name = "A10ImageGlow",
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        Position = UDim2.new(0.5, 0, 0.5, 0),
-        Size = UDim2.new(1, 80, 0, 3),
-        BackgroundColor3 = Color3.fromRGB(206, 218, 221),
-        BackgroundTransparency = 0.72,
-        BorderSizePixel = 0,
-        ZIndex = 5,
-    }, aircraft)
-    make("UIGradient", {Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,1),NumberSequenceKeypoint.new(0.5,0.1),NumberSequenceKeypoint.new(1,1)})}, aircraftGlow)
-
-    -- Camera-shake style impact flash behind the aircraft.
-    local shock = make("Frame", {AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.new(0.5,0,0.34,0), Size=UDim2.new(0,10,0,10), BackgroundColor3=Color3.fromRGB(211,220,221), BackgroundTransparency=1, BorderSizePixel=0, ZIndex=8}, bg)
-    make("UICorner", {CornerRadius=UDim.new(1,0)}, shock)
-
-    local topLine = make("Frame", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.new(0.5,0,0.105,0), Size=UDim2.new(0,0,0,2), BackgroundColor3=Color3.fromRGB(186,199,202), BackgroundTransparency=0.18, BorderSizePixel=0, ZIndex=12}, bg)
-    local bottomLine = make("Frame", {AnchorPoint=Vector2.new(0.5,1), Position=UDim2.new(0.5,0,0.895,0), Size=UDim2.new(0,0,0,1), BackgroundColor3=Color3.fromRGB(120,135,142), BackgroundTransparency=0.22, BorderSizePixel=0, ZIndex=12}, bg)
-    tween(topLine, {Size=UDim2.new(0.82,0,0,2)}, 0.65)
-    tween(bottomLine, {Size=UDim2.new(0.58,0,0,1)}, 0.75)
-
-    -- [[ INTRO TITLE ICON - ImageId buraya ]] --
-    local INTRO_TITLE_ICON_ID = "rbxassetid://74851439089345" -- BURAYA ROBLOX IMAGE ID YAZ (sadece sayı da olur)
-    local introIconSize = 72
-    local introIcon = make("ImageLabel", {
-        Name = "IntroTitleIcon",
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        Position = UDim2.fromScale(0.5, 0.52),
-        Size = UDim2.new(0, introIconSize, 0, introIconSize),
-        BackgroundTransparency = 1,
-        Image = "",
-        ImageTransparency = 1,
-        ScaleType = Enum.ScaleType.Fit,
-        ZIndex = 16,
-    }, bg)
-    do
-        local clean = tostring(INTRO_TITLE_ICON_ID):match("%d+")
-        if clean and clean ~= "0" then
-            introIcon.Image = "rbxassetid://" .. clean
-            -- ikon solda, title biraz sağa kayar
-            introIcon.Position = UDim2.new(0.5, -160, 0.52, 0)
+    task.spawn(function()
+        while gui.Parent and not finished do
+            for _, r in ipairs(rings) do
+                if r.obj and r.obj.Parent then
+                    tw(r.obj, {Rotation = r.obj.Rotation + r.speed * 0.2}, 0.2, Enum.EasingStyle.Linear)
+                end
+            end
+            task.wait(0.2)
         end
+    end)
+
+    tw(progress, {Size = UDim2.new(0.25, 0, 1, 0)}, 0.35)
+    task.wait(0.3)
+    tw(progress, {Size = UDim2.new(0.55, 0, 1, 0)}, 0.4)
+    task.wait(0.25)
+    tw(progress, {Size = UDim2.new(0.82, 0, 1, 0)}, 0.4)
+    task.wait(0.2)
+
+    local full = "ϟϟ AWD COMPHUB ϟϟ"
+    logo.Text = ""
+    for i = 1, #full do
+        if finished then return end
+        logo.Text = string.sub(full, 1, i)
+        if i == 1 then tw(logo, {TextTransparency = 0}, 0.2) end
+        task.wait(0.04)
+    end
+    if finished then return end
+
+    for _ = 1, 3 do
+        logo.TextTransparency = 0.3
+        task.wait(0.04)
+        logo.TextTransparency = 0
+        task.wait(0.05)
     end
 
-    local eyebrow = make("TextLabel", {AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.fromScale(0.5,0.425), Size=UDim2.new(0.8,0,0,24), BackgroundTransparency=1, Text="ANANISTAN WAFFEN DIVISION", TextColor3=Color3.fromRGB(157,171,176), TextTransparency=1, Font=Enum.Font.Code, TextSize=12, ZIndex=15}, bg)
-    local title = make("TextLabel", {Name="AWDMenuTitle", AnchorPoint=Vector2.new(0.5,0.5), Position=UDim2.fromScale(0.5,0.52), Size=UDim2.new(0.9,0,0,125), BackgroundTransparency=1, Text="A.W.D COMPHUB", TextColor3=Color3.fromRGB(245,247,247), TextTransparency=1, TextScaled=true, Font=Enum.Font.GothamBlack, ZIndex=16}, bg)
-    make("UITextSizeConstraint", {MinTextSize=32, MaxTextSize=92}, title)
-    make("UIStroke", {Color=Color3.fromRGB(185,197,197), Thickness=1.1, Transparency=1}, title)
-    local subtitle = make("TextLabel", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.fromScale(0.5,0.615), Size=UDim2.new(0.8,0,0,24), BackgroundTransparency=1, Text="POPO PIPI COCO", TextColor3=Color3.fromRGB(177,187,190), TextTransparency=1, TextSize=12, Font=Enum.Font.GothamMedium, ZIndex=16}, bg)
-    local status = make("TextLabel", {AnchorPoint=Vector2.new(0.5,0), Position=UDim2.fromScale(0.5,0.665), Size=UDim2.new(0.7,0,0,18), BackgroundTransparency=1, Text="Credits: Haviland, arthurmorgan4000, dutchvander4000, imstillstand", TextColor3=Color3.fromRGB(121,143,147), TextTransparency=1, TextSize=11, Font=Enum.Font.Code, ZIndex=16}, bg)
+    sub.Text = "ANANISTAN WAFFEN DIVISION"
+    status.Text = "SYSTEM LINK  //  READY  //  COMMAND CENTER"
+    tw(sub, {TextTransparency = 0}, 0.4)
+    tw(status, {TextTransparency = 0}, 0.35)
+    tw(progress, {Size = UDim2.new(1, 0, 1, 0)}, 0.45)
+    tw(core, {Size = UDim2.fromOffset(24, 24)}, 0.3, Enum.EasingStyle.Back)
+    task.wait(0.65)
 
-    -- Sequence: distant aircraft enters, fast close fly-by, title locks in, then clean fade.
-    tween(haze, {BackgroundTransparency=0.74}, 0.8, Enum.EasingStyle.Sine)
-    tween(aircraft, {Position=UDim2.new(0.54,0,0.34,0), Rotation=178, Size=UDim2.new(0,760,0,310)}, 0.92, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut)
-    tween(eyebrow, {TextTransparency=0}, 0.45)
-    waitFor(0.52)
-    tween(shock, {Size=UDim2.new(0,540,0,540), BackgroundTransparency=0.88}, 0.22, Enum.EasingStyle.Quad)
-    tween(bg, {BackgroundColor3=Color3.fromRGB(16,20,23)}, 0.12, Enum.EasingStyle.Linear)
-    waitFor(0.13)
-    tween(shock, {Size=UDim2.new(0,900,0,900), BackgroundTransparency=1}, 0.35, Enum.EasingStyle.Quint)
-    tween(aircraft, {Position=UDim2.new(-0.48,0,0.30,0), Rotation=184, Size=UDim2.new(0,900,0,360)}, 0.78, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
-    tween(title, {TextTransparency=0}, 0.38, Enum.EasingStyle.Quint)
-    if introIcon and introIcon.Image ~= "" then
-        tween(introIcon, {ImageTransparency=0}, 0.38, Enum.EasingStyle.Quint)
-    end
-    waitFor(0.22)
-    tween(subtitle, {TextTransparency=0}, 0.38)
-    tween(status, {TextTransparency=0}, 0.42)
-    waitFor(1.05)
-    tween(title, {TextTransparency=1, Position=UDim2.fromScale(0.5,0.47)}, 0.32, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
-    if introIcon then
-        tween(introIcon, {ImageTransparency=1, Position=UDim2.new(0.5, -160, 0.47, 0)}, 0.32, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
-    end
-    tween(eyebrow, {TextTransparency=1}, 0.2)
-    tween(subtitle, {TextTransparency=1}, 0.24)
-    tween(status, {TextTransparency=1}, 0.2)
-    tween(topLine, {BackgroundTransparency=1}, 0.25)
-    tween(bottomLine, {BackgroundTransparency=1}, 0.25)
-    tween(vignette, {BackgroundTransparency=1}, 0.35)
-    tween(bg, {BackgroundTransparency=1}, 0.38)
-    waitFor(0.42)
-    pcall(function() if gunSound.IsPlaying then gunSound:Stop() end end)
-    pcall(function() gui:Destroy() end)
+    finish()
 end
-task.spawn(function()
-    pcall(awdShowIntro)
-end)
 
 -- [[ SINGLETON: AYNI SCRIPTİN ÖNCEKİ KOPYASINI KAPAT ]] --
 if type(_G.ananistwaffendivisionCleanup) == "function" then
@@ -1331,12 +1326,12 @@ end
 
 
 -- [[ KOSATKA / PERİSKOP MODU ]] --
-local kosatkaEnabled = false
-local kosatkaConn = nil
-local kosatkaSavedCollision = {}
-local kosatkaSavedCharacter = nil
-local kosatkaAntiFall = nil
-local kosatkaHeight = 0.5
+kosatkaEnabled = false
+kosatkaConn = nil
+kosatkaSavedCollision = {}
+kosatkaSavedCharacter = nil
+kosatkaAntiFall = nil
+kosatkaHeight = 0.5
 
 function setKosatkaHeight(value)
     kosatkaHeight = math.clamp(tonumber(value) or 0.5, 0, 8)
@@ -1409,8 +1404,6 @@ function getKosatkaSurfaceY(root, char)
     params.FilterDescendantsInstances = {char}
     params.IgnoreWater = false
 
-    -- Önce karakterin bulunduğu X/Z noktasında yukarıdan aşağıya ray atılır.
-    -- Böylece karakter zaten yerin altında olsa bile yüzey bulunur.
     local origin = Vector3.new(root.Position.X, root.Position.Y + 100, root.Position.Z)
     local result = workspace:Raycast(origin, Vector3.new(0, -1000, 0), params)
     return result and result.Position.Y or nil
@@ -1430,8 +1423,6 @@ function startKosatka()
     forceKosatkaNoclip(char)
     kosatkaEnabled = true
 
-    -- Yerçekimini karakter üzerinde etkisizleştirir ama Humanoid yürüyüşünü bozmaz.
-    -- Böylece noclip açıkken aşağı doğru sonsuz düşüş yaşanmaz.
     local attachment = Instance.new("Attachment")
     attachment.Name = "ANANISTAN_KosatkaAntiFall"
     attachment.Parent = root
@@ -1445,7 +1436,6 @@ function startKosatka()
     vectorForce.Parent = root
     kosatkaAntiFall = vectorForce
 
-    -- Humanoid normal yürüme animasyonlarını korur.
     hum.PlatformStand = false
     hum.AutoRotate = true
 
@@ -1458,7 +1448,6 @@ function startKosatka()
         local currentHum = currentChar and currentChar:FindFirstChildOfClass("Humanoid")
         if not currentChar or not currentRoot or not currentHead or not currentHum then return end
 
-        -- Respawn sonrası Kosatka açık kalmışsa yeni karaktere yeniden uygula.
         if currentChar ~= kosatkaSavedCharacter then
             restoreKosatkaCollision()
             kosatkaSavedCharacter = currentChar
@@ -1489,8 +1478,6 @@ function startKosatka()
 
         local surfaceY = getKosatkaSurfaceY(currentRoot, currentChar)
         if surfaceY then
-            -- Head'in ALT yüzünü yüzeyden kosatkaHeight kadar yukarıda tut.
-            -- Root sadece Y ekseninde sabitlenir; X/Z Humanoid hareketinden gelir.
             local headOffsetY = currentHead.Position.Y - currentRoot.Position.Y
             local headHalfY = currentHead.Size.Y * 0.5
             local targetRootY = surfaceY + kosatkaHeight + headHalfY - headOffsetY
@@ -1502,7 +1489,6 @@ function startKosatka()
                 0
             )
 
-            -- Y hızını sıfırla; X/Z hızını kesinlikle elleme.
             local v = currentRoot.AssemblyLinearVelocity
             currentRoot.AssemblyLinearVelocity = Vector3.new(v.X, 0, v.Z)
             currentRoot.AssemblyAngularVelocity = Vector3.zero
@@ -1780,12 +1766,11 @@ end)
 
 -- [[ TEMA SİSTEMİ VERİ YAPISI (TOPLAM 20 BENZERSİZ TEMA) ]] --
 
-local themeData = {
-    -- [[ ANA & KLASİK TEMALAR ]] --
+themeData = {
   ["ϟϟ Theme"] = {
         MainBG = Color3.fromRGB(0, 0, 0),
         TopbarBG = Color3.fromRGB(0, 0, 0),
-        ButtonBG = Color3.fromRGB(35, 35, 35), -- Pure siyah yapıldı
+        ButtonBG = Color3.fromRGB(35, 35, 35),
         Accent = Color3.fromRGB(255, 255, 255),
         Text = Color3.fromRGB(220, 220, 240),
         UnselectedTabBtn = Color3.fromRGB(30, 30, 45),
@@ -1818,8 +1803,6 @@ local themeData = {
         UnselectedTabBtn = Color3.fromRGB(12, 40, 18),
         MainTrans = 0.1, TopbarTrans = 0.15, ButtonTrans = 0
     },
-
-    -- [[ OYUN & POPÜLER KÜLTÜR TEMALARI ]] --
     ["Cyberpunk"] = {
         MainBG = Color3.fromRGB(15, 15, 10),
         TopbarBG = Color3.fromRGB(25, 25, 10),
@@ -1839,10 +1822,10 @@ local themeData = {
         MainTrans = 0.05, TopbarTrans = 0.1, ButtonTrans = 0
     },
     ["Minecraft"] = {
-        MainBG = Color3.fromRGB(45, 34, 25), -- Dirt brown
+        MainBG = Color3.fromRGB(45, 34, 25),
         TopbarBG = Color3.fromRGB(74, 57, 42),
         ButtonBG = Color3.fromRGB(94, 73, 54),
-        Accent = Color3.fromRGB(92, 179, 44), -- Grass green
+        Accent = Color3.fromRGB(92, 179, 44),
         Text = Color3.fromRGB(240, 240, 230),
         UnselectedTabBtn = Color3.fromRGB(61, 46, 34),
         MainTrans = 0.1, TopbarTrans = 0.1, ButtonTrans = 0
@@ -1851,7 +1834,7 @@ local themeData = {
         MainBG = Color3.fromRGB(20, 20, 20),
         TopbarBG = Color3.fromRGB(30, 30, 30),
         ButtonBG = Color3.fromRGB(40, 40, 40),
-        Accent = Color3.fromRGB(247, 134, 14), -- Lambda orange
+        Accent = Color3.fromRGB(247, 134, 14),
         Text = Color3.fromRGB(235, 235, 235),
         UnselectedTabBtn = Color3.fromRGB(28, 28, 28),
         MainTrans = 0.1, TopbarTrans = 0.15, ButtonTrans = 0
@@ -1863,10 +1846,8 @@ local themeData = {
         Accent = Color3.fromRGB(255, 255, 255),
         Text = Color3.fromRGB(30, 60, 90),
         UnselectedTabBtn = Color3.fromRGB(195, 215, 250),
-        MainTrans = 0.4, TopbarTrans = 0.45, ButtonTrans = 0.3 -- Aero / Glass saydamlığı
+        MainTrans = 0.4, TopbarTrans = 0.45, ButtonTrans = 0.3
     },
-
-    -- [[ EVREN & DOĞA TEMALARI ]] --
     ["Space Void"] = {
         MainBG = Color3.fromRGB(10, 5, 20),
         TopbarBG = Color3.fromRGB(20, 10, 38),
@@ -1912,8 +1893,6 @@ local themeData = {
         UnselectedTabBtn = Color3.fromRGB(18, 24, 15),
         MainTrans = 0.1, TopbarTrans = 0.15, ButtonTrans = 0
     },
-
-    -- [[ AGRESİF & GÜÇLÜ TEMALAR ]] --
     ["Bloodlust"] = {
         MainBG = Color3.fromRGB(10, 0, 0),
         TopbarBG = Color3.fromRGB(22, 0, 0),
@@ -1941,8 +1920,6 @@ local themeData = {
         UnselectedTabBtn = Color3.fromRGB(22, 24, 19),
         MainTrans = 0.1, TopbarTrans = 0.15, ButtonTrans = 0
     },
-
-    -- [[ RETRO & GELİŞTİRİCİ TEMALARI ]] --
     ["Dracula"] = {
         MainBG = Color3.fromRGB(40, 42, 54),
         TopbarBG = Color3.fromRGB(33, 34, 44),
@@ -1970,8 +1947,6 @@ local themeData = {
         UnselectedTabBtn = Color3.fromRGB(28, 12, 38),
         MainTrans = 0.1, TopbarTrans = 0.15, ButtonTrans = 0
     },
-    
-    -- [[ FULL CUSTOM DIZAYN TEMASI ]] --
     ["Custom Designer"] = {
         MainBG = Color3.fromRGB(10, 10, 15),
         TopbarBG = Color3.fromRGB(18, 18, 25),
@@ -1986,18 +1961,17 @@ local themeData = {
     }
 }
 
--- Dinamik olarak güncellenecek UI elemanları listesi
-local registry = {
-    MainBG = {},      -- mainFrame, topFix vb.
-    TopbarBG = {},    -- topbar
-    ButtonBG = {},    -- butonlar, toggle kutuları vb.
-    Accent = {},      -- aktif çizgiler, kaydırma çubukları vb.
-    Text = {},        -- başlıklar, etiketler vb.
-    TabBtns = {},     -- Sekme butonlarının kendileri
-    ScrollFrames = {} -- Kaydırma çerçevenleri (kaydırma çubuğu rengi için)
+registry = {
+    MainBG = {},
+    TopbarBG = {},
+    ButtonBG = {},
+    Accent = {},
+    Text = {},
+    TabBtns = {},
+    ScrollFrames = {}
 }
 
-local currentTheme = "ϟϟ Theme"
+currentTheme = "ϟϟ Theme"
 
 function registerObj(obj, category)
     if registry[category] then
@@ -2010,7 +1984,6 @@ function applyTheme(themeName)
     if not cfg then return end
     currentTheme = themeName
 
-    -- Seçilen temayı Custom Designer değerlerine kopyala (UI senkron)
     if themeName ~= "Custom Designer" and cfg then
         local cd = themeData["Custom Designer"]
         if cd then
@@ -2023,14 +1996,12 @@ function applyTheme(themeName)
         end
     end
 
-    -- Smooth Tween'lerle renkleri yumuşakça geçir
     local function tween(obj, props)
         pcall(function()
             TweenService:Create(obj, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), props):Play()
         end)
     end
 
-    -- Resimli background ayarlarını uygula
     if bgImageLabel and blurOverlay then
         if cfg.BGImage and cfg.BGImage ~= "" then
             bgImageLabel.Image = cfg.BGImage
@@ -2070,7 +2041,17 @@ function applyTheme(themeName)
                 tween(obj, {BackgroundColor3 = Color3.fromRGB(80, 80, 80)})
             end
         else
-            tween(obj, {BackgroundColor3 = cfg.ButtonBG, BackgroundTransparency = cfg.ButtonTrans})
+            local hoverColor = cfg.ButtonBG:Lerp(Color3.fromRGB(105, 125, 160), 0.22)
+            tween(obj, {
+                BackgroundColor3 = obj:GetAttribute("AWD_Hovered") and hoverColor or cfg.ButtonBG,
+                BackgroundTransparency = cfg.ButtonTrans
+            })
+        end
+    end
+
+    for _, obj in pairs(registry.ButtonBG) do
+        if obj:IsA("Frame") and not obj:GetAttribute("IsToggleBg") and obj:GetAttribute("AWD_Hovered") then
+            tween(obj, {BackgroundColor3 = cfg.ButtonBG:Lerp(Color3.fromRGB(105, 125, 160), 0.2)})
         end
     end
 
@@ -2095,14 +2076,13 @@ function applyTheme(themeName)
         end
     end
 
-    -- Tab butonlarının renklerini seçili olma durumlarına göre yenile
     for _, item in pairs(registry.TabBtns) do
         local btn = item.Btn
         local ind = item.Indicator
-        if ind.Visible then -- Seçili sekme
+        if ind.Visible then
             tween(btn, {BackgroundColor3 = Color3.fromRGB(18, 18, 18), BackgroundTransparency = 0, TextColor3 = cfg.Text})
             tween(ind, {BackgroundColor3 = cfg.Accent})
-        else -- Seçili olmayan sekme
+        else
             tween(btn, {BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0, TextColor3 = cfg.Text})
         end
     end
@@ -2110,13 +2090,12 @@ end
 
 -- [[ YENİ UI - SMOOTH, COOL, KAPANMA SORUNU ÇÖZÜLDÜ, SİMGELER GÜNCELLENDİ ]] --
 
-local screenGui = Instance.new("ScreenGui")
+screenGui = Instance.new("ScreenGui")
 screenGui.Name = "ananistwaffendivisionUI"
 screenGui.ResetOnSpawn = false
-screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling -- Katman uyumluluğu için Sibling yapıldı
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 screenGui.Parent = CoreGui
 
--- Bu kopya, bir sonraki AWD Hub açılışında temizlenecek.
 _G.ananistwaffendivisionCleanup = function()
     pcall(function()
         if _G.ananistwaffendivisionBodycamStopPlayback then _G.ananistwaffendivisionBodycamStopPlayback() end
@@ -2150,24 +2129,26 @@ _G.ananistwaffendivisionCleanup = function()
     _G.ananistwaffendivisionCleanup = nil
 end
 
-local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 800, 0, 560)
-mainFrame.Position = UDim2.new(0.5, -400, 0.5, -280)
-mainFrame.BackgroundColor3 = Color3.fromRGB(8, 8, 14)
-mainFrame.BackgroundTransparency = 0.1
+mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 1020, 0, 680)
+mainFrame.Position = UDim2.new(0.5, -510, 0.5, -340)
+mainFrame.AnchorPoint = Vector2.new(0, 0)
+mainFrame.BackgroundColor3 = Color3.fromRGB(8, 11, 18)
+mainFrame.BackgroundTransparency = 0.075
+mainFrame.ClipsDescendants = true
+mainFrame.Active = true
 mainFrame.BorderSizePixel = 0
 mainFrame.Parent = screenGui
 registerObj(mainFrame, "MainBG")
 
--- [[ GÜMÜŞ OUTLINE (UIStroke) EKLEMESİ ]] --
-local silverStroke = Instance.new("UIStroke")
+silverStroke = Instance.new("UIStroke")
 silverStroke.Name = "SilverOutline"
-silverStroke.Thickness = 1.5
-silverStroke.Color = Color3.fromRGB(192, 192, 192) -- Gümüş Rengi
+silverStroke.Thickness = 1.25
+silverStroke.Color = Color3.fromRGB(104, 143, 198)
+silverStroke.Transparency = 0.34
 silverStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 silverStroke.Parent = mainFrame
 
--- [[ ÖZELLEŞTİRİLEBİLİR GÖRSEL KATMANI VE BULANIKLIK SİTEMİ ]] --
 bgImageLabel = Instance.new("ImageLabel")
 bgImageLabel.Name = "CustomBGImage"
 bgImageLabel.Size = UDim2.new(1, 0, 1, 0)
@@ -2176,28 +2157,215 @@ bgImageLabel.BackgroundTransparency = 1
 bgImageLabel.Image = ""
 bgImageLabel.ImageTransparency = 1
 bgImageLabel.ScaleType = Enum.ScaleType.Crop
-bgImageLabel.ZIndex = 2 -- Panelin üstünde, butonların altında kalacak şekilde 2 yapıldı
+bgImageLabel.ZIndex = 2
 bgImageLabel.Parent = mainFrame
 
--- Arka plan resminin üzerine binecek ve bulanıklık simülasyonu yapacak yumuşatıcı katman
 blurOverlay = Instance.new("Frame")
 blurOverlay.Name = "BlurOverlay"
 blurOverlay.Size = UDim2.new(1, 0, 1, 0)
 blurOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 blurOverlay.BackgroundTransparency = 1
-blurOverlay.ZIndex = 3 -- Resmin hemen üstünde katmanlanması için 3 yapıldı
+blurOverlay.ZIndex = 3
 blurOverlay.Parent = mainFrame
 
-local imgCorner = Instance.new("UICorner", bgImageLabel)
+ambientLayer = Instance.new("Frame")
+ambientLayer.Name = "AWD_AmbientVisualLayer"
+ambientLayer.Size = UDim2.fromScale(1, 1)
+ambientLayer.BackgroundTransparency = 1
+ambientLayer.BorderSizePixel = 0
+ambientLayer.ZIndex = 4
+ambientLayer.ClipsDescendants = true
+ambientLayer.Parent = mainFrame
+ambientWash = Instance.new("Frame")
+ambientWash.Name = "AmbientWash"
+ambientWash.Size = UDim2.fromScale(1, 1)
+ambientWash.BackgroundColor3 = Color3.fromRGB(24, 43, 69)
+ambientWash.BackgroundTransparency = 0.91
+ambientWash.BorderSizePixel = 0
+ambientWash.ZIndex = 4
+ambientWash.Parent = ambientLayer
+ambientGradient = Instance.new("UIGradient")
+ambientGradient.Rotation = 28
+ambientGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(38, 67, 105)),
+    ColorSequenceKeypoint.new(0.48, Color3.fromRGB(12, 20, 33)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(42, 34, 72))
+})
+ambientGradient.Transparency = NumberSequence.new({
+    NumberSequenceKeypoint.new(0, 0.25),
+    NumberSequenceKeypoint.new(0.5, 0.92),
+    NumberSequenceKeypoint.new(1, 0.28)
+})
+ambientGradient.Parent = ambientWash
+ambientRail = Instance.new("Frame")
+ambientRail.Name = "AmbientSweep"
+ambientRail.AnchorPoint = Vector2.new(0.5, 0.5)
+ambientRail.Position = UDim2.new(-0.25, 0, 0.5, 0)
+ambientRail.Size = UDim2.new(0, 2, 1.35, 0)
+ambientRail.Rotation = 18
+ambientRail.BackgroundColor3 = Color3.fromRGB(118, 171, 235)
+ambientRail.BackgroundTransparency = 0.78
+ambientRail.BorderSizePixel = 0
+ambientRail.ZIndex = 4
+ambientRail.Parent = ambientLayer
+railGradient = Instance.new("UIGradient")
+railGradient.Rotation = 90
+railGradient.Transparency = NumberSequence.new({
+    NumberSequenceKeypoint.new(0, 1),
+    NumberSequenceKeypoint.new(0.5, 0.12),
+    NumberSequenceKeypoint.new(1, 1)
+})
+railGradient.Parent = ambientRail
+ambientTopLine = Instance.new("Frame")
+ambientTopLine.Name = "AmbientTopLine"
+ambientTopLine.Position = UDim2.new(0, 0, 0, 72)
+ambientTopLine.Size = UDim2.new(1, 0, 0, 1)
+ambientTopLine.BackgroundColor3 = Color3.fromRGB(111, 155, 211)
+ambientTopLine.BackgroundTransparency = 0.72
+ambientTopLine.BorderSizePixel = 0
+ambientTopLine.ZIndex = 4
+ambientTopLine.Parent = ambientLayer
+
+-- [[ AWD GLASSMORPHISM // MULTI-LAYER FROSTED PANELS ]] --
+glassFrost = Instance.new("Frame")
+glassFrost.Name = "AWD_GlassFrost"
+glassFrost.Size = UDim2.new(1, -28, 1, -126)
+glassFrost.Position = UDim2.new(0, 14, 0, 88)
+glassFrost.BackgroundColor3 = Color3.fromRGB(180, 205, 240)
+glassFrost.BackgroundTransparency = 0.94
+glassFrost.BorderSizePixel = 0
+glassFrost.ZIndex = 4
+glassFrost.Parent = ambientLayer
+Instance.new("UICorner", glassFrost).CornerRadius = UDim.new(0, 14)
+local frostGradient = Instance.new("UIGradient", glassFrost)
+frostGradient.Rotation = 118
+frostGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(120, 165, 235)),
+    ColorSequenceKeypoint.new(0.42, Color3.fromRGB(60, 90, 140)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(20, 30, 50))
+})
+frostGradient.Transparency = NumberSequence.new({
+    NumberSequenceKeypoint.new(0, 0.35),
+    NumberSequenceKeypoint.new(0.5, 0.92),
+    NumberSequenceKeypoint.new(1, 0.60)
+})
+frostGradient.Parent = glassFrost
+
+glassSpecular = Instance.new("Frame")
+glassSpecular.Name = "AWD_GlassSpecular"
+glassSpecular.Size = UDim2.new(0, 260, 0, 2)
+glassSpecular.Position = UDim2.new(0.08, 0, 0, 92)
+glassSpecular.BackgroundColor3 = Color3.fromRGB(230, 240, 255)
+glassSpecular.BackgroundTransparency = 0.55
+glassSpecular.BorderSizePixel = 0
+glassSpecular.ZIndex = 5
+glassSpecular.Parent = ambientLayer
+Instance.new("UICorner", glassSpecular).CornerRadius = UDim.new(1, 0)
+local specGrad = Instance.new("UIGradient", glassSpecular)
+specGrad.Rotation = 0
+specGrad.Transparency = NumberSequence.new({
+    NumberSequenceKeypoint.new(0, 1),
+    NumberSequenceKeypoint.new(0.5, 0.0),
+    NumberSequenceKeypoint.new(1, 1)
+})
+specGrad.Parent = glassSpecular
+
+glassChip = Instance.new("Frame")
+glassChip.Name = "AWD_GlassChip"
+glassChip.Size = UDim2.new(0, 210, 0, 3)
+glassChip.Position = UDim2.new(0, 14, 1, -60)
+glassChip.BackgroundColor3 = Color3.fromRGB(155, 185, 230)
+glassChip.BackgroundTransparency = 0.85
+glassChip.BorderSizePixel = 0
+glassChip.ZIndex = 6
+glassChip.Parent = ambientLayer
+Instance.new("UICorner", glassChip).CornerRadius = UDim.new(1, 0)
+local chipGrad = Instance.new("UIGradient", glassChip)
+chipGrad.Rotation = 0
+chipGrad.Transparency = NumberSequence.new({
+    NumberSequenceKeypoint.new(0, 0.25),
+    NumberSequenceKeypoint.new(0.7, 0.85),
+    NumberSequenceKeypoint.new(1, 1)
+})
+chipGrad.Parent = glassChip
+
+-- [[ AWD GLASSMORPHISM // MULTI-LAYERED SURFACES ]] --
+glassSheen = Instance.new("Frame")
+glassSheen.Name = "AWD_GlassSheen"
+glassSheen.Size = UDim2.fromScale(1, 1)
+glassSheen.BackgroundColor3 = Color3.fromRGB(170, 205, 255)
+glassSheen.BackgroundTransparency = 0.965
+glassSheen.BorderSizePixel = 0
+glassSheen.ZIndex = 4
+glassSheen.Parent = ambientLayer
+glassSheenGradient = Instance.new("UIGradient")
+glassSheenGradient.Rotation = 112
+glassSheenGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(120, 175, 245)),
+    ColorSequenceKeypoint.new(0.34, Color3.fromRGB(34, 57, 86)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(9, 14, 24))
+})
+glassSheenGradient.Transparency = NumberSequence.new({
+    NumberSequenceKeypoint.new(0, 0.30),
+    NumberSequenceKeypoint.new(0.42, 0.92),
+    NumberSequenceKeypoint.new(1, 0.55)
+})
+glassSheenGradient.Parent = glassSheen
+
+function makeAmbientOrb(name, size, position, color, transparency)
+    local orb = Instance.new("Frame")
+    orb.Name = name
+    orb.AnchorPoint = Vector2.new(0.5, 0.5)
+    orb.Size = UDim2.fromOffset(size, size)
+    orb.Position = position
+    orb.BackgroundColor3 = color
+    orb.BackgroundTransparency = transparency
+    orb.BorderSizePixel = 0
+    orb.ZIndex = 4
+    orb.Parent = ambientLayer
+    Instance.new("UICorner", orb).CornerRadius = UDim.new(1, 0)
+    local gradient = Instance.new("UIGradient")
+    gradient.Rotation = 35
+    gradient.Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 0.22),
+        NumberSequenceKeypoint.new(0.45, 0.68),
+        NumberSequenceKeypoint.new(1, 1)
+    })
+    gradient.Parent = orb
+    return orb, gradient
+end
+
+ambientOrbA, ambientOrbAGradient = makeAmbientOrb(
+    "AWD_AmbientOrb_A", 310, UDim2.new(0.12, 0, 0.18, 0),
+    Color3.fromRGB(44, 104, 180), 0.90
+)
+ambientOrbB, ambientOrbBGradient = makeAmbientOrb(
+    "AWD_AmbientOrb_B", 250, UDim2.new(0.88, 0, 0.78, 0),
+    Color3.fromRGB(90, 72, 175), 0.92
+)
+ambientOrbC, ambientOrbCGradient = makeAmbientOrb(
+    "AWD_AmbientOrb_C", 190, UDim2.new(0.72, 0, 0.12, 0),
+    Color3.fromRGB(40, 135, 155), 0.94
+)
+
+glassRim = Instance.new("UIStroke")
+glassRim.Name = "AWD_GlassRim"
+glassRim.Color = Color3.fromRGB(154, 190, 238)
+glassRim.Thickness = 1
+glassRim.Transparency = 0.76
+glassRim.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+glassRim.Parent = mainFrame
+
+imgCorner = Instance.new("UICorner", bgImageLabel)
 imgCorner.CornerRadius = UDim.new(0, 22)
 
-local overlayCorner = Instance.new("UICorner", blurOverlay)
+overlayCorner = Instance.new("UICorner", blurOverlay)
 overlayCorner.CornerRadius = UDim.new(0, 22)
 
-local blurEffect = Instance.new("BlurEffect", game:GetService("Lighting"))
+blurEffect = Instance.new("BlurEffect", game:GetService("Lighting"))
 blurEffect.Size = 0
 
-local blurHolder = Instance.new("Frame")
+blurHolder = Instance.new("Frame")
 blurHolder.Size = mainFrame.Size
 blurHolder.Position = mainFrame.Position
 blurHolder.BackgroundTransparency = 1
@@ -2220,10 +2388,14 @@ mainFrame:GetPropertyChangedSignal("AbsolutePosition"):Connect(updateBlur)
 mainFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateBlur)
 task.delay(0.1, updateBlur)
 
-local corner = Instance.new("UICorner", mainFrame)
-corner.CornerRadius = UDim.new(0, 22)
+corner = Instance.new("UICorner", mainFrame)
+corner.CornerRadius = UDim.new(0, 20)
+sizeConstraint = Instance.new("UISizeConstraint")
+sizeConstraint.MinSize = Vector2.new(820, 540)
+sizeConstraint.MaxSize = Vector2.new(1320, 900)
+sizeConstraint.Parent = mainFrame
 
-local shadow = Instance.new("ImageLabel", mainFrame)
+shadow = Instance.new("ImageLabel", mainFrame)
 shadow.Size = UDim2.new(1, 60, 1, 60)
 shadow.Position = UDim2.new(0, -30, 0, -30)
 shadow.BackgroundTransparency = 1
@@ -2232,85 +2404,291 @@ shadow.ImageColor3 = Color3.new(0,0,0)
 shadow.ImageTransparency = 0.7
 shadow.ZIndex = -1
 
-local topbar = Instance.new("Frame", mainFrame)
-topbar.Size = UDim2.new(1, 0, 0, 50)
-topbar.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
-topbar.BackgroundTransparency = 0.15
+topbar = Instance.new("Frame", mainFrame)
+topbar.Size = UDim2.new(1, 0, 0, 72)
+topbar.BackgroundColor3 = Color3.fromRGB(12, 16, 24)
+topbar.BackgroundTransparency = 0.02
 topbar.BorderSizePixel = 0
-topbar.ZIndex = 5 -- Elementlerin görsel üstünde kalması sağlandı
+topbar.ZIndex = 5
 registerObj(topbar, "TopbarBG")
+topbarGradient = Instance.new("UIGradient", topbar)
+topbarGradient.Rotation = 0
+topbarGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(18, 25, 38)),
+    ColorSequenceKeypoint.new(0.52, Color3.fromRGB(12, 17, 27)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(8, 12, 19))
+})
 
-local topCorner = Instance.new("UICorner", topbar)
+topCorner = Instance.new("UICorner", topbar)
 topCorner.CornerRadius = UDim.new(0, 22)
 
-local topFix = Instance.new("Frame", topbar)
+topFix = Instance.new("Frame", topbar)
 topFix.Name = "topFix"
-topFix.Size = UDim2.new(1, 0, 0, 22)
-topFix.Position = UDim2.new(0, 0, 1, -22)
+topFix.Size = UDim2.new(1, 0, 0, 28)
+topFix.Position = UDim2.new(0, 0, 1, -28)
 topFix.BackgroundColor3 = Color3.fromRGB(8, 8, 14)
 topFix.BackgroundTransparency = 0.1
 topFix.BorderSizePixel = 0
 topFix.ZIndex = 5
 registerObj(topFix, "MainBG")
 
-local title = Instance.new("TextLabel", topbar)
-title.Size = UDim2.new(1, -120, 1, 0)
-title.Position = UDim2.new(0, 25, 0, 0)
+title = Instance.new("TextLabel", topbar)
+title.Size = UDim2.new(1, -260, 0, 29)
+title.Position = UDim2.new(0, 62, 0, 9)
 title.BackgroundTransparency = 1
-title.Text = "ϟϟ AWD HUB ϟϟ"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.TextSize = 22
+title.Text = "Ananistwaffen Division Hub"
+title.TextColor3 = Color3.fromRGB(242, 246, 255)
+title.TextSize = 18
 title.Font = Enum.Font.GothamBold
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.ZIndex = 6
 registerObj(title, "Text")
 
+brandTile = Instance.new("Frame", topbar)
+brandTile.Name = "AWD_BrandTile"
+brandTile.Size = UDim2.new(0, 34, 0, 34)
+brandTile.Position = UDim2.new(0, 16, 0, 9)
+brandTile.BackgroundColor3 = Color3.fromRGB(190, 205, 230)
+brandTile.BorderSizePixel = 0
+brandTile.ZIndex = 7
+Instance.new("UICorner", brandTile).CornerRadius = UDim.new(0, 10)
+brandGlyph = Instance.new("TextLabel", brandTile)
+brandGlyph.Size = UDim2.fromScale(1, 1)
+brandGlyph.BackgroundTransparency = 1
+brandGlyph.Text = "◎"
+brandGlyph.TextColor3 = Color3.fromRGB(9, 13, 20)
+brandGlyph.Font = Enum.Font.GothamBlack
+brandGlyph.TextSize = 19
+brandGlyph.ZIndex = 8
+
+headerSub = Instance.new("TextLabel", topbar)
+headerSub.Name = "AWD_HeaderSubtitle"
+headerSub.Size = UDim2.new(1, -300, 0, 16)
+headerSub.Position = UDim2.new(0, 63, 0, 36)
+headerSub.BackgroundTransparency = 1
+headerSub.Text = "ANANISTAN WAFFEN DIVISION     /     LOCAL SESSION"
+headerSub.TextColor3 = Color3.fromRGB(116, 132, 153)
+headerSub.TextSize = 9
+headerSub.Font = Enum.Font.Code
+headerSub.TextXAlignment = Enum.TextXAlignment.Left
+headerSub.ZIndex = 7
+
+sessionBadge = Instance.new("Frame", topbar)
+sessionBadge.Name = "AWD_SessionBadge"
+sessionBadge.Size = UDim2.new(0, 108, 0, 25)
+sessionBadge.Position = UDim2.new(1, -316, 0, 19)
+sessionBadge.BackgroundColor3 = Color3.fromRGB(16, 34, 30)
+sessionBadge.BorderSizePixel = 0
+sessionBadge.ZIndex = 8
+Instance.new("UICorner", sessionBadge).CornerRadius = UDim.new(1, 0)
+sessionDot = Instance.new("Frame", sessionBadge)
+sessionDot.Size = UDim2.new(0, 6, 0, 6)
+sessionDot.Position = UDim2.new(0, 11, 0.5, -3)
+sessionDot.BackgroundColor3 = Color3.fromRGB(105, 220, 165)
+sessionDot.BorderSizePixel = 0
+sessionDot.ZIndex = 9
+Instance.new("UICorner", sessionDot).CornerRadius = UDim.new(1, 0)
+sessionText = Instance.new("TextLabel", sessionBadge)
+sessionText.Size = UDim2.new(1, -26, 1, 0)
+sessionText.Position = UDim2.new(0, 23, 0, 0)
+sessionText.BackgroundTransparency = 1
+sessionText.Text = "SESSION LIVE"
+sessionText.TextColor3 = Color3.fromRGB(151, 213, 184)
+sessionText.TextSize = 9
+sessionText.Font = Enum.Font.GothamBold
+sessionText.TextXAlignment = Enum.TextXAlignment.Left
+sessionText.ZIndex = 9
+
+buildTag = Instance.new("TextLabel", topbar)
+buildTag.Name = "AWD_BuildTag"
+buildTag.Size = UDim2.new(0, 62, 0, 18)
+buildTag.Position = UDim2.new(1, -386, 0, 22)
+buildTag.BackgroundColor3 = Color3.fromRGB(22, 29, 40)
+buildTag.BackgroundTransparency = 0.08
+buildTag.Text = "BUILD  /  02"
+buildTag.TextColor3 = Color3.fromRGB(142, 159, 184)
+buildTag.TextSize = 8
+buildTag.Font = Enum.Font.Code
+buildTag.BorderSizePixel = 0
+buildTag.ZIndex = 9
+Instance.new("UICorner", buildTag).CornerRadius = UDim.new(1, 0)
+
+headerAccent = Instance.new("Frame", topbar)
+headerAccent.Name = "AWD_HeaderAccent"
+headerAccent.Size = UDim2.new(0, 2, 0, 30)
+headerAccent.Position = UDim2.new(0, 7, 0.5, -15)
+headerAccent.BackgroundColor3 = Color3.fromRGB(130, 165, 220)
+headerAccent.BorderSizePixel = 0
+headerAccent.ZIndex = 8
+Instance.new("UICorner", headerAccent).CornerRadius = UDim.new(1, 0)
+
+headerDivider = Instance.new("Frame", mainFrame)
+headerDivider.Name = "AWD_HeaderDivider"
+headerDivider.Position = UDim2.new(0, 0, 0, 71)
+headerDivider.Size = UDim2.new(1, 0, 0, 1)
+headerDivider.BackgroundColor3 = Color3.fromRGB(95, 112, 140)
+headerDivider.BackgroundTransparency = 0.65
+headerDivider.BorderSizePixel = 0
+headerDivider.ZIndex = 8
+
+-- [[ AWD LAYERED DESIGN // DEPTH + GRADIENT BORDERS + FLOATING CHIPS ]] --
+depthShadowA = Instance.new("Frame")
+depthShadowA.Name = "AWD_DepthShadowA"
+depthShadowA.Size = UDim2.new(1, 0, 1, 0)
+depthShadowA.Position = UDim2.new(0, 6, 0, 6)
+depthShadowA.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+depthShadowA.BackgroundTransparency = 0.72
+depthShadowA.BorderSizePixel = 0
+depthShadowA.ZIndex = 3
+depthShadowA.Parent = mainFrame
+Instance.new("UICorner", depthShadowA).CornerRadius = UDim.new(0, 22)
+
+depthShadowB = Instance.new("Frame")
+depthShadowB.Name = "AWD_DepthShadowB"
+depthShadowB.Size = UDim2.new(1, 0, 1, 0)
+depthShadowB.Position = UDim2.new(0, 14, 0, 14)
+depthShadowB.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+depthShadowB.BackgroundTransparency = 0.86
+depthShadowB.BorderSizePixel = 0
+depthShadowB.ZIndex = 2
+depthShadowB.Parent = mainFrame
+Instance.new("UICorner", depthShadowB).CornerRadius = UDim.new(0, 22)
+
+topAccentGradient = Instance.new("Frame")
+topAccentGradient.Name = "AWD_TopAccentGradient"
+topAccentGradient.Size = UDim2.new(1, -32, 0, 1)
+topAccentGradient.Position = UDim2.new(0, 16, 0, 71)
+topAccentGradient.BackgroundColor3 = Color3.new(1, 1, 1)
+topAccentGradient.BorderSizePixel = 0
+topAccentGradient.ZIndex = 9
+topAccentGradient.Parent = mainFrame
+local topAccentGrad = Instance.new("UIGradient", topAccentGradient)
+topAccentGrad.Rotation = 0
+topAccentGrad.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(60, 110, 200)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(200, 220, 255)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(90, 80, 180))
+})
+topAccentGrad.Transparency = NumberSequence.new({
+    NumberSequenceKeypoint.new(0, 0.9),
+    NumberSequenceKeypoint.new(0.5, 0.15),
+    NumberSequenceKeypoint.new(1, 0.9)
+})
+topAccentGrad.Parent = topAccentGradient
+
+-- V2 / LIVE dekoratif rozetleri kaldırıldı.
+
+awdMotionMultiplier = 1
 function smoothTween(obj, props, duration)
     if not obj then return end
     pcall(function()
-        TweenService:Create(obj, TweenInfo.new(duration or 0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), props):Play()
+        local baseDuration = duration or 0.35
+        TweenService:Create(obj, TweenInfo.new(math.max(0.04, baseDuration * awdMotionMultiplier), Enum.EasingStyle.Quad, Enum.EasingDirection.Out), props):Play()
     end)
 end
 
--- Kapatma butonu
-local closeBtn = Instance.new("TextButton", topbar)
-closeBtn.Size = UDim2.new(0, 45, 1, 0)
-closeBtn.Position = UDim2.new(1, -45, 0, 0)
-closeBtn.BackgroundTransparency = 1
+closeBtn = Instance.new("TextButton", topbar)
+closeBtn.Name = "AWD_CloseButton"
+closeBtn.Size = UDim2.new(0, 42, 0, 38)
+closeBtn.Position = UDim2.new(1, -50, 0, 13)
+closeBtn.BackgroundColor3 = Color3.fromRGB(42, 22, 28)
+closeBtn.BackgroundTransparency = 0.12
 closeBtn.Text = "ϟϟ"
-closeBtn.TextColor3 = Color3.fromRGB(255, 70, 70)
-closeBtn.TextSize = 22
-closeBtn.Font = Enum.Font.GothamBold
-closeBtn.ZIndex = 6
+closeBtn.TextColor3 = Color3.fromRGB(255, 132, 145)
+closeBtn.TextSize = 29
+closeBtn.Font = Enum.Font.GothamMedium
+closeBtn.AutoButtonColor = false
+closeBtn.ZIndex = 9
 closeBtn:SetAttribute("IsCloseButton", true)
+Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 11)
+closeStroke = Instance.new("UIStroke", closeBtn)
+closeStroke.Color = Color3.fromRGB(255, 100, 120)
+closeStroke.Transparency = 0.72
+closeStroke.Thickness = 1
 
-local isClosing = false
-closeBtn.MouseButton1Click:Connect(function()
-    if isClosing then return end
+isClosing = false
+menuScale = Instance.new("UIScale")
+menuScale.Name = "AWD_MenuScale"
+menuScale.Scale = 1
+menuScale.Parent = mainFrame
+
+function playCloseAnimation()
+    if isClosing or not screenGui.Enabled or not mainFrame.Visible then return end
     isClosing = true
+
+    local center = UDim2.fromScale(0.5, 0.5)
+    mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    mainFrame.Position = center
+
+    smoothTween(closeBtn, {BackgroundColor3 = Color3.fromRGB(75, 27, 39)}, 0.08)
+    smoothTween(menuScale, {Scale = 0.035}, 0.32)
     pcall(function()
-        smoothTween(mainFrame, {BackgroundTransparency = 1}, 0.2)
-        smoothTween(topbar, {BackgroundTransparency = 1}, 0.2)
+        if blurEffect then
+            TweenService:Create(blurEffect, TweenInfo.new(0.22, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = 0}):Play()
+        end
     end)
-    task.delay(0.25, function()
+    smoothTween(mainFrame, {BackgroundTransparency = 1}, 0.24)
+    smoothTween(topbar, {BackgroundTransparency = 1}, 0.20)
+    smoothTween(silverStroke, {Transparency = 1}, 0.18)
+    if glassFrost then smoothTween(glassFrost, {BackgroundTransparency = 1}, 0.18) end
+    if glassSpecular then smoothTween(glassSpecular, {BackgroundTransparency = 1}, 0.15) end
+    if glassChip then smoothTween(glassChip, {BackgroundTransparency = 1}, 0.18) end
+
+    task.delay(0.34, function()
+        if not mainFrame.Parent then return end
+        mainFrame.Visible = false
+        mainFrame.AnchorPoint = Vector2.new(0, 0)
+        mainFrame.Position = UDim2.new(0.5, -510, 0.5, -340)
+        mainFrame.BackgroundTransparency = 0.015
+        topbar.BackgroundTransparency = 0.02
+        silverStroke.Transparency = 0.34
+        menuScale.Scale = 1
+        closeBtn.BackgroundColor3 = Color3.fromRGB(42, 22, 28)
+        if glassFrost then glassFrost.BackgroundTransparency = 0.94 end
+        if glassSpecular then glassSpecular.BackgroundTransparency = 0.55; glassSpecular.Position = UDim2.new(0.08, 0, 0, 92) end
+        if glassChip then glassChip.BackgroundTransparency = 0.85 end
+        isClosing = false
         pcall(function()
-            screenGui.Enabled = false
-            mainFrame.Visible = false
-            isClosing = false
+            game.StarterGui:SetCore("SendNotification", {
+                Title = "AWD Hub",
+                Text = "Menü kapatıldı  /  INSERT ile geri aç",
+                Duration = 3
+            })
         end)
     end)
-    pcall(function()
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "AWD Hub",
-            Text = "Menü için INSERT",
-            Duration = 3
-        })
-    end)
+end
+
+closeBtn.MouseButton1Click:Connect(playCloseAnimation)
+
+paletteTopButton = Instance.new("TextButton", topbar)
+paletteTopButton.Name = "AWD_CommandPaletteButton"
+paletteTopButton.Size = UDim2.new(0, 92, 0, 30)
+paletteTopButton.Position = UDim2.new(1, -200, 0, 17)
+paletteTopButton.BackgroundColor3 = Color3.fromRGB(23, 31, 45)
+paletteTopButton.Text = "C.B"
+paletteTopButton.TextColor3 = Color3.fromRGB(175, 195, 222)
+paletteTopButton.Font = Enum.Font.Code
+paletteTopButton.TextSize = 10
+paletteTopButton.AutoButtonColor = false
+paletteTopButton.ZIndex = 9
+Instance.new("UICorner", paletteTopButton).CornerRadius = UDim.new(0, 8)
+paletteTopButton.MouseButton1Click:Connect(function()
+    if _G.AWD_OpenCommandPalette then _G.AWD_OpenCommandPalette() end
+end)
+paletteTopButton.MouseEnter:Connect(function() smoothTween(paletteTopButton, {BackgroundColor3 = Color3.fromRGB(42, 59, 83)}, 0.12) end)
+paletteTopButton.MouseLeave:Connect(function() smoothTween(paletteTopButton, {BackgroundColor3 = Color3.fromRGB(23, 31, 45)}, 0.14) end)
+closeBtn.MouseEnter:Connect(function()
+    smoothTween(closeBtn, {BackgroundColor3 = Color3.fromRGB(75, 27, 39)}, 0.14)
+    smoothTween(closeStroke, {Transparency = 0.28}, 0.14)
+end)
+closeBtn.MouseLeave:Connect(function()
+    smoothTween(closeBtn, {BackgroundColor3 = Color3.fromRGB(42, 22, 28)}, 0.16)
+    smoothTween(closeStroke, {Transparency = 0.72}, 0.16)
 end)
 
-local minBtn = Instance.new("TextButton", topbar)
-minBtn.Size = UDim2.new(0, 45, 1, 0)
-minBtn.Position = UDim2.new(1, -90, 0, 0)
+minBtn = Instance.new("TextButton", topbar)
+minBtn.Size = UDim2.new(0, 38, 0, 38)
+minBtn.Position = UDim2.new(1, -96, 0, 13)
 minBtn.BackgroundTransparency = 1
 minBtn.Text = "—"
 minBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
@@ -2319,13 +2697,13 @@ minBtn.Font = Enum.Font.GothamBold
 minBtn.ZIndex = 6
 minBtn:SetAttribute("IsCloseButton", true)
 
-local isMinimized = false
-local beforeMinSize = mainFrame.Size
+isMinimized = false
+beforeMinSize = mainFrame.Size
 minBtn.MouseButton1Click:Connect(function()
     isMinimized = not isMinimized
     if isMinimized then
         beforeMinSize = mainFrame.Size
-        smoothTween(mainFrame, {Size = UDim2.new(0, beforeMinSize.X.Offset, 0, 50)}, 0.3)
+        smoothTween(mainFrame, {Size = UDim2.new(0, beforeMinSize.X.Offset, 0, 64)}, 0.3)
         mainFrame.ClipsDescendants = true
     else
         smoothTween(mainFrame, {Size = beforeMinSize}, 0.3)
@@ -2334,8 +2712,7 @@ minBtn.MouseButton1Click:Connect(function()
     end
 end)
 
-local dragging = false
-local dragStart, startPos, dragInput
+dragging = false
 topbar.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = true
@@ -2359,15 +2736,14 @@ UIS.InputChanged:Connect(function(input)
     end
 end)
 
--- [[ SOL SIDEBAR NAVIGATION // AWD REDESIGN ]] --
-local sidebarWidth = 148
+sidebarWidth = 172
 
-local tabNav = Instance.new("ScrollingFrame", mainFrame)
+tabNav = Instance.new("ScrollingFrame", mainFrame)
 tabNav.Name = "AWD_Sidebar"
-tabNav.Size = UDim2.new(0, sidebarWidth, 1, -68)
-tabNav.Position = UDim2.new(0, 10, 0, 58)
-tabNav.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-tabNav.BackgroundTransparency = 0
+tabNav.Size = UDim2.new(0, sidebarWidth, 1, -114)
+tabNav.Position = UDim2.new(0, 14, 0, 76)
+tabNav.BackgroundColor3 = Color3.fromRGB(13, 20, 31)
+tabNav.BackgroundTransparency = 0.18
 tabNav.BorderSizePixel = 0
 tabNav.ZIndex = 5
 tabNav.ScrollingDirection = Enum.ScrollingDirection.Y
@@ -2376,47 +2752,178 @@ tabNav.ScrollBarImageColor3 = Color3.fromRGB(115, 115, 140)
 tabNav.CanvasSize = UDim2.new(0, 0, 0, 0)
 tabNav.AutomaticCanvasSize = Enum.AutomaticSize.Y
 tabNav.ClipsDescendants = true
-local sideCorner = Instance.new("UICorner", tabNav)
-sideCorner.CornerRadius = UDim.new(0, 12)
-local tabLayout = Instance.new("UIListLayout", tabNav)
+sideCorner = Instance.new("UICorner", tabNav)
+sideCorner.CornerRadius = UDim.new(0, 13)
+sideStroke = Instance.new("UIStroke", tabNav)
+sideStroke.Color = Color3.fromRGB(112, 151, 202)
+sideStroke.Transparency = 0.70
+sideStroke.Thickness = 1
+sideGlassGradient = Instance.new("UIGradient", tabNav)
+sideGlassGradient.Rotation = 90
+sideGlassGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(25, 38, 57)),
+    ColorSequenceKeypoint.new(0.55, Color3.fromRGB(13, 20, 31)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(10, 15, 24))
+})
+tabLayout = Instance.new("UIListLayout", tabNav)
 tabLayout.FillDirection = Enum.FillDirection.Vertical
 tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
-tabLayout.Padding = UDim.new(0, 5)
-local sidePadding = Instance.new("UIPadding", tabNav)
-sidePadding.PaddingTop = UDim.new(0, 8)
-sidePadding.PaddingBottom = UDim.new(0, 8)
-sidePadding.PaddingLeft = UDim.new(0, 7)
-sidePadding.PaddingRight = UDim.new(0, 7)
+tabLayout.Padding = UDim.new(0, 0)
+sidePadding = Instance.new("UIPadding", tabNav)
+sidePadding.PaddingTop = UDim.new(0, 2)
+sidePadding.PaddingBottom = UDim.new(0, 2)
+sidePadding.PaddingLeft = UDim.new(0, 4)
+sidePadding.PaddingRight = UDim.new(0, 4)
 
-local contentArea = Instance.new("Frame", mainFrame)
+navCaption = Instance.new("TextLabel", tabNav)
+navCaption.Name = "AWD_NavigationCaption"
+navCaption.Size = UDim2.new(1, 0, 0, 16)
+navCaption.BackgroundTransparency = 1
+navCaption.Text = "WORKSPACE  /  PAGES"
+navCaption.TextColor3 = Color3.fromRGB(94, 111, 137)
+navCaption.TextSize = 9
+navCaption.Font = Enum.Font.Code
+navCaption.TextXAlignment = Enum.TextXAlignment.Left
+navCaption.LayoutOrder = -100
+navCaption.ZIndex = 6
+
+bottomBar = Instance.new("Frame", mainFrame)
+bottomBar.Name = "AWD_StatusBar"
+bottomBar.Size = UDim2.new(1, -28, 0, 26)
+bottomBar.Position = UDim2.new(0, 14, 1, -34)
+bottomBar.BackgroundColor3 = Color3.fromRGB(15, 23, 35)
+bottomBar.BackgroundTransparency = 0.16
+bottomBar.BorderSizePixel = 0
+bottomBar.ZIndex = 7
+Instance.new("UICorner", bottomBar).CornerRadius = UDim.new(0, 7)
+bottomGradient = Instance.new("UIGradient", bottomBar)
+bottomGradient.Rotation = 0
+bottomGradient.Color = ColorSequence.new(Color3.fromRGB(16, 22, 32), Color3.fromRGB(9, 12, 18))
+bottomStroke = Instance.new("UIStroke", bottomBar)
+bottomStroke.Color = Color3.fromRGB(75, 91, 116)
+bottomStroke.Transparency = 0.82
+bottomStroke.Thickness = 1
+
+function makeStatusText(name, textValue, x, width, color)
+    local label = Instance.new("TextLabel", bottomBar)
+    label.Name = name
+    label.Size = UDim2.new(0, width, 1, 0)
+    label.Position = UDim2.new(0, x, 0, 0)
+    label.BackgroundTransparency = 1
+    label.Text = textValue
+    label.TextColor3 = color or Color3.fromRGB(125, 142, 165)
+    label.TextSize = 9
+    label.Font = Enum.Font.Code
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.ZIndex = 8
+    return label
+end
+
+statusUser = makeStatusText("AWD_StatusUser", "USER  /  " .. tostring(player and player.Name or "LOCAL"), 10, 190, Color3.fromRGB(160, 174, 195))
+statusPlace = makeStatusText("AWD_StatusPlace", "PLACE  /  " .. tostring(game.PlaceId), 210, 220)
+statusFPS = makeStatusText("AWD_StatusFPS", "FPS  /  --", 0, 90, Color3.fromRGB(135, 210, 175))
+statusFPS.Position = UDim2.new(1, -100, 0, 0)
+statusFPS.TextXAlignment = Enum.TextXAlignment.Right
+
+fpsFrames, fpsElapsed = 0, 0
+fpsConnection = RunService.RenderStepped:Connect(function(dt)
+    fpsFrames += 1
+    fpsElapsed += dt
+    if fpsElapsed >= 0.5 then
+        statusFPS.Text = "FPS  /  " .. tostring(math.floor(fpsFrames / math.max(fpsElapsed, 0.001)))
+        fpsFrames, fpsElapsed = 0, 0
+    end
+end)
+screenGui.AncestryChanged:Connect(function(_, parent)
+    if parent == nil and fpsConnection then
+        fpsConnection:Disconnect()
+        fpsConnection = nil
+    end
+end)
+
+contentArea = Instance.new("Frame", mainFrame)
 contentArea.Name = "AWD_ContentArea"
-contentArea.Size = UDim2.new(1, -(sidebarWidth + 28), 1, -68)
-contentArea.Position = UDim2.new(0, sidebarWidth + 18, 0, 58)
+contentArea.Size = UDim2.new(1, -(sidebarWidth + 46), 1, -126)
+contentArea.Position = UDim2.new(0, sidebarWidth + 32, 0, 88)
 contentArea.BackgroundTransparency = 1
 contentArea.ClipsDescendants = true
 contentArea.ZIndex = 5
 
-local tabs = {}
-local activeTab = nil
-local tabSwitchToken = 0
+-- [[ LAYERED DESIGN: content overlay (glass) + side overlay ]] --
+sideOverlay = Instance.new("Frame")
+sideOverlay.Name = "AWD_SideOverlay"
+sideOverlay.Size = tabNav.Size
+sideOverlay.Position = tabNav.Position
+sideOverlay.BackgroundColor3 = Color3.new(1, 1, 1)
+sideOverlay.BackgroundTransparency = 1
+sideOverlay.BorderSizePixel = 0
+sideOverlay.ZIndex = 5
+-- Sidebar overlay ScrollingFrame icinde olursa UIListLayout bunu tam ekranlik bir tab gibi sayar ve butonlari asagi iter.
+-- Overlay artik ana frame uzerinde ayri katmanda; tab listesinin layoutunu etkilemez.
+sideOverlay.Parent = mainFrame
+local sideOverlayGrad = Instance.new("UIGradient", sideOverlay)
+sideOverlayGrad.Rotation = 90
+sideOverlayGrad.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(60, 100, 160)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(20, 30, 50)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(30, 50, 90))
+})
+sideOverlayGrad.Transparency = NumberSequence.new({
+    NumberSequenceKeypoint.new(0, 0.85),
+    NumberSequenceKeypoint.new(0.5, 0.98),
+    NumberSequenceKeypoint.new(1, 0.92)
+})
+sideOverlayGrad.Parent = sideOverlay
+Instance.new("UICorner", sideOverlay).CornerRadius = UDim.new(0, 13)
+
+contentOverlay = Instance.new("Frame")
+contentOverlay.Name = "AWD_ContentOverlay"
+contentOverlay.Size = UDim2.new(1, 0, 1, 0)
+contentOverlay.BackgroundColor3 = Color3.new(1, 1, 1)
+contentOverlay.BackgroundTransparency = 1
+contentOverlay.BorderSizePixel = 0
+contentOverlay.ZIndex = 5
+contentOverlay.Parent = contentArea
+local contentOverlayGrad = Instance.new("UIGradient", contentOverlay)
+contentOverlayGrad.Rotation = 135
+contentOverlayGrad.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(40, 60, 95)),
+    ColorSequenceKeypoint.new(0.6, Color3.fromRGB(15, 22, 35)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(25, 35, 55))
+})
+contentOverlayGrad.Transparency = NumberSequence.new({
+    NumberSequenceKeypoint.new(0, 0.92),
+    NumberSequenceKeypoint.new(0.5, 0.99),
+    NumberSequenceKeypoint.new(1, 0.94)
+})
+contentOverlayGrad.Parent = contentOverlay
+
+tabs = {}
+activeTab = nil
+tabSwitchToken = 0
 
 function CreateTab(name)
     local tabBtn = Instance.new("TextButton", tabNav)
     tabBtn.Name = "Nav_" .. name:gsub("%W", "")
-    tabBtn.Size = UDim2.new(1, 0, 0, 38)
+    tabBtn.Size = UDim2.new(1, 0, 0, 42)
     tabBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     tabBtn.BackgroundTransparency = 0
     tabBtn.Text = "   " .. name
     tabBtn.TextColor3 = Color3.fromRGB(178, 178, 199)
     tabBtn.TextXAlignment = Enum.TextXAlignment.Left
     tabBtn.Font = Enum.Font.GothamMedium
-    tabBtn.TextSize = 12
+    tabBtn.TextSize = 13
     tabBtn.BorderSizePixel = 0
+    tabBtn.TextTruncate = Enum.TextTruncate.AtEnd
     tabBtn.AutoButtonColor = false
     tabBtn.ZIndex = 6
     registerObj(tabBtn, "Text")
     local tabCorner = Instance.new("UICorner", tabBtn)
-    tabCorner.CornerRadius = UDim.new(0, 8)
+    tabCorner.CornerRadius = UDim.new(0, 10)
+    local tabStroke = Instance.new("UIStroke", tabBtn)
+    tabStroke.Color = Color3.fromRGB(104, 135, 180)
+    tabStroke.Transparency = 1
+    tabStroke.Thickness = 1
     local indicator = Instance.new("Frame", tabBtn)
     indicator.Name = "ActiveOutline"
     indicator.Size = UDim2.new(1, -2, 1, -2)
@@ -2426,9 +2933,9 @@ function CreateTab(name)
     indicator.Visible = false
     indicator.ZIndex = 7
     local outline = Instance.new("UIStroke", indicator)
-    outline.Color = Color3.fromRGB(145, 145, 160)
+    outline.Color = Color3.fromRGB(142, 164, 198)
     outline.Thickness = 1
-    outline.Transparency = 0.15
+    outline.Transparency = 0.42
     local indCorner = Instance.new("UICorner", indicator)
     indCorner.CornerRadius = UDim.new(0, 8)
 
@@ -2438,11 +2945,12 @@ function CreateTab(name)
     scroll.Position = UDim2.new(0, 0, 0, 8)
     scroll.BackgroundTransparency = 1
     scroll.BorderSizePixel = 0
-    scroll.ScrollBarThickness = 4
-    scroll.ScrollBarImageColor3 = Color3.fromRGB(145, 145, 165)
+    scroll.ScrollBarThickness = 3
+    scroll.ScrollBarImageColor3 = Color3.fromRGB(125, 148, 180)
     scroll.Visible = false
-    scroll.ZIndex = 5
+    scroll.ZIndex = 6
     scroll.ClipsDescendants = true
+    scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
     registerObj(scroll, "ScrollFrames")
 
     local list = Instance.new("UIListLayout", scroll)
@@ -2464,8 +2972,11 @@ function CreateTab(name)
         for _, t in ipairs(tabs) do
             local selected = (t == tabData)
             t.Indicator.Visible = selected
+            t.Btn:SetAttribute("AWD_Hovered", false)
+            local tabOutline = t.Btn:FindFirstChildOfClass("UIStroke")
+            if tabOutline then smoothTween(tabOutline, {Transparency = selected and 0.5 or 1}, 0.18) end
             smoothTween(t.Btn, {
-                BackgroundColor3 = selected and Color3.fromRGB(18, 18, 18) or Color3.fromRGB(0, 0, 0),
+                BackgroundColor3 = selected and Color3.fromRGB(24, 35, 52) or Color3.fromRGB(9, 12, 18),
                 BackgroundTransparency = 0,
                 TextColor3 = selected and Color3.fromRGB(248, 248, 255) or Color3.fromRGB(178, 178, 199)
             }, 0.22)
@@ -2474,19 +2985,24 @@ function CreateTab(name)
             end
         end
         scroll.Visible = true
-        scroll.Position = UDim2.new(0, 12, 0, 8)
-        smoothTween(scroll, {Position = UDim2.new(0, 0, 0, 0)}, 0.24)
+        scroll.Position = UDim2.new(0, 10, 0, 5)
+        scroll.ZIndex = 6
+        smoothTween(scroll, {Position = UDim2.new(0, 0, 0, 0)}, 0.28)
         applyTheme(currentTheme)
     end
     tabBtn.MouseButton1Click:Connect(selectTab)
     tabBtn.MouseEnter:Connect(function()
         if activeTab ~= tabData then
-            smoothTween(tabBtn, {BackgroundColor3 = Color3.fromRGB(10, 10, 10)}, 0.12)
+            tabBtn:SetAttribute("AWD_Hovered", true)
+            smoothTween(tabBtn, {BackgroundColor3 = Color3.fromRGB(24, 33, 48), TextColor3 = Color3.fromRGB(240, 246, 255)}, 0.13)
+            smoothTween(tabStroke, {Transparency = 0.62}, 0.13)
         end
     end)
     tabBtn.MouseLeave:Connect(function()
+        tabBtn:SetAttribute("AWD_Hovered", false)
         if activeTab ~= tabData then
-            smoothTween(tabBtn, {BackgroundColor3 = Color3.fromRGB(0, 0, 0)}, 0.12)
+            smoothTween(tabBtn, {BackgroundColor3 = Color3.fromRGB(0, 0, 0), TextColor3 = (themeData[currentTheme] and themeData[currentTheme].Text) or Color3.fromRGB(178, 178, 199)}, 0.16)
+            smoothTween(tabStroke, {Transparency = 1}, 0.16)
         end
     end)
     tabData.Select = selectTab
@@ -2495,53 +3011,68 @@ end
 
 function AddButton(parent, text, callback)
     local btn = Instance.new("TextButton", parent)
-    btn.Size = UDim2.new(1, -10, 0, 38)
-    btn.BackgroundColor3 = Color3.fromRGB(22, 22, 27)
+    btn.Size = UDim2.new(1, -12, 0, 46)
+    btn.BackgroundColor3 = Color3.fromRGB(17, 21, 29)
     btn.Text = ""
     btn.AutoButtonColor = false
-    btn.ZIndex = 5
+    btn.ZIndex = 7
+    btn.LayoutOrder = #parent:GetChildren()
     registerObj(btn, "ButtonBG")
     
     local cornerBtn = Instance.new("UICorner", btn)
-    cornerBtn.CornerRadius = UDim.new(0, 10)
+    cornerBtn.CornerRadius = UDim.new(0, 12)
     local stroke = Instance.new("UIStroke", btn)
-    stroke.Color = Color3.fromRGB(100, 105, 128)
+    stroke.Color = Color3.fromRGB(92, 112, 143)
     stroke.Transparency = 0.58
-    stroke.Thickness = 1
+    stroke.Thickness = 1.1
+    stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     local accent = Instance.new("Frame", btn)
     accent.Size = UDim2.new(0, 3, 0, 18)
     accent.Position = UDim2.new(0, 7, 0.5, -9)
     accent.BackgroundColor3 = Color3.fromRGB(175, 190, 255)
     accent.BackgroundTransparency = 0.78
     accent.BorderSizePixel = 0
-    accent.ZIndex = 6
+    accent.ZIndex = 8
     local accentCorner = Instance.new("UICorner", accent)
     accentCorner.CornerRadius = UDim.new(1, 0)
     
     local label = Instance.new("TextLabel", btn)
-    label.Size = UDim2.new(1, -10, 1, 0)
+    label.Size = UDim2.new(1, -12, 1, 0)
     label.Position = UDim2.new(0, 17, 0, 0)
     label.BackgroundTransparency = 1
+    label.BackgroundColor3 = Color3.new(0, 0, 0)
     label.Text = text
-    label.TextColor3 = Color3.fromRGB(220, 220, 240)
-    label.TextSize = 13
+    label.TextColor3 = Color3.fromRGB(224, 231, 243)
+    label.TextSize = 14
     label.Font = Enum.Font.GothamMedium
     label.TextXAlignment = Enum.TextXAlignment.Left
-    label.ZIndex = 6
+    label.TextStrokeTransparency = 1
+    label.ZIndex = 8
     registerObj(label, "Text")
     
+    local isHovered = false
     btn.MouseEnter:Connect(function()
-        smoothTween(btn, {BackgroundColor3 = Color3.fromRGB(40, 42, 53)}, 0.14)
-        smoothTween(stroke, {Transparency = 0.12, Color = Color3.fromRGB(185, 195, 255)}, 0.14)
-        smoothTween(accent, {BackgroundTransparency = 0.05, Size = UDim2.new(0, 3, 0, 24), Position = UDim2.new(0, 7, 0.5, -12)}, 0.14)
+        isHovered = true
+        btn:SetAttribute("AWD_Hovered", true)
+        local cfg = themeData[currentTheme] or themeData["ϟϟ Theme"]
+        local base = (cfg and cfg.ButtonBG) or Color3.fromRGB(17, 21, 29)
+        smoothTween(btn, {BackgroundColor3 = base:Lerp(Color3.fromRGB(105, 125, 160), 0.22)}, 0.12)
+        smoothTween(stroke, {Transparency = 0.12, Color = (cfg and cfg.Accent) or Color3.fromRGB(185, 195, 255)}, 0.12)
+        smoothTween(accent, {BackgroundTransparency = 0.05, Size = UDim2.new(0, 3, 0, 24), Position = UDim2.new(0, 7, 0.5, -12)}, 0.12)
     end)
     btn.MouseLeave:Connect(function()
-        smoothTween(btn, {BackgroundColor3 = Color3.fromRGB(22, 22, 27)}, 0.16)
-        smoothTween(stroke, {Transparency = 0.58, Color = Color3.fromRGB(100, 105, 128)}, 0.16)
+        isHovered = false
+        btn:SetAttribute("AWD_Hovered", false)
+        local cfg = themeData[currentTheme] or themeData["ϟϟ Theme"]
+        smoothTween(btn, {
+            BackgroundColor3 = (cfg and cfg.ButtonBG) or Color3.fromRGB(17, 21, 29),
+            BackgroundTransparency = (cfg and cfg.ButtonTrans) or 0
+        }, 0.16)
+        smoothTween(stroke, {Transparency = 0.58, Color = Color3.fromRGB(92, 112, 143)}, 0.16)
         smoothTween(accent, {BackgroundTransparency = 0.78, Size = UDim2.new(0, 3, 0, 18), Position = UDim2.new(0, 7, 0.5, -9)}, 0.16)
     end)
-    btn.MouseButton1Down:Connect(function() smoothTween(btn, {Size = UDim2.new(1, -14, 0, 36)}, 0.08) end)
-    btn.MouseButton1Up:Connect(function() smoothTween(btn, {Size = UDim2.new(1, -10, 0, 38)}, 0.1) end)
+    btn.MouseButton1Down:Connect(function() smoothTween(btn, {Size = UDim2.new(1, -14, 0, 42)}, 0.08) end)
+    btn.MouseButton1Up:Connect(function() smoothTween(btn, {Size = UDim2.new(1, -12, 0, 46)}, 0.1) end)
     btn.MouseButton1Click:Connect(function() pcall(callback) end)
     return btn
 end
@@ -2550,7 +3081,8 @@ function AddToggle(parent, text, defaultState, callback)
     local frame = Instance.new("Frame", parent)
     frame.Size = UDim2.new(1, -10, 0, 38)
     frame.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
-    frame.ZIndex = 5
+    frame.ZIndex = 7
+    frame.LayoutOrder = #parent:GetChildren()
     registerObj(frame, "ButtonBG")
     
     local cornerFrame = Instance.new("UICorner", frame)
@@ -2558,17 +3090,20 @@ function AddToggle(parent, text, defaultState, callback)
     local frameStroke = Instance.new("UIStroke", frame)
     frameStroke.Color = Color3.fromRGB(100, 105, 128)
     frameStroke.Transparency = 0.62
+    frameStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     
     local label = Instance.new("TextLabel", frame)
     label.Size = UDim2.new(1, -60, 1, 0)
     label.Position = UDim2.new(0, 10, 0, 0)
     label.BackgroundTransparency = 1
+    label.BackgroundColor3 = Color3.new(0, 0, 0)
     label.Text = text
     label.TextColor3 = Color3.fromRGB(220, 220, 240)
     label.TextSize = 13
     label.Font = Enum.Font.GothamMedium
     label.TextXAlignment = Enum.TextXAlignment.Left
-    label.ZIndex = 6
+    label.TextStrokeTransparency = 1
+    label.ZIndex = 8
     registerObj(label, "Text")
 
     local togBg = Instance.new("Frame", frame)
@@ -2577,7 +3112,7 @@ function AddToggle(parent, text, defaultState, callback)
     togBg.BackgroundColor3 = defaultState and Color3.fromRGB(80, 220, 80) or Color3.fromRGB(80, 80, 80)
     togBg:SetAttribute("IsToggleBg", true)
     togBg:SetAttribute("ToggleActive", defaultState)
-    togBg.ZIndex = 5
+    togBg.ZIndex = 7
     registerObj(togBg, "ButtonBG")
     
     local togCorner = Instance.new("UICorner", togBg)
@@ -2587,7 +3122,7 @@ function AddToggle(parent, text, defaultState, callback)
     togCircle.Size = UDim2.new(0, 18, 0, 18)
     togCircle.Position = UDim2.new(defaultState and 0.55 or 0.05, 0, 0.5, -9)
     togCircle.BackgroundColor3 = Color3.new(1,1,1)
-    togCircle.ZIndex = 6
+    togCircle.ZIndex = 8
     local circleCorner = Instance.new("UICorner", togCircle)
     circleCorner.CornerRadius = UDim.new(0, 9)
 
@@ -2595,12 +3130,11 @@ function AddToggle(parent, text, defaultState, callback)
     btn.Size = UDim2.new(1,0,1,0)
     btn.BackgroundTransparency = 1
     btn.Text = ""
-    btn.ZIndex = 6
+    btn.ZIndex = 8
 
     local state = defaultState
     local function UpdateVis()
         pcall(function()
-            -- Dinamik renk eşleştirmesi (Veya Özel Tasarımcı Aktifken Accent Rengi Kullanımı)
             local activeColor = (currentTheme == "Custom Designer") and themeData["Custom Designer"].Accent
                              or (currentTheme == "Kırmızı theme" or currentTheme == "Bloodlust") and Color3.fromRGB(255, 50, 50) 
                              or (currentTheme == "Yeşil theme" or currentTheme == "Matrix" or currentTheme == "Toxic Waste" or currentTheme == "Minecraft") and Color3.fromRGB(50, 255, 50)
@@ -2623,12 +3157,17 @@ function AddToggle(parent, text, defaultState, callback)
         pcall(function() callback(state) end)
     end)
     btn.MouseEnter:Connect(function()
-        smoothTween(frame, {BackgroundColor3 = Color3.fromRGB(40, 42, 53)}, 0.14)
-        smoothTween(frameStroke, {Transparency = 0.18}, 0.14)
+        frame:SetAttribute("AWD_Hovered", true)
+        local cfg = themeData[currentTheme] or themeData["ϟϟ Theme"]
+        local base = (cfg and cfg.ButtonBG) or Color3.fromRGB(35, 35, 50)
+        smoothTween(frame, {BackgroundColor3 = base:Lerp(Color3.fromRGB(105, 125, 160), 0.2)}, 0.12)
+        smoothTween(frameStroke, {Transparency = 0.16, Color = (cfg and cfg.Accent) or Color3.fromRGB(145, 165, 205)}, 0.12)
     end)
     btn.MouseLeave:Connect(function()
-        smoothTween(frame, {BackgroundColor3 = Color3.fromRGB(22, 22, 27)}, 0.16)
-        smoothTween(frameStroke, {Transparency = 0.62}, 0.16)
+        frame:SetAttribute("AWD_Hovered", false)
+        local cfg = themeData[currentTheme] or themeData["ϟϟ Theme"]
+        smoothTween(frame, {BackgroundColor3 = (cfg and cfg.ButtonBG) or Color3.fromRGB(35, 35, 50)}, 0.16)
+        smoothTween(frameStroke, {Transparency = 0.62, Color = Color3.fromRGB(100, 105, 128)}, 0.16)
     end)
 
     return function(forceState)
@@ -2637,7 +3176,7 @@ function AddToggle(parent, text, defaultState, callback)
     end
 end
 
-local colorPickerFrame = Instance.new("Frame", screenGui)
+colorPickerFrame = Instance.new("Frame", screenGui)
 colorPickerFrame.Size = UDim2.new(0, 220, 0, 260)
 colorPickerFrame.Position = UDim2.new(0.5, -110, 0.5, -130)
 colorPickerFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
@@ -2645,10 +3184,10 @@ colorPickerFrame.Visible = false
 colorPickerFrame.ZIndex = 10
 registerObj(colorPickerFrame, "TopbarBG")
 
-local pickerCorner = Instance.new("UICorner", colorPickerFrame)
+pickerCorner = Instance.new("UICorner", colorPickerFrame)
 pickerCorner.CornerRadius = UDim.new(0, 12)
 
-local pTitle = Instance.new("TextLabel", colorPickerFrame)
+pTitle = Instance.new("TextLabel", colorPickerFrame)
 pTitle.Size = UDim2.new(1, 0, 0, 30)
 pTitle.Position = UDim2.new(0, 0, 0, 0)
 pTitle.BackgroundTransparency = 1
@@ -2659,7 +3198,7 @@ pTitle.Font = Enum.Font.GothamBold
 pTitle.TextXAlignment = Enum.TextXAlignment.Left
 registerObj(pTitle, "Text")
 
-local closeColorBtn = Instance.new("TextButton", colorPickerFrame)
+closeColorBtn = Instance.new("TextButton", colorPickerFrame)
 closeColorBtn.Size = UDim2.new(0, 30, 0, 30)
 closeColorBtn.Position = UDim2.new(1, -30, 0, 0)
 closeColorBtn.BackgroundTransparency = 1
@@ -2671,14 +3210,14 @@ closeColorBtn.ZIndex = 11
 closeColorBtn:SetAttribute("IsCloseButton", true)
 closeColorBtn.MouseButton1Click:Connect(function() colorPickerFrame.Visible = false end)
 
-local wheelImg = Instance.new("ImageButton", colorPickerFrame)
+wheelImg = Instance.new("ImageButton", colorPickerFrame)
 wheelImg.Size = UDim2.new(0, 170, 0, 170)
 wheelImg.Position = UDim2.new(0.5, -85, 0, 35)
 wheelImg.Image = "rbxassetid://6020299385"
 wheelImg.BackgroundTransparency = 1
 wheelImg.ZIndex = 11
 
-local rgbBox = Instance.new("TextBox", colorPickerFrame)
+rgbBox = Instance.new("TextBox", colorPickerFrame)
 rgbBox.Size = UDim2.new(0, 170, 0, 35)
 rgbBox.Position = UDim2.new(0.5, -85, 1, -45)
 rgbBox.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
@@ -2689,11 +3228,11 @@ rgbBox.Text = "255, 255, 255"
 registerObj(rgbBox, "ButtonBG")
 registerObj(rgbBox, "Text")
 
-local rgbCorner = Instance.new("UICorner", rgbBox)
+rgbCorner = Instance.new("UICorner", rgbBox)
 rgbCorner.CornerRadius = UDim.new(0, 8)
 rgbBox.ZIndex = 11
 
-local applyPickedColorCallback = nil
+applyPickedColorCallback = nil
 
 wheelImg.MouseButton1Down:Connect(function()
     local mouse = game.Players.LocalPlayer:GetMouse()
@@ -2738,7 +3277,8 @@ function AddColorPicker(parent, text, defaultColor, callback)
     local frame = Instance.new("Frame", parent)
     frame.Size = UDim2.new(1, -10, 0, 38)
     frame.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
-    frame.ZIndex = 5
+    frame.ZIndex = 7
+    frame.LayoutOrder = #parent:GetChildren()
     registerObj(frame, "ButtonBG")
     
     local frameCorner = Instance.new("UICorner", frame)
@@ -2748,12 +3288,14 @@ function AddColorPicker(parent, text, defaultColor, callback)
     label.Size = UDim2.new(1, -60, 1, 0)
     label.Position = UDim2.new(0, 10, 0, 0)
     label.BackgroundTransparency = 1
+    label.BackgroundColor3 = Color3.new(0, 0, 0)
     label.Text = text
     label.TextColor3 = Color3.fromRGB(220, 220, 240)
     label.TextSize = 13
     label.Font = Enum.Font.GothamMedium
     label.TextXAlignment = Enum.TextXAlignment.Left
-    label.ZIndex = 6
+    label.TextStrokeTransparency = 1
+    label.ZIndex = 8
     registerObj(label, "Text")
 
     local cBtn = Instance.new("TextButton", frame)
@@ -2761,7 +3303,7 @@ function AddColorPicker(parent, text, defaultColor, callback)
     cBtn.Position = UDim2.new(1, -45, 0.5, -11)
     cBtn.BackgroundColor3 = defaultColor
     cBtn.Text = ""
-    cBtn.ZIndex = 6
+    cBtn.ZIndex = 8
     local cBtnCorner = Instance.new("UICorner", cBtn)
     cBtnCorner.CornerRadius = UDim.new(0, 6)
 
@@ -2787,7 +3329,9 @@ function AddTextBox(parent, placeholder, callback)
     box.Font = Enum.Font.GothamMedium
     box.TextSize = 13
     box.ClearTextOnFocus = false
-    box.ZIndex = 5
+    box.ZIndex = 7
+    box.LayoutOrder = #parent:GetChildren()
+    box.TextStrokeTransparency = 1
     registerObj(box, "ButtonBG")
     registerObj(box, "Text")
     
@@ -2796,6 +3340,7 @@ function AddTextBox(parent, placeholder, callback)
     local boxStroke = Instance.new("UIStroke", box)
     boxStroke.Color = Color3.fromRGB(100, 105, 128)
     boxStroke.Transparency = 0.58
+    boxStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     box.Focused:Connect(function()
         smoothTween(boxStroke, {Transparency = 0.05, Color = Color3.fromRGB(185, 195, 255)}, 0.15)
         smoothTween(box, {BackgroundColor3 = Color3.fromRGB(28, 29, 38)}, 0.15)
@@ -2812,20 +3357,27 @@ function AddSlider(parent, text, min, max, default, callback)
     local frame = Instance.new("Frame", parent)
     frame.Size = UDim2.new(1, -10, 0, 58)
     frame.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
-    frame.ZIndex = 5
+    frame.ZIndex = 7
+    frame.LayoutOrder = #parent:GetChildren()
     registerObj(frame, "ButtonBG")
     Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 8)
+    local frameStroke = Instance.new("UIStroke", frame)
+    frameStroke.Color = Color3.fromRGB(100, 105, 128)
+    frameStroke.Transparency = 0.62
+    frameStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
     local label = Instance.new("TextLabel", frame)
     label.Size = UDim2.new(0.55, 0, 0, 20)
     label.Position = UDim2.new(0, 10, 0, 2)
     label.BackgroundTransparency = 1
+    label.BackgroundColor3 = Color3.new(0, 0, 0)
     label.Text = text
     label.TextColor3 = Color3.fromRGB(220, 220, 240)
     label.TextSize = 12
     label.Font = Enum.Font.GothamMedium
     label.TextXAlignment = Enum.TextXAlignment.Left
-    label.ZIndex = 6
+    label.TextStrokeTransparency = 1
+    label.ZIndex = 8
     registerObj(label, "Text")
 
     local valueBox = Instance.new("TextBox", frame)
@@ -2837,7 +3389,8 @@ function AddSlider(parent, text, min, max, default, callback)
     valueBox.TextSize = 12
     valueBox.Font = Enum.Font.GothamMedium
     valueBox.ClearTextOnFocus = false
-    valueBox.ZIndex = 6
+    valueBox.ZIndex = 8
+    valueBox.TextStrokeTransparency = 1
     Instance.new("UICorner", valueBox).CornerRadius = UDim.new(0, 4)
     registerObj(valueBox, "ButtonBG")
     registerObj(valueBox, "Text")
@@ -2846,13 +3399,13 @@ function AddSlider(parent, text, min, max, default, callback)
     sliderBg.Size = UDim2.new(1, -20, 0, 5)
     sliderBg.Position = UDim2.new(0, 10, 1, -16)
     sliderBg.BackgroundColor3 = Color3.fromRGB(50, 50, 65)
-    sliderBg.ZIndex = 5
+    sliderBg.ZIndex = 7
     Instance.new("UICorner", sliderBg).CornerRadius = UDim.new(0, 3)
 
     local sliderFill = Instance.new("Frame", sliderBg)
     sliderFill.Size = UDim2.new(math.clamp((default - min) / (max - min), 0, 1), 0, 1, 0)
     sliderFill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    sliderFill.ZIndex = 6
+    sliderFill.ZIndex = 8
     registerObj(sliderFill, "Accent")
     Instance.new("UICorner", sliderFill).CornerRadius = UDim.new(0, 3)
 
@@ -2861,7 +3414,7 @@ function AddSlider(parent, text, min, max, default, callback)
     sliderBtn.Position = UDim2.new(math.clamp((default - min) / (max - min), 0, 1), -7, 0.5, -7)
     sliderBtn.BackgroundColor3 = Color3.new(1,1,1)
     sliderBtn.Text = ""
-    sliderBtn.ZIndex = 6
+    sliderBtn.ZIndex = 9
     Instance.new("UICorner", sliderBtn).CornerRadius = UDim.new(0, 7)
 
     local current = default
@@ -2921,12 +3474,15 @@ function AddLabel(parent, text, tall)
     local box = Instance.new("TextLabel", parent)
     box.Size = UDim2.new(1, 0, 0, tall and 60 or 28)
     box.BackgroundTransparency = 1
+    box.BackgroundColor3 = Color3.new(0, 0, 0)
     box.Text = " " .. text
     box.TextColor3 = Color3.fromRGB(200, 200, 220)
     box.TextSize = 14
     box.Font = Enum.Font.GothamBold
     box.TextXAlignment = Enum.TextXAlignment.Left
-    box.ZIndex = 5
+    box.TextStrokeTransparency = 1
+    box.ZIndex = 7
+    box.LayoutOrder = #parent:GetChildren()
     registerObj(box, "Text")
     
     if tall then 
@@ -2937,12 +3493,10 @@ function AddLabel(parent, text, tall)
 end
 
 
-
-
 -- ═══════════════════════════════════════════
 -- ANANISTAN AIMBOT — register-safe (single table)
 -- ═══════════════════════════════════════════
-local AA = {
+AA = {
     silentAim = false, wallhack = false, aimLock = false, triggerBot = false,
     aimLockKey = Enum.UserInputType.MouseButton2, triggerKey = Enum.KeyCode.V,
     aimLockMode = "hold", triggerMode = "toggle",
@@ -2987,8 +3541,6 @@ function AA.getTarget()
         end
     end
     local fov = tonumber(AA.fov) or 120
-    -- Mouse: FOV imleç etrafında (kaynak Waffen gibi)
-    -- Camera: FOV ekran ortası
     local centerPos
     if AA.lockMethod == "Camera" then
         local vp = cam.ViewportSize
@@ -3022,7 +3574,6 @@ function AA.getTarget()
             end
         end
     end
-    -- Sticky target
     local now = tick()
     if best then
         AA.stickyTarget = best
@@ -3122,7 +3673,6 @@ function AA.startLoop()
                     if AA.lockMethod == "Camera" then
                         cam.CFrame = CFrame.new(cam.CFrame.Position, aimPos)
                     else
-                        -- ========== MOUSE AIMBOT (smooth + no drift) ==========
                         local screenPos, onScreen = cam:WorldToViewportPoint(aimPos)
                         if onScreen and screenPos.Z > 0 then
                             local mousePos = UIS:GetMouseLocation()
@@ -3130,9 +3680,7 @@ function AA.startLoop()
                             local dy = screenPos.Y - mousePos.Y
                             local dist = math.sqrt(dx * dx + dy * dy)
 
-                            -- deadzone: çok yakınsa dokunma (jitter yok)
                             if dist > 2.5 then
-                                -- adaptive strength: uzak = daha hızlı, yakın = ultra smooth
                                 local strength
                                 if dist > 120 then
                                     strength = 0.62
@@ -3145,7 +3693,6 @@ function AA.startLoop()
                                 dx = dx * strength
                                 dy = dy * strength
 
-                                -- max step clamp: tek frame aşırı sıçrama / spin engeli
                                 local maxStep = 38
                                 local ax, ay = math.abs(dx), math.abs(dy)
                                 if ax > maxStep or ay > maxStep then
@@ -3274,7 +3821,6 @@ UIS.InputEnded:Connect(function(input)
     AA.handleKey(input, false)
 end)
 
--- Hold-mode safety poll (fixes MouseButton2 / camera / focus edge cases)
 if not AA._holdPoll then
     AA._holdPoll = RunService.RenderStepped:Connect(function()
         if AA.settingKey then return end
@@ -3303,17 +3849,15 @@ if not AA._holdPoll then
     end)
 end
 
--- compat wrappers used by UI/config
 function AnanistanAimSetupSilentHook() AA.setupSilent() end
 function AnanistanAimStopLoop() AA.stopLoop() end
 function AnanistanAimFeatureActive(f) return AA.active(f) end
 function AnanistanAimSyncAliases() end
 
--- Keybind Değişkenleri-- Keybind Değişkenleri
-local menuToggleKey = Enum.KeyCode.Insert
-local espToggleKey = Enum.KeyCode.T
-local settingESPKey = false
-local settingMenuKey = false
+menuToggleKey = Enum.KeyCode.Insert
+espToggleKey = Enum.KeyCode.T
+settingESPKey = false
+settingMenuKey = false
 
 
 -- [[ SERVER / REJOIN / SERVER HOP / SERVER FINDER / USER SNIPE ]] --
@@ -3451,32 +3995,561 @@ function getServerInfoText()
     )
 end
 
--- Tabs oluştur (12 Tab Alan Sınırına Uygun Ölçeklendi)
-local tabMain, tD1 = CreateTab("Ana Sayfa")
-local tabPlayer, tD2 = CreateTab("Oyuncu")
-local tabUlasim, tD6 = CreateTab("Ulaşım")
-local tabStudio, tDStudio = CreateTab("Studio")
-local tabGames, tDGames = CreateTab("Oyunlar")
-local tabSpider, tD5 = CreateTab("Grapple")
-local tabVisuals, tD3 = CreateTab("Görseller")
-local tabAimbot, tDAimbot = CreateTab("Aimbot")
-local tabSettings, tD4 = CreateTab("Ayarlar")
-local tabDesigner, tD8 = CreateTab("Dizayn")
-local tabSlots, tD9 = tabDesigner, tD8 -- Slotlar tema kaydı Dizayn altında
+-- Tabs oluştur
+tabMain, tD1 = CreateTab("Ana Sayfa")
+tabPlayer, tD2 = CreateTab("Oyuncu")
+tabUlasim, tD6 = CreateTab("Ulaşım")
+tabStudio, tDStudio = CreateTab("Studio")
+tabGames, tDGames = CreateTab("Oyunlar")
+tabSpider, tD5 = CreateTab("Grapple")
+tabVisuals, tD3 = CreateTab("Görseller")
+tabAimbot, tDAimbot = CreateTab("Aimbot")
+tabSettings, tD4 = CreateTab("Ayarlar")
+tabDesigner, tD8 = CreateTab("Dizayn")
+tabSlots, tD9 = tabDesigner, tD8
 _G.ananistwaffendivisionTabPlayers, _G.ananistwaffendivisionTabPlayersData = CreateTab("Oyuncular")
-local tabScripts, tDScripts = CreateTab("Scriptler")
+tabScripts, tDScripts = CreateTab("Scriptler")
 _G.ananistwaffendivisionTabPlayersData.Btn.TextSize = 12
--- Sidebar sırası: yeni sayfalar sonradan üretilse de doğru yerde kalır.
 tD1.Btn.LayoutOrder, tD2.Btn.LayoutOrder, tD6.Btn.LayoutOrder = 1, 2, 3
 tDStudio.Btn.LayoutOrder, tDGames.Btn.LayoutOrder, tD5.Btn.LayoutOrder = 4, 5, 6
 tD3.Btn.LayoutOrder, tDAimbot.Btn.LayoutOrder, tD4.Btn.LayoutOrder = 7, 8, 9
 tD8.Btn.LayoutOrder, _G.ananistwaffendivisionTabPlayersData.Btn.LayoutOrder, tDScripts.Btn.LayoutOrder = 10, 11, 12
-local espKeyBtn, espKeyLabel
-local menuKeyBtn, menuKeyLabel
 
--- İlk açılışta Ana Sayfa seçili gelsin.
+
+-- [[ AWD UI STYLES: layout + visual presets ]] --
+-- ANA UI is the untouched default layout. All navigation labels remain text-only.
+local awdStyleNames = {
+    "ANA UI", "Altta Tablar", "Üstte Tablar", "Cam UI", "Modern UI",
+    "Future UI", "EkranÜstü Tablar", "Sağda Tablar", "Solda Tablar",
+    "Efektli UI", "Minimal UI", "Kompakt UI", "Geniş Panel",
+    "Kart UI", "Terminal UI", "Neon UI", "Çift Sıra Tablar", "Köşeli UI"
+}
+local awdStylePath = "AWD_HUB_UI_STYLE_V3.txt"
+local awdSelectedStyle = "ANA UI"
+pcall(function()
+    if isfile and readfile and isfile(awdStylePath) then
+        local saved = tostring(readfile(awdStylePath))
+        for _, name in ipairs(awdStyleNames) do
+            if name == saved then awdSelectedStyle = saved break end
+        end
+    end
+end)
+
+local awdOriginalVisual = {
+    navColor = tabNav.BackgroundColor3, navTransparency = tabNav.BackgroundTransparency,
+    strokeColor = sideStroke.Color, strokeTransparency = sideStroke.Transparency,
+    strokeThickness = sideStroke.Thickness, corner = sideCorner.CornerRadius,
+    mainColor = mainFrame.BackgroundColor3, mainTransparency = mainFrame.BackgroundTransparency
+}
+
+local function awdNavFlow(horizontal, compact, twoRows)
+    tabLayout.FillDirection = horizontal and Enum.FillDirection.Horizontal or Enum.FillDirection.Vertical
+    tabLayout.Padding = UDim.new(0, (compact and 2) or (twoRows and 5) or 4)
+    navCaption.Visible = not horizontal
+    if horizontal then
+        navCaption.Size = UDim2.new(0, 0, 0, 0)
+        tabNav.ScrollingDirection = Enum.ScrollingDirection.X
+        tabNav.AutomaticCanvasSize = Enum.AutomaticSize.X
+        sidePadding.PaddingTop, sidePadding.PaddingBottom = UDim.new(0, 4), UDim.new(0, 4)
+        sidePadding.PaddingLeft, sidePadding.PaddingRight = UDim.new(0, 5), UDim.new(0, 5)
+        for _, t in ipairs(tabs) do
+            t.Btn.TextXAlignment = Enum.TextXAlignment.Center
+            t.Btn.Text = t.Btn.Text:gsub("^%s+", "")
+            t.Btn.Size = UDim2.new(0, compact and 92 or 116, 1, -8)
+        end
+    else
+        navCaption.Size = UDim2.new(1, 0, 0, 16)
+        tabNav.ScrollingDirection = Enum.ScrollingDirection.Y
+        tabNav.AutomaticCanvasSize = Enum.AutomaticSize.Y
+        sidePadding.PaddingTop, sidePadding.PaddingBottom = UDim.new(0, 3), UDim.new(0, 3)
+        sidePadding.PaddingLeft, sidePadding.PaddingRight = UDim.new(0, 4), UDim.new(0, 4)
+        for _, t in ipairs(tabs) do
+            t.Btn.TextXAlignment = Enum.TextXAlignment.Left
+            if not t.Btn.Text:match("^   ") then t.Btn.Text = "   " .. t.Btn.Text end
+            t.Btn.Size = UDim2.new(1, 0, 0, compact and 34 or 42)
+        end
+    end
+end
+
+local function awdApplyVisual(style)
+    -- Reset to the hub's original material before applying each preset.
+    tabNav.BackgroundColor3, tabNav.BackgroundTransparency = awdOriginalVisual.navColor, awdOriginalVisual.navTransparency
+    sideStroke.Color, sideStroke.Transparency, sideStroke.Thickness = awdOriginalVisual.strokeColor, awdOriginalVisual.strokeTransparency, awdOriginalVisual.strokeThickness
+    sideCorner.CornerRadius = awdOriginalVisual.corner
+    mainFrame.BackgroundColor3, mainFrame.BackgroundTransparency = awdOriginalVisual.mainColor, awdOriginalVisual.mainTransparency
+    sideGlassGradient.Enabled = true
+    if style == "Cam UI" then
+        tabNav.BackgroundColor3, tabNav.BackgroundTransparency = Color3.fromRGB(115, 145, 185), 0.66
+        sideStroke.Color, sideStroke.Transparency, sideStroke.Thickness = Color3.fromRGB(190, 220, 255), 0.35, 1.4
+        sideCorner.CornerRadius = UDim.new(0, 19)
+        sideGlassGradient.Enabled = true
+    elseif style == "Modern UI" then
+        tabNav.BackgroundColor3, tabNav.BackgroundTransparency = Color3.fromRGB(25, 29, 39), 0.02
+        sideStroke.Color, sideStroke.Transparency, sideStroke.Thickness = Color3.fromRGB(90, 105, 130), 0.35, 1
+        sideCorner.CornerRadius = UDim.new(0, 8)
+        sideGlassGradient.Enabled = false
+    elseif style == "Future UI" then
+        tabNav.BackgroundColor3, tabNav.BackgroundTransparency = Color3.fromRGB(8, 22, 39), 0.08
+        sideStroke.Color, sideStroke.Transparency, sideStroke.Thickness = Color3.fromRGB(45, 190, 255), 0.18, 1.6
+        sideCorner.CornerRadius = UDim.new(0, 5)
+        sideGlassGradient.Enabled = false
+    elseif style == "Efektli UI" then
+        tabNav.BackgroundColor3, tabNav.BackgroundTransparency = Color3.fromRGB(24, 18, 42), 0.12
+        sideStroke.Color, sideStroke.Transparency, sideStroke.Thickness = Color3.fromRGB(165, 100, 255), 0.12, 2
+        sideCorner.CornerRadius = UDim.new(0, 17)
+        sideGlassGradient.Enabled = true
+    elseif style == "Minimal UI" then
+        tabNav.BackgroundColor3, tabNav.BackgroundTransparency = Color3.fromRGB(10, 13, 18), 0.02
+        sideStroke.Transparency, sideStroke.Thickness = 1, 0
+        sideCorner.CornerRadius = UDim.new(0, 3)
+        sideGlassGradient.Enabled = false
+    elseif style == "Kompakt UI" then
+        tabNav.BackgroundColor3, tabNav.BackgroundTransparency = Color3.fromRGB(15, 21, 30), 0.04
+        sideStroke.Transparency, sideStroke.Thickness = 0.8, 1
+        sideCorner.CornerRadius = UDim.new(0, 7)
+        sideGlassGradient.Enabled = false
+    elseif style == "Geniş Panel" then
+        tabNav.BackgroundColor3, tabNav.BackgroundTransparency = Color3.fromRGB(17, 27, 42), 0.05
+        sideStroke.Color, sideStroke.Transparency, sideStroke.Thickness = Color3.fromRGB(100, 145, 195), 0.55, 1
+        sideCorner.CornerRadius = UDim.new(0, 16)
+        sideGlassGradient.Enabled = true
+    elseif style == "Kart UI" then
+        tabNav.BackgroundColor3, tabNav.BackgroundTransparency = Color3.fromRGB(28, 34, 46), 0.02
+        sideStroke.Color, sideStroke.Transparency, sideStroke.Thickness = Color3.fromRGB(115, 130, 155), 0.55, 1
+        sideCorner.CornerRadius = UDim.new(0, 22)
+        sideGlassGradient.Enabled = false
+    elseif style == "Terminal UI" then
+        tabNav.BackgroundColor3, tabNav.BackgroundTransparency = Color3.fromRGB(3, 19, 13), 0.02
+        sideStroke.Color, sideStroke.Transparency, sideStroke.Thickness = Color3.fromRGB(55, 190, 115), 0.25, 1
+        sideCorner.CornerRadius = UDim.new(0, 2)
+        sideGlassGradient.Enabled = false
+    elseif style == "Neon UI" then
+        tabNav.BackgroundColor3, tabNav.BackgroundTransparency = Color3.fromRGB(20, 10, 34), 0.05
+        sideStroke.Color, sideStroke.Transparency, sideStroke.Thickness = Color3.fromRGB(255, 65, 205), 0.08, 2
+        sideCorner.CornerRadius = UDim.new(0, 13)
+        sideGlassGradient.Enabled = true
+    elseif style == "Köşeli UI" then
+        tabNav.BackgroundColor3, tabNav.BackgroundTransparency = Color3.fromRGB(18, 24, 34), 0.02
+        sideStroke.Color, sideStroke.Transparency, sideStroke.Thickness = Color3.fromRGB(100, 115, 140), 0.4, 1
+        sideCorner.CornerRadius = UDim.new(0, 0)
+        sideGlassGradient.Enabled = false
+    end
+end
+
+local function applyUILayout(styleName)
+    local style = styleName or "ANA UI"
+    local horizontal = false
+    local compact = false
+    local twoRows = false
+    local navPos, navSize, contentPos, contentSize
+    local w = mainFrame.AbsoluteSize.X
+    if style == "ANA UI" or style == "Solda Tablar" then
+        navPos, navSize = UDim2.new(0,14,0,76), UDim2.new(0,172,1,-114)
+        contentPos, contentSize = UDim2.new(0,204,0,88), UDim2.new(1,-218,1,-126)
+    elseif style == "Altta Tablar" then
+        horizontal = true
+        navPos, navSize = UDim2.new(0,14,1,-78), UDim2.new(1,-28,0,48)
+        contentPos, contentSize = UDim2.new(0,14,0,76), UDim2.new(1,-28,1,-164)
+    elseif style == "Üstte Tablar" then
+        horizontal = true
+        navPos, navSize = UDim2.new(0,14,0,66), UDim2.new(1,-28,0,48)
+        contentPos, contentSize = UDim2.new(0,14,0,124), UDim2.new(1,-28,1,-162)
+    elseif style == "Cam UI" then
+        horizontal = true
+        navPos, navSize = UDim2.new(0,22,0,70), UDim2.new(1,-44,0,50)
+        contentPos, contentSize = UDim2.new(0,22,0,132), UDim2.new(1,-44,1,-170)
+    elseif style == "Modern UI" then
+        horizontal = true
+        navPos, navSize = UDim2.new(0,14,0,76), UDim2.new(1,-28,0,42)
+        contentPos, contentSize = UDim2.new(0,14,0,130), UDim2.new(1,-28,1,-168)
+        compact = true
+    elseif style == "Future UI" then
+        horizontal = true
+        navPos, navSize = UDim2.new(0,14,0,58), UDim2.new(1,-28,0,56)
+        contentPos, contentSize = UDim2.new(0,14,0,128), UDim2.new(1,-28,1,-166)
+    elseif style == "EkranÜstü Tablar" then
+        horizontal = true
+        navPos, navSize = UDim2.new(0,0,0,0), UDim2.new(1,0,0,52)
+        contentPos, contentSize = UDim2.new(0,14,0,66), UDim2.new(1,-28,1,-104)
+    elseif style == "Sağda Tablar" then
+        navPos, navSize = UDim2.new(1,-186,0,76), UDim2.new(0,172,1,-114)
+        contentPos, contentSize = UDim2.new(0,14,0,88), UDim2.new(1,-218,1,-126)
+    elseif style == "Efektli UI" then
+        navPos, navSize = UDim2.new(0,18,0,84), UDim2.new(0,190,1,-130)
+        contentPos, contentSize = UDim2.new(0,226,0,84), UDim2.new(1,-244,1,-130)
+    elseif style == "Minimal UI" then
+        horizontal = true
+        navPos, navSize = UDim2.new(0,14,0,72), UDim2.new(1,-28,0,34)
+        contentPos, contentSize = UDim2.new(0,14,0,118), UDim2.new(1,-28,1,-156)
+        compact = true
+    elseif style == "Kompakt UI" then
+        navPos, navSize = UDim2.new(0,10,0,76), UDim2.new(0,142,1,-114)
+        contentPos, contentSize = UDim2.new(0,172,0,88), UDim2.new(1,-186,1,-126)
+        compact = true
+    elseif style == "Geniş Panel" then
+        navPos, navSize = UDim2.new(0,14,0,76), UDim2.new(0,220,1,-114)
+        contentPos, contentSize = UDim2.new(0,252,0,88), UDim2.new(1,-266,1,-126)
+    elseif style == "Kart UI" then
+        navPos, navSize = UDim2.new(0,20,0,92), UDim2.new(0,188,1,-146)
+        contentPos, contentSize = UDim2.new(0,230,0,76), UDim2.new(1,-244,1,-114)
+    elseif style == "Terminal UI" then
+        navPos, navSize = UDim2.new(0,14,0,76), UDim2.new(0,184,1,-114)
+        contentPos, contentSize = UDim2.new(0,216,0,88), UDim2.new(1,-230,1,-126)
+    elseif style == "Neon UI" then
+        horizontal = true
+        navPos, navSize = UDim2.new(0.04,0,0,68), UDim2.new(0.92,0,0,48)
+        contentPos, contentSize = UDim2.new(0,14,0,128), UDim2.new(1,-28,1,-166)
+    elseif style == "Çift Sıra Tablar" then
+        horizontal, twoRows = true, true
+        navPos, navSize = UDim2.new(0,14,0,60), UDim2.new(1,-28,0,66)
+        contentPos, contentSize = UDim2.new(0,14,0,138), UDim2.new(1,-28,1,-176)
+    elseif style == "Köşeli UI" then
+        navPos, navSize = UDim2.new(0,14,0,76), UDim2.new(0,172,1,-114)
+        contentPos, contentSize = UDim2.new(0,204,0,88), UDim2.new(1,-218,1,-126)
+    end
+    awdNavFlow(horizontal, compact, twoRows)
+    if twoRows then
+        local half = math.ceil(#tabs / 2)
+        for _, t in ipairs(tabs) do t.Btn.Size = UDim2.new(0, math.max(84, math.floor((w-52)/half)), 0, 26) end
+    elseif horizontal then
+        local count = math.max(#tabs, 1)
+        local width = math.max(compact and 78 or 92, math.floor((w-54) / math.min(count, 7)))
+        for _, t in ipairs(tabs) do t.Btn.Size = UDim2.new(0, width, 1, -8) end
+    end
+    tabNav.Position, tabNav.Size = navPos, navSize
+    tabNav.AutomaticSize = Enum.AutomaticSize.None
+    tabNav.ClipsDescendants, tabNav.ScrollingEnabled = true, true
+    contentArea.Position, contentArea.Size = contentPos, contentSize
+    sideOverlay.Position, sideOverlay.Size, sideOverlay.Visible = navPos, navSize, true
+    for _, t in ipairs(tabs) do t.Frame.Position, t.Frame.Size = UDim2.new(0,0,0,0), UDim2.new(1,0,1,0) end
+    bottomBar.Position = UDim2.new(0,14,1,-34)
+    bottomBar.Visible = true
+    awdApplyVisual(style)
+    awdSelectedStyle = style
+end
+
+local stylePage, styleTabData = CreateTab("Stil")
+styleTabData.Btn.LayoutOrder = 13
+AddLabel(stylePage, "ARAYÜZ STİLLERİ", false)
+AddLabel(stylePage, "Sekmelerin konumunu ve arayüzün görünümünü değiştiren stillerden birini seç. ANA UI orijinal tasarımdır.", true)
+for index, styleName in ipairs(awdStyleNames) do
+    local button = AddButton(stylePage, styleName, function()
+        applyUILayout(styleName)
+        pcall(function() if writefile then writefile(awdStylePath, styleName) end end)
+        if notify then notify("Arayüz Stili", styleName .. " uygulandı") end
+    end)
+    button.LayoutOrder = index + 10
+end
+applyUILayout(awdSelectedStyle)
+
+StatsService = game:GetService("Stats")
+paletteKey = Enum.KeyCode.K
+paletteCapture = false
+awdNotificationHistory = {}
+awdDeveloperLog = {}
+paletteCommands = {}
+
+function awdLog(message, kind)
+    local stamp = os.date("%H:%M:%S")
+    table.insert(awdDeveloperLog, 1, "[" .. stamp .. "] [" .. tostring(kind or "INFO") .. "] " .. tostring(message))
+    while #awdDeveloperLog > 35 do table.remove(awdDeveloperLog) end
+end
+
+function awdNotify(title, message, duration)
+    local item = {time = os.date("%H:%M:%S"), title = tostring(title or "AWD Hub"), message = tostring(message or "")}
+    table.insert(awdNotificationHistory, 1, item)
+    while #awdNotificationHistory > 30 do table.remove(awdNotificationHistory) end
+    awdLog(item.title .. ": " .. item.message, "NOTICE")
+    pcall(function()
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = item.title,
+            Text = item.message,
+            Duration = duration or 3
+        })
+    end)
+end
+
+function awdMakePanel(parent, name, size, position, z)
+    local frame = Instance.new("Frame")
+    frame.Name = name
+    frame.Size = size
+    frame.Position = position
+    frame.BackgroundColor3 = Color3.fromRGB(13, 18, 27)
+    frame.BorderSizePixel = 0
+    frame.ZIndex = z or 30
+    frame.Visible = false
+    frame.Parent = parent
+    Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 14)
+    local stroke = Instance.new("UIStroke", frame)
+    stroke.Color = Color3.fromRGB(95, 125, 170)
+    stroke.Transparency = 0.45
+    stroke.Thickness = 1
+    return frame
+end
+
+AddLabel(tabMain, "AWD COMMAND CENTER", false)
+AddLabel(tabMain, "Kontrol paneli • canlı oturum bilgileri • hızlı erişim", true)
+dashboardStats = AddLabel(tabMain, "Yükleniyor...", true)
+dashboardQuick = AddLabel(tabMain, "QUICK ACCESS", false)
+AddButton(tabMain, "Komut Paletini Aç  [Ctrl + K]", function()
+    if _G.AWD_OpenCommandPalette then _G.AWD_OpenCommandPalette() end
+end)
+AddButton(tabMain, "Tema Stüdyosuna Git", function() if tD8 and tD8.Select then tD8.Select() end end)
+AddButton(tabMain, "Ayarlar ve Profil Yönetimi", function() if tD4 and tD4.Select then tD4.Select() end end)
+AddButton(tabMain, "Oyuncu Araçlarına Git", function() if tD2 and tD2.Select then tD2.Select() end end)
+
+paletteShade = Instance.new("TextButton")
+paletteShade.Name = "AWD_PaletteShade"
+paletteShade.Size = UDim2.fromScale(1, 1)
+paletteShade.BackgroundColor3 = Color3.new(0, 0, 0)
+paletteShade.BackgroundTransparency = 0.42
+paletteShade.Text = ""
+paletteShade.AutoButtonColor = false
+paletteShade.Visible = false
+paletteShade.ZIndex = 29
+paletteShade.Parent = screenGui
+palette = awdMakePanel(screenGui, "AWD_CommandPalette", UDim2.new(0, 470, 0, 430), UDim2.new(0.5, -235, 0.5, -215), 30)
+paletteShade.MouseButton1Click:Connect(function() palette.Visible = false; paletteShade.Visible = false end)
+paletteTitle = Instance.new("TextLabel", palette)
+paletteTitle.Size = UDim2.new(1, -28, 0, 30)
+paletteTitle.Position = UDim2.new(0, 14, 0, 10)
+paletteTitle.BackgroundTransparency = 1
+paletteTitle.Text = "COMMAND PALETTE"
+paletteTitle.TextColor3 = Color3.fromRGB(230, 238, 250)
+paletteTitle.Font = Enum.Font.GothamBold
+paletteTitle.TextSize = 14
+paletteTitle.TextXAlignment = Enum.TextXAlignment.Left
+paletteTitle.ZIndex = 31
+paletteHint = Instance.new("TextLabel", palette)
+paletteHint.Size = UDim2.new(1, -28, 0, 18)
+paletteHint.Position = UDim2.new(0, 14, 0, 37)
+paletteHint.BackgroundTransparency = 1
+paletteHint.Text = "Sekme veya araç ara • ESC ile kapat"
+paletteHint.TextColor3 = Color3.fromRGB(125, 145, 170)
+paletteHint.Font = Enum.Font.Gotham
+paletteHint.TextSize = 10
+paletteHint.TextXAlignment = Enum.TextXAlignment.Left
+paletteHint.ZIndex = 31
+paletteSearch = Instance.new("TextBox", palette)
+paletteSearch.Size = UDim2.new(1, -28, 0, 42)
+paletteSearch.Position = UDim2.new(0, 14, 0, 64)
+paletteSearch.BackgroundColor3 = Color3.fromRGB(22, 29, 42)
+paletteSearch.TextColor3 = Color3.fromRGB(240, 245, 255)
+paletteSearch.PlaceholderColor3 = Color3.fromRGB(120, 135, 158)
+paletteSearch.PlaceholderText = "Ara: sekme, tema, ayar..."
+paletteSearch.Text = ""
+paletteSearch.ClearTextOnFocus = false
+paletteSearch.Font = Enum.Font.Gotham
+paletteSearch.TextSize = 13
+paletteSearch.TextXAlignment = Enum.TextXAlignment.Left
+paletteSearch.ZIndex = 32
+Instance.new("UICorner", paletteSearch).CornerRadius = UDim.new(0, 9)
+paletteSearchPad = Instance.new("UIPadding", paletteSearch)
+paletteSearchPad.PaddingLeft = UDim.new(0, 12)
+paletteResults = Instance.new("ScrollingFrame", palette)
+paletteResults.Size = UDim2.new(1, -28, 1, -126)
+paletteResults.Position = UDim2.new(0, 14, 0, 116)
+paletteResults.BackgroundTransparency = 1
+paletteResults.BorderSizePixel = 0
+paletteResults.ScrollBarThickness = 3
+paletteResults.CanvasSize = UDim2.new(0, 0, 0, 0)
+paletteResults.AutomaticCanvasSize = Enum.AutomaticSize.Y
+paletteResults.ZIndex = 31
+paletteLayout = Instance.new("UIListLayout", paletteResults)
+paletteLayout.Padding = UDim.new(0, 6)
+paletteLayout.SortOrder = Enum.SortOrder.LayoutOrder
+palettePad = Instance.new("UIPadding", paletteResults)
+palettePad.PaddingBottom = UDim.new(0, 6)
+
+function awdAddPaletteCommand(label, category, callback)
+    table.insert(paletteCommands, {label = label, category = category or "ACTION", callback = callback})
+end
+for _, tab in ipairs(tabs) do
+    local captured = tab
+    local tabName = captured.Btn.Text:gsub("^%s+", "")
+    awdAddPaletteCommand("Sekmeye Git: " .. tabName, "NAVIGATION", function()
+        if captured.Select then captured.Select() end
+        palette.Visible = false; paletteShade.Visible = false
+    end)
+end
+awdAddPaletteCommand("Tema: Varsayılan", "THEME", function() applyTheme("ϟϟ Theme"); palette.Visible = false; paletteShade.Visible = false end)
+awdAddPaletteCommand("Tema: Cyberpunk", "THEME", function() applyTheme("Cyberpunk"); palette.Visible = false; paletteShade.Visible = false end)
+awdAddPaletteCommand("Tema: Ocean Deep", "THEME", function() applyTheme("Ocean Deep"); palette.Visible = false; paletteShade.Visible = false end)
+awdAddPaletteCommand("Tema: Dracula", "THEME", function() applyTheme("Dracula"); palette.Visible = false; paletteShade.Visible = false end)
+awdAddPaletteCommand("Tema Stüdyosunu Aç", "DESIGN", function() tD8.Select(); palette.Visible = false; paletteShade.Visible = false end)
+awdAddPaletteCommand("Bildirim Geçmişini Aç", "SYSTEM", function() tD4.Select(); palette.Visible = false; paletteShade.Visible = false end)
+
+function refreshPalette(query)
+    for _, child in ipairs(paletteResults:GetChildren()) do
+        if child:IsA("GuiObject") and not child:IsA("UIListLayout") and not child:IsA("UIPadding") then
+            child:Destroy()
+        end
+    end
+    local q = string.lower(tostring(query or ""))
+    local shown = 0
+    for _, item in ipairs(paletteCommands) do
+        if q == "" or string.find(string.lower(item.label), q, 1, true) or string.find(string.lower(item.category), q, 1, true) then
+            shown += 1
+            local row = Instance.new("TextButton")
+            row.Size = UDim2.new(1, -4, 0, 38)
+            row.BackgroundColor3 = Color3.fromRGB(22, 29, 42)
+            row.Text = ""
+            row.AutoButtonColor = false
+            row.LayoutOrder = shown
+            row.ZIndex = 32
+            row.Parent = paletteResults
+            Instance.new("UICorner", row).CornerRadius = UDim.new(0, 8)
+            local name = Instance.new("TextLabel", row)
+            name.Size = UDim2.new(1, -100, 1, 0)
+            name.Position = UDim2.new(0, 11, 0, 0)
+            name.BackgroundTransparency = 1
+            name.Text = item.label
+            name.TextColor3 = Color3.fromRGB(220, 230, 245)
+            name.TextSize = 12
+            name.Font = Enum.Font.GothamMedium
+            name.TextXAlignment = Enum.TextXAlignment.Left
+            name.ZIndex = 33
+            local tag = Instance.new("TextLabel", row)
+            tag.Size = UDim2.new(0, 82, 1, 0)
+            tag.Position = UDim2.new(1, -90, 0, 0)
+            tag.BackgroundTransparency = 1
+            tag.Text = item.category
+            tag.TextColor3 = Color3.fromRGB(115, 145, 185)
+            tag.TextSize = 9
+            tag.Font = Enum.Font.Code
+            tag.TextXAlignment = Enum.TextXAlignment.Right
+            tag.ZIndex = 33
+            row.MouseEnter:Connect(function() smoothTween(row, {BackgroundColor3 = Color3.fromRGB(38, 52, 73)}, 0.1) end)
+            row.MouseLeave:Connect(function() smoothTween(row, {BackgroundColor3 = Color3.fromRGB(22, 29, 42)}, 0.12) end)
+            row.MouseButton1Click:Connect(function() pcall(item.callback); awdLog("Command executed: " .. item.label) end)
+        end
+    end
+    if shown == 0 then
+        local empty = Instance.new("TextLabel", paletteResults)
+        empty.Size = UDim2.new(1, 0, 0, 38)
+        empty.BackgroundTransparency = 1
+        empty.Text = "Sonuç bulunamadı"
+        empty.TextColor3 = Color3.fromRGB(140, 150, 170)
+        empty.Font = Enum.Font.Gotham
+        empty.TextSize = 12
+        empty.ZIndex = 32
+    end
+end
+paletteSearch:GetPropertyChangedSignal("Text"):Connect(function() refreshPalette(paletteSearch.Text) end)
+refreshPalette("")
+function openPalette()
+    palette.Visible = true
+    paletteShade.Visible = true
+    paletteSearch.Text = ""
+    refreshPalette("")
+    task.defer(function() pcall(function() paletteSearch:CaptureFocus() end) end)
+end
+_G.AWD_OpenCommandPalette = openPalette
+
+UIS.InputBegan:Connect(function(input, processed)
+    if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
+    if paletteCapture then
+        if input.KeyCode ~= Enum.KeyCode.Unknown then
+            paletteKey = input.KeyCode
+            paletteCapture = false
+            if _G.AWD_PaletteKeyLabel then _G.AWD_PaletteKeyLabel.Text = "Komut paleti: " .. paletteKey.Name end
+            awdNotify("Keybind güncellendi", "Komut paleti: " .. paletteKey.Name, 2)
+        end
+        return
+    end
+    if input.KeyCode == Enum.KeyCode.Escape and palette.Visible then
+        palette.Visible = false; paletteShade.Visible = false
+        return
+    end
+    if input.KeyCode == paletteKey and (UIS:IsKeyDown(Enum.KeyCode.LeftControl) or UIS:IsKeyDown(Enum.KeyCode.RightControl)) then
+        openPalette()
+    end
+end)
+
+AddLabel(tabDesigner, "THEME STUDIO / LIVE CUSTOMIZATION", false)
+AddLabel(tabDesigner, "Özel vurgu rengi, arayüz ölçeği ve animasyon hızını canlı düzenle.", true)
+AddColorPicker(tabDesigner, "Özel vurgu rengi", themeData["Custom Designer"].Accent, function(color)
+    themeData["Custom Designer"].Accent = color
+    applyTheme("Custom Designer")
+    awdLog("Custom accent updated")
+end)
+setScale = AddSlider(tabDesigner, "Arayüz ölçeği", 0.82, 1.18, 1, function(value)
+    if menuScale then menuScale.Scale = value end
+end)
+setMotion = AddSlider(tabDesigner, "Animasyon hızı", 0.45, 1.8, 1, function(value)
+    awdMotionMultiplier = value
+end)
+AddButton(tabDesigner, "Arayüz ölçeğini sıfırla", function() setScale(1); menuScale.Scale = 1 end)
+AddButton(tabDesigner, "Animasyon hızını sıfırla", function() setMotion(1); awdMotionMultiplier = 1 end)
+AddButton(tabDesigner, "Tema Stüdyosu: Özel temayı uygula", function() applyTheme("Custom Designer"); awdNotify("Tema uygulandı", "Custom Designer aktif", 2) end)
+
+AddLabel(tabDesigner, "WIDGET SYSTEM", false)
+AddToggle(tabDesigner, "Canlı alt durum çubuğu", true, function(state)
+    bottomBar.Visible = state
+end)
+AddToggle(tabDesigner, "Ambient arka plan efektleri", true, function(state)
+    if ambientLayer then ambientLayer.Visible = state end
+end)
+AddToggle(tabDesigner, "Blur efekti", true, function(state)
+    if blurEffect then blurEffect.Size = state and 8 or 0 end
+end)
+
+AddLabel(tabSettings, "NOTIFICATION CENTER", false)
+notificationSummary = AddLabel(tabSettings, "Henüz bildirim yok.", true)
+AddButton(tabSettings, "Bildirim geçmişini yenile", function()
+    local lines = {}
+    for i = 1, math.min(#awdNotificationHistory, 8) do
+        local n = awdNotificationHistory[i]
+        table.insert(lines, n.time .. "  " .. n.title .. " — " .. n.message)
+    end
+    notificationSummary.Text = #lines > 0 and table.concat(lines, "\n") or "Henüz bildirim yok."
+end)
+AddButton(tabSettings, "Test bildirimi gönder", function() awdNotify("AWD Hub", "Bildirim merkezi düzgün çalışıyor.", 3) end)
+AddButton(tabSettings, "Bildirim geçmişini temizle", function()
+    for i = #awdNotificationHistory, 1, -1 do table.remove(awdNotificationHistory, i) end
+    notificationSummary.Text = "Bildirim geçmişi temizlendi."
+end)
+AddLabel(tabSettings, "KEYBIND MANAGER", false)
+paletteKeyLabel = AddLabel(tabSettings, "Komut paleti: LeftControl + " .. paletteKey.Name, false)
+_G.AWD_PaletteKeyLabel = paletteKeyLabel
+AddButton(tabSettings, "Komut paleti tuşunu değiştir", function()
+    paletteCapture = true
+    paletteKeyLabel.Text = "Komut paleti için bir tuşa bas..."
+    awdNotify("Keybind", "Şimdi yeni tuşa bas.", 3)
+end)
+AddLabel(tabSettings, "DEVELOPER CONSOLE", false)
+developerLogLabel = AddLabel(tabSettings, "Kayıt bekleniyor...", true)
+AddButton(tabSettings, "Son sistem kayıtlarını göster", function()
+    developerLogLabel.Text = #awdDeveloperLog > 0 and table.concat(awdDeveloperLog, "\n") or "Henüz kayıt yok."
+end)
+AddButton(tabSettings, "Sistem kayıtlarını temizle", function()
+    for i = #awdDeveloperLog, 1, -1 do table.remove(awdDeveloperLog, i) end
+    developerLogLabel.Text = "Kayıtlar temizlendi."
+end)
+AddLabel(tabSettings, "PROFILE SYSTEM", false)
+AddLabel(tabSettings, "Mevcut AWD Config Manager; profil kaydetme, yükleme, silme ve liste yenileme işlemlerini yönetir.", true)
+
+dashboardLastUpdate = 0
+dashboardConnection = RunService.Heartbeat:Connect(function(dt)
+    dashboardLastUpdate += dt
+    if dashboardLastUpdate < 1 then return end
+    dashboardLastUpdate = 0
+    local fpsText = statusFPS and statusFPS.Text or "FPS / --"
+    local memoryText = "-- MB"
+    pcall(function() memoryText = string.format("%.1f MB", StatsService:GetTotalMemoryUsageMb()) end)
+    local playerCount = #Players:GetPlayers()
+    if dashboardStats and dashboardStats.Parent then
+        dashboardStats.Text = "LIVE SESSION\nOyuncu: " .. playerCount .. "/" .. tostring(Players.MaxPlayers)
+            .. "\n" .. fpsText .. "\nBellek: " .. memoryText
+            .. "\nPlace ID: " .. tostring(game.PlaceId)
+    end
+end)
+screenGui.AncestryChanged:Connect(function(_, parent)
+    if parent == nil and dashboardConnection then dashboardConnection:Disconnect(); dashboardConnection = nil end
+end)
+awdLog("AWD Command Center initialized")
+
 task.defer(function() if tabs[1] and tabs[1].Select then tabs[1].Select() end end)
-
 
 
 -- [[ ANANISTAN BODYCAM / OYUNCULAR SİSTEMİ ]] --
@@ -3496,7 +4569,6 @@ _G.ananistwaffendivisionBodycamState = _G.ananistwaffendivisionBodycamState or {
 
 _G.ananistwaffendivisionBodycamState.selectedUserId = _G.ananistwaffendivisionBodycamState.selectedUserId or player.UserId
 
--- [[ ANANISTAN BODYCAM HUD / GERÇEK BODYCAM STİLİ ]]
 _G.ananistwaffendivisionBodycamCreateHUD = _G.ananistwaffendivisionBodycamCreateHUD or function()
     local st = _G.ananistwaffendivisionBodycamState
     if st.hud and st.hud.Parent then return st.hud end
@@ -3627,7 +4699,6 @@ end
 
 _G.ananistwaffendivisionBodycamSetHUD(false)
 
--- [[ BODYCAM DOSYA KAYDI / KALICI DEPOLAMA ]]
 _G.ananistwaffendivisionBodycamFileName = _G.ananistwaffendivisionBodycamFileName or "ananistwaffendivision_Bodycams.json"
 
 _G.ananistwaffendivisionBodycamSerializeCFrame = function(cf)
@@ -3985,8 +5056,8 @@ end
 -- Oyuncular tabı
 -- [[ ANANIST WAFFEN DIVISION - ADVANCED PLAYERS TAB ]] --
 
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
+Players = game:GetService("Players")
+RunService = game:GetService("RunService")
 
 _G.ananistwaffendivisionOrbitDistance = _G.ananistwaffendivisionOrbitDistance or 12
 _G.ananistwaffendivisionOrbitSpeed = _G.ananistwaffendivisionOrbitSpeed or 1
@@ -3994,13 +5065,11 @@ _G.ananistwaffendivisionOrbitTarget = nil
 _G.ananistwaffendivisionOrbitConnection = nil
 _G.ananistwaffendivisionOrbitAngle = 0
 
--- Eski orbit bağlantısını temizle
 if _G.ananistwaffendivisionOrbitConnection then
     _G.ananistwaffendivisionOrbitConnection:Disconnect()
     _G.ananistwaffendivisionOrbitConnection = nil
 end
 
--- Ana başlık
 _G.ananistwaffendivisionTabPlayersTitle =
     AddLabel(_G.ananistwaffendivisionTabPlayers, "Oyuncular")
 
@@ -4011,7 +5080,6 @@ _G.ananistwaffendivisionTabPlayersHint =
         true
     )
 
--- Yenile butonu EN ÜSTTE
 _G.ananistwaffendivisionTabPlayersRefresh = AddButton(
     _G.ananistwaffendivisionTabPlayers,
     "Listeyi Yenile",
@@ -4022,17 +5090,17 @@ _G.ananistwaffendivisionTabPlayersRefresh = AddButton(
     end
 )
 
--- Orbit ayar paneli
-local orbitPanel = Instance.new("Frame")
+orbitPanel = Instance.new("Frame")
 orbitPanel.Name = "OrbitSettings"
 orbitPanel.Size = UDim2.new(1, -10, 0, 105)
 orbitPanel.BackgroundColor3 = Color3.fromRGB(27, 29, 40)
 orbitPanel.BorderSizePixel = 0
 orbitPanel.Visible = false
 orbitPanel.Parent = _G.ananistwaffendivisionTabPlayers
+orbitPanel.LayoutOrder = #_G.ananistwaffendivisionTabPlayers:GetChildren()
 Instance.new("UICorner", orbitPanel).CornerRadius = UDim.new(0, 8)
 
-local orbitTitle = Instance.new("TextLabel")
+orbitTitle = Instance.new("TextLabel")
 orbitTitle.Size = UDim2.new(1, -16, 0, 22)
 orbitTitle.Position = UDim2.new(0, 8, 0, 4)
 orbitTitle.BackgroundTransparency = 1
@@ -4158,11 +5226,10 @@ createSlider("Hız", 65, 0.2, 5, _G.ananistwaffendivisionOrbitSpeed, function(va
     _G.ananistwaffendivisionOrbitSpeed = value
 end)
 
--- Oyuncu listesi
 _G.ananistwaffendivisionBodycamPlayersScroll =
     Instance.new("ScrollingFrame")
 
-local scroll = _G.ananistwaffendivisionBodycamPlayersScroll
+scroll = _G.ananistwaffendivisionBodycamPlayersScroll
 scroll.Name = "PlayersList"
 scroll.Size = UDim2.new(1, -10, 0, 260)
 scroll.BackgroundTransparency = 1
@@ -4171,8 +5238,9 @@ scroll.ScrollBarThickness = 5
 scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
 scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
 scroll.Parent = _G.ananistwaffendivisionTabPlayers
+scroll.LayoutOrder = #_G.ananistwaffendivisionTabPlayers:GetChildren()
 
-local listLayout = Instance.new("UIListLayout")
+listLayout = Instance.new("UIListLayout")
 listLayout.Padding = UDim.new(0, 6)
 listLayout.SortOrder = Enum.SortOrder.LayoutOrder
 listLayout.Parent = scroll
@@ -4231,7 +5299,6 @@ function startOrbit(target)
             math.sin(angle) * distance
         )
 
-        -- Yalnızca kendi karakterini hareket ettirir.
         root.CFrame = CFrame.lookAt(
             targetRoot.Position + offset,
             targetRoot.Position
@@ -4260,6 +5327,7 @@ _G.ananistwaffendivisionRefreshPlayersTab = function()
         local stroke = Instance.new("UIStroke")
         stroke.Color = Color3.fromRGB(57, 63, 82)
         stroke.Thickness = 1
+        stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         stroke.Parent = row
 
         local avatar = Instance.new("ImageLabel")
@@ -4294,6 +5362,7 @@ _G.ananistwaffendivisionRefreshPlayersTab = function()
         name.TextSize = 12
         name.TextXAlignment = Enum.TextXAlignment.Left
         name.TextTruncate = Enum.TextTruncate.AtEnd
+        name.TextStrokeTransparency = 1
         name.Parent = row
 
         local username = Instance.new("TextLabel")
@@ -4306,6 +5375,7 @@ _G.ananistwaffendivisionRefreshPlayersTab = function()
         username.TextSize = 10
         username.TextXAlignment = Enum.TextXAlignment.Left
         username.TextTruncate = Enum.TextTruncate.AtEnd
+        username.TextStrokeTransparency = 1
         username.Parent = row
 
         local function makeButton(text, width, xOffset, color, callback)
@@ -4318,6 +5388,7 @@ _G.ananistwaffendivisionRefreshPlayersTab = function()
             button.TextColor3 = Color3.new(1, 1, 1)
             button.Font = Enum.Font.GothamBold
             button.TextSize = 10
+            button.TextStrokeTransparency = 1
             button.Parent = row
 
             Instance.new("UICorner", button).CornerRadius = UDim.new(0, 6)
@@ -4441,8 +5512,6 @@ _G.ananistwaffendivisionBodycamRefreshList()
 end
 _G.ananistwaffendivisionRefreshPlayersTab()
 
--- Ana Sayfa
-
 AddLabel(tabMain, "AnanistWaffen Division // ban yerseniz idgaf // eğer alttaki kişilerden biri değilseniz napay (siktirin gidin)", true)
 AddLabel(tabMain, "babapro yapımcılar")
 
@@ -4452,7 +5521,8 @@ function AddCreatorCard(parent, displayName, profileUsername)
     card.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
     card.Text = ""
     card.AutoButtonColor = true
-    card.ZIndex = 5
+    card.ZIndex = 7
+    card.LayoutOrder = #parent:GetChildren()
     registerObj(card, "ButtonBG")
 
     local corner = Instance.new("UICorner", card)
@@ -4462,7 +5532,7 @@ function AddCreatorCard(parent, displayName, profileUsername)
     avatar.Size = UDim2.new(0, 48, 0, 48)
     avatar.Position = UDim2.new(0, 7, 0.5, -24)
     avatar.BackgroundTransparency = 1
-    avatar.ZIndex = 6
+    avatar.ZIndex = 8
 
     local nameLabel = Instance.new("TextLabel", card)
     nameLabel.Size = UDim2.new(1, -70, 1, 0)
@@ -4473,7 +5543,8 @@ function AddCreatorCard(parent, displayName, profileUsername)
     nameLabel.TextSize = 14
     nameLabel.Font = Enum.Font.GothamBold
     nameLabel.TextXAlignment = Enum.TextXAlignment.Left
-    nameLabel.ZIndex = 6
+    nameLabel.TextStrokeTransparency = 1
+    nameLabel.ZIndex = 8
     registerObj(nameLabel, "Text")
 
     task.spawn(function()
@@ -4516,7 +5587,6 @@ function AddCreatorCard(parent, displayName, profileUsername)
     return card
 end
 
--- Görünen isim        -- Profil alınacak gerçek Roblox hesabı
 AddCreatorCard(tabMain, "dutchvander4000 (Main)", "35YARGIC")
 AddCreatorCard(tabMain, "arthurmorgan4000 (Main)", "Ananistan_Doom")
 AddCreatorCard(tabMain, "imstillstand (Idea)", "UTKUATA35609")
@@ -4550,15 +5620,15 @@ AddButton(tabMain, "Placeid kopyala", function()
 end)
 
 AddLabel(tabMain, "Server Bulucu")
-local serverPlayerCountBox = AddTextBox(tabMain, "sayı gir 123", function() end)
+serverPlayerCountBox = AddTextBox(tabMain, "sayı gir 123", function() end)
 AddButton(tabMain, "Bak şimdi sayı giriyon o kişi kadar server buluyo", function()
     findServerByPlayerCount(serverPlayerCountBox.Text)
 end)
 
 AddLabel(tabMain, "Kullanıcı tf2 sniper")
-local snipePlaceIdBox = AddTextBox(tabMain, "Oyun ve Placeid", function() end)
+snipePlaceIdBox = AddTextBox(tabMain, "Oyun ve Placeid", function() end)
 snipePlaceIdBox.Text = tostring(game.PlaceId)
-local snipeUsernameBox = AddTextBox(tabMain, "Kullanıcı adı", function() end)
+snipeUsernameBox = AddTextBox(tabMain, "Kullanıcı adı", function() end)
 AddButton(tabMain, "Milli Joyango", function()
     userSnipe(snipePlaceIdBox.Text, snipeUsernameBox.Text)
 end)
@@ -4569,13 +5639,12 @@ AddCreatorCard(tabMain, "em*r", "Emodka123321")
 AddCreatorCard(tabMain, "*fra", "Afraistee12")
 AddCreatorCard(tabMain, "d*mir", "XxDemir_3555")
 function AddCreatorCard(parent, imageId, textContent)
-    -- Ana kart (İkiliyi yan yana tutmak için)
     local card = Instance.new("Frame")
     card.Size = UDim2.new(1, 0, 0, 50)
     card.BackgroundTransparency = 1
     card.Parent = parent
+    card.LayoutOrder = #parent:GetChildren()
 
-    -- Resim (Image)
     local img = Instance.new("ImageLabel")
     img.Size = UDim2.new(0, 40, 0, 40)
     img.Position = UDim2.new(0, 5, 0, 5)
@@ -4583,7 +5652,6 @@ function AddCreatorCard(parent, imageId, textContent)
     img.Image = "rbxassetid://" .. imageId
     img.Parent = card
 
-    -- Yazı (Text)
     local txt = Instance.new("TextLabel")
     txt.Size = UDim2.new(1, -55, 1, 0)
     txt.Position = UDim2.new(0, 55, 0, 0)
@@ -4592,14 +5660,14 @@ function AddCreatorCard(parent, imageId, textContent)
     txt.TextColor3 = Color3.new(1, 1, 1)
     txt.TextSize = 16
     txt.TextXAlignment = Enum.TextXAlignment.Left
+    txt.TextStrokeTransparency = 1
     txt.Parent = card
 end
 
--- Kullanımı:
 AddCreatorCard(tabMain, "131444549369998", "üstte gördüğünüz orospu çocukları ile iletişime geçmeyin ")
 AddCreatorCard(tabMain, "131444549369998", " osama claim bulunmuştur saat gece 3te director modda sikişmeyin")
 AddLabel(tabMain, "Server infosu")
-local serverInfoLabel = AddLabel(tabMain, getServerInfoText(), true)
+serverInfoLabel = AddLabel(tabMain, getServerInfoText(), true)
 task.spawn(function()
     while serverInfoLabel and serverInfoLabel.Parent do
         serverInfoLabel.Text = getServerInfoText()
@@ -4637,17 +5705,13 @@ AddButton(tabMain, "Hub Öldür", function()
     if _G.ananistwaffendivisionCleanup then _G.ananistwaffendivisionCleanup = nil end
 end)
 
--- Oyuncu
 AddLabel(tabPlayer, "KARAKTERİNE BASAN MODLAR (yimmenü)")
-local kosatkaHeightFrame
-local kosatkaToggleFrame
 kosatkaToggleFrame = AddToggle(tabPlayer, "Kosatka", kosatkaEnabled, function(state)
     toggleKosatka(state)
     if kosatkaHeightFrame then
         kosatkaHeightFrame.Visible = state
     end
 end)
-local setKosatkaHeightSlider
 setKosatkaHeightSlider, kosatkaHeightFrame = AddSlider(tabPlayer, "Kosatka Yüksekliği", 0, 8, kosatkaHeight, function(val)
     setKosatkaHeight(val)
 end)
@@ -4667,7 +5731,6 @@ AddButton(tabPlayer, "Antigravity", function()
     end)
 end)
 AddLabel(tabPlayer, "Hareket ayartaşağı")
-local setWalkUI, setJumpUI, setGravUI
 setWalkUI = AddSlider(tabPlayer, "WalkSpeed", 0, 200, movementWalkSpeed, function(val)
     setWalkSpeed(val)
 end)
@@ -4744,11 +5807,6 @@ AddToggle(tabPlayer, "Anti-Void", false, function(s)
     if s then startAntiVoid() else stopAntiVoid() end
 end)
 
-
--- Aimbot
-
-
--- ANANISTAN AIMBOT TAB
 AddLabel(tabAimbot, "ANANISTAN Aimbot — Aktif (Mouse)")
 AddToggle(tabAimbot, "Aim Lock", AA.aimLock, function(s)
     AA.aimLock = s
@@ -4865,13 +5923,10 @@ AddSlider(tabAimbot, "Prediction Miktarı", 0, 50, math.floor((AA.predictionAmou
     AA.predictionAmount = (tonumber(val) or 12) / 100
 end)
 
-
--- Grapple
 AddLabel(tabSpider, "Grapple Hook")
 AddButton(tabSpider, "Grapple 1 (Çekme)", runSpiderWeb1)
 AddButton(tabSpider, "Grapple 2 (Tutunma)", runSpiderWeb2)
 
--- [[ STUDIO TAB ]] --
 AddLabel(tabStudio, "Studio Araçları")
 AddLabel(tabStudio, "Dex, Scene Creator ve Workspace Explorer bu bölümde toplanır.", true)
 AddButton(tabStudio, "Dex Explorer", function()
@@ -4885,7 +5940,6 @@ AddButton(tabStudio, "Scene Creator", function()
     end)
 end)
 
--- [[ OYUNLAR TAB // DÜZ ALT TAB LİSTESİ ]] --
 AddLabel(tabGames, "Oyunlar")
 AddLabel(tabGames, "Bir oyun seç; her satır kendi oyun scriptlerini açar.", true)
 AddButton(tabGames, "BRM5", function()
@@ -4904,12 +5958,11 @@ AddButton(tabGames, "Evil Morty Sex", function()
     pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/6GH3j1Vj"))() end)
 end)
 
--- [[ OYUNLAR // KART KATALOĞU + İÇ SIDEBAR ]] --
-do -- Register limitini aşmamak için katalog local'ları bu scope içinde kalır.
+do
 tDGames.Btn.Visible = false
-local gameLibrary, gameLibraryData = CreateTab("Oyunlar")
+gameLibrary, gameLibraryData = CreateTab("Oyunlar")
 gameLibraryData.Btn.LayoutOrder = 5
-local gameOldLayout = gameLibrary:FindFirstChildOfClass("UIListLayout")
+gameOldLayout = gameLibrary:FindFirstChildOfClass("UIListLayout")
 if gameOldLayout then gameOldLayout:Destroy() end
 gameLibrary.CanvasSize = UDim2.new(0, 0, 0, 410)
 function gameNew(class, props, parent)
@@ -4918,17 +5971,17 @@ function gameNew(class, props, parent)
     o.Parent = parent
     return o
 end
-gameNew("TextLabel", {Size = UDim2.new(1, -18, 0, 35), Position = UDim2.new(0, 9, 0, 5), BackgroundTransparency = 1, Text = "Oyunlar", TextColor3 = Color3.fromRGB(245, 245, 250), Font = Enum.Font.GothamBold, TextSize = 24, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 6}, gameLibrary)
-gameNew("TextLabel", {Size = UDim2.new(1, -18, 0, 20), Position = UDim2.new(0, 10, 0, 40), BackgroundTransparency = 1, Text = "oyununu seç, sağdaki karttan scripti aç", TextColor3 = Color3.fromRGB(150, 150, 165), Font = Enum.Font.GothamMedium, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 6}, gameLibrary)
-gameNew("Frame", {Size = UDim2.new(1, -18, 0, 1), Position = UDim2.new(0, 9, 0, 71), BackgroundColor3 = Color3.fromRGB(82, 82, 98), BorderSizePixel = 0, ZIndex = 6}, gameLibrary)
-local gameSidebar = gameNew("ScrollingFrame", {Size = UDim2.new(0, 135, 0, 292), Position = UDim2.new(0, 9, 0, 86), BackgroundColor3 = Color3.fromRGB(8, 8, 10), BorderSizePixel = 0, ScrollBarThickness = 2, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 6}, gameLibrary)
+gameNew("TextLabel", {Size = UDim2.new(1, -18, 0, 35), Position = UDim2.new(0, 9, 0, 5), BackgroundTransparency = 1, Text = "Oyunlar", TextColor3 = Color3.fromRGB(245, 245, 250), Font = Enum.Font.GothamBold, TextSize = 24, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8, TextStrokeTransparency = 1}, gameLibrary)
+gameNew("TextLabel", {Size = UDim2.new(1, -18, 0, 20), Position = UDim2.new(0, 10, 0, 40), BackgroundTransparency = 1, Text = "oyununu seç, sağdaki karttan scripti aç", TextColor3 = Color3.fromRGB(150, 150, 165), Font = Enum.Font.GothamMedium, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8, TextStrokeTransparency = 1}, gameLibrary)
+gameNew("Frame", {Size = UDim2.new(1, -18, 0, 1), Position = UDim2.new(0, 9, 0, 71), BackgroundColor3 = Color3.fromRGB(82, 82, 98), BorderSizePixel = 0, ZIndex = 8}, gameLibrary)
+gameSidebar = gameNew("ScrollingFrame", {Size = UDim2.new(0, 135, 0, 292), Position = UDim2.new(0, 9, 0, 86), BackgroundColor3 = Color3.fromRGB(8, 8, 10), BorderSizePixel = 0, ScrollBarThickness = 2, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 8}, gameLibrary)
 gameNew("UICorner", {CornerRadius = UDim.new(0, 10)}, gameSidebar)
-local sideList = gameNew("UIListLayout", {Padding = UDim.new(0, 5)}, gameSidebar)
+sideList = gameNew("UIListLayout", {Padding = UDim.new(0, 5)}, gameSidebar)
 gameNew("UIPadding", {PaddingTop = UDim.new(0, 7), PaddingBottom = UDim.new(0, 7), PaddingLeft = UDim.new(0, 6), PaddingRight = UDim.new(0, 6)}, gameSidebar)
-local gameGrid = gameNew("ScrollingFrame", {Size = UDim2.new(1, -162, 0, 292), Position = UDim2.new(0, 153, 0, 86), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 3, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 6}, gameLibrary)
-local gameGridLayout = gameNew("UIGridLayout", {CellSize = UDim2.new(0, 145, 0, 100), CellPadding = UDim2.new(0, 10, 0, 10), SortOrder = Enum.SortOrder.LayoutOrder}, gameGrid)
-local gameTitle = gameNew("TextLabel", {Size = UDim2.new(1, -162, 0, 22), Position = UDim2.new(0, 153, 0, 64), BackgroundTransparency = 1, Text = "TÜM OYUNLAR", TextColor3 = Color3.fromRGB(175, 185, 220), Font = Enum.Font.Code, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 6}, gameLibrary)
-local games = {
+gameGrid = gameNew("ScrollingFrame", {Size = UDim2.new(1, -162, 0, 292), Position = UDim2.new(0, 153, 0, 86), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 3, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 8}, gameLibrary)
+gameGridLayout = gameNew("UIGridLayout", {CellSize = UDim2.new(0, 145, 0, 100), CellPadding = UDim2.new(0, 10, 0, 10), SortOrder = Enum.SortOrder.LayoutOrder}, gameGrid)
+gameTitle = gameNew("TextLabel", {Size = UDim2.new(1, -162, 0, 22), Position = UDim2.new(0, 153, 0, 64), BackgroundTransparency = 1, Text = "TÜM OYUNLAR", TextColor3 = Color3.fromRGB(175, 185, 220), Font = Enum.Font.Code, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8, TextStrokeTransparency = 1}, gameLibrary)
+games = {
 
     {"Ftap", "Sandbox", function()
         pcall(function()
@@ -4985,17 +6038,17 @@ local games = {
     end},
 
 }
-local selectedGame = "TÜM OYUNLAR"
+selectedGame = "TÜM OYUNLAR"
 function buildGameCards(filter)
     for _, c in ipairs(gameGrid:GetChildren()) do if not c:IsA("UIGridLayout") then c:Destroy() end end
     for _, gameInfo in ipairs(games) do
         if filter == "TÜM OYUNLAR" or filter == gameInfo[2] then
-            local card = gameNew("TextButton", {BackgroundColor3 = Color3.fromRGB(18, 18, 22), BorderSizePixel = 0, Text = "", AutoButtonColor = false, ZIndex = 7}, gameGrid)
+            local card = gameNew("TextButton", {BackgroundColor3 = Color3.fromRGB(18, 18, 22), BorderSizePixel = 0, Text = "", AutoButtonColor = false, ZIndex = 9}, gameGrid)
             gameNew("UICorner", {CornerRadius = UDim.new(0, 10)}, card)
-            gameNew("UIStroke", {Color = Color3.fromRGB(100, 100, 122), Transparency = .32}, card)
-            gameNew("TextLabel", {Size = UDim2.new(1, -18, 0, 22), Position = UDim2.new(0, 9, 0, 14), BackgroundTransparency = 1, Text = gameInfo[1], TextColor3 = Color3.fromRGB(245, 245, 250), Font = Enum.Font.GothamBold, TextSize = 13, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8}, card)
-            gameNew("TextLabel", {Size = UDim2.new(1, -18, 0, 17), Position = UDim2.new(0, 9, 0, 39), BackgroundTransparency = 1, Text = gameInfo[2] .. "  /  SCRIPT", TextColor3 = Color3.fromRGB(150, 170, 235), Font = Enum.Font.Code, TextSize = 9, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8}, card)
-            local open = gameNew("TextLabel", {Size = UDim2.new(1, -18, 0, 16), Position = UDim2.new(0, 9, 1, -22), BackgroundTransparency = 1, Text = "AÇMAK İÇİN TIKLA", TextColor3 = Color3.fromRGB(160, 160, 170), Font = Enum.Font.GothamMedium, TextSize = 8, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8}, card)
+            gameNew("UIStroke", {Color = Color3.fromRGB(100, 100, 122), Transparency = .32, ApplyStrokeMode = Enum.ApplyStrokeMode.Border}, card)
+            gameNew("TextLabel", {Size = UDim2.new(1, -18, 0, 22), Position = UDim2.new(0, 9, 0, 14), BackgroundTransparency = 1, Text = gameInfo[1], TextColor3 = Color3.fromRGB(245, 245, 250), Font = Enum.Font.GothamBold, TextSize = 13, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 10, TextStrokeTransparency = 1}, card)
+            gameNew("TextLabel", {Size = UDim2.new(1, -18, 0, 17), Position = UDim2.new(0, 9, 0, 39), BackgroundTransparency = 1, Text = gameInfo[2] .. "  /  SCRIPT", TextColor3 = Color3.fromRGB(150, 170, 235), Font = Enum.Font.Code, TextSize = 9, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 10, TextStrokeTransparency = 1}, card)
+            local open = gameNew("TextLabel", {Size = UDim2.new(1, -18, 0, 16), Position = UDim2.new(0, 9, 1, -22), BackgroundTransparency = 1, Text = "AÇMAK İÇİN TIKLA", TextColor3 = Color3.fromRGB(160, 160, 170), Font = Enum.Font.GothamMedium, TextSize = 8, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 10, TextStrokeTransparency = 1}, card)
             card.MouseButton1Click:Connect(gameInfo[3])
             card.MouseEnter:Connect(function() TweenService:Create(card, TweenInfo.new(.15), {BackgroundColor3 = Color3.fromRGB(31, 34, 44)}):Play() end)
             card.MouseLeave:Connect(function() TweenService:Create(card, TweenInfo.new(.15), {BackgroundColor3 = Color3.fromRGB(18, 18, 22)}):Play() end)
@@ -5003,14 +6056,13 @@ function buildGameCards(filter)
     end
 end
 for _, category in ipairs({"TÜM OYUNLAR", "Sandbox", "FPS", "Survival", "Horror", "OTHER"}) do
-    local b = gameNew("TextButton", {Size = UDim2.new(1, 0, 0, 34), BackgroundColor3 = Color3.fromRGB(0, 0, 0), BorderSizePixel = 0, Text = "  " .. category, TextColor3 = Color3.fromRGB(205, 205, 215), TextXAlignment = Enum.TextXAlignment.Left, Font = Enum.Font.GothamMedium, TextSize = 10, ZIndex = 7}, gameSidebar)
+    local b = gameNew("TextButton", {Size = UDim2.new(1, 0, 0, 34), BackgroundColor3 = Color3.fromRGB(0, 0, 0), BorderSizePixel = 0, Text = "  " .. category, TextColor3 = Color3.fromRGB(205, 205, 215), TextXAlignment = Enum.TextXAlignment.Left, Font = Enum.Font.GothamMedium, TextSize = 10, ZIndex = 9, TextStrokeTransparency = 1}, gameSidebar)
     gameNew("UICorner", {CornerRadius = UDim.new(0, 7)}, b)
     b.MouseButton1Click:Connect(function() selectedGame = category; gameTitle.Text = category; buildGameCards(category) end)
 end
 buildGameCards(selectedGame)
 end
 
--- [[ SCRIPTLER TAB ]] --
 do
     AddLabel(tabScripts, "Hazır Scriptler")
     AddButton(tabScripts, "FTAP", function()
@@ -5069,7 +6121,8 @@ do
             entry.Name = "ScriptSlotEntry"
             entry.Size = UDim2.new(1, -10, 0, 52)
             entry.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
-            entry.ZIndex = 5
+            entry.ZIndex = 7
+            entry.LayoutOrder = #tabScripts:GetChildren()
             registerObj(entry, "ButtonBG")
             local entryCorner = Instance.new("UICorner", entry)
             entryCorner.CornerRadius = UDim.new(0, 8)
@@ -5082,7 +6135,8 @@ do
             label.TextSize = 13
             label.Font = Enum.Font.GothamMedium
             label.TextXAlignment = Enum.TextXAlignment.Left
-            label.ZIndex = 6
+            label.TextStrokeTransparency = 1
+            label.ZIndex = 8
             registerObj(label, "Text")
             local loadBtn = Instance.new("TextButton", entry)
             loadBtn.Size = UDim2.new(0.15, -4, 0, 30)
@@ -5092,7 +6146,8 @@ do
             loadBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
             loadBtn.Font = Enum.Font.GothamBold
             loadBtn.TextSize = 11
-            loadBtn.ZIndex = 6
+            loadBtn.TextStrokeTransparency = 1
+            loadBtn.ZIndex = 8
             local loadBtnCorner = Instance.new("UICorner", loadBtn)
             loadBtnCorner.CornerRadius = UDim.new(0, 6)
             loadBtn.MouseButton1Click:Connect(function()
@@ -5110,7 +6165,8 @@ do
             editBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
             editBtn.Font = Enum.Font.GothamBold
             editBtn.TextSize = 10
-            editBtn.ZIndex = 6
+            editBtn.TextStrokeTransparency = 1
+            editBtn.ZIndex = 8
             Instance.new("UICorner", editBtn).CornerRadius = UDim.new(0, 6)
             editBtn.MouseButton1Click:Connect(function()
                 editingSlotName = slotName
@@ -5125,7 +6181,8 @@ do
             copyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
             copyBtn.Font = Enum.Font.GothamBold
             copyBtn.TextSize = 10
-            copyBtn.ZIndex = 6
+            copyBtn.TextStrokeTransparency = 1
+            copyBtn.ZIndex = 8
             Instance.new("UICorner", copyBtn).CornerRadius = UDim.new(0, 6)
             copyBtn.MouseButton1Click:Connect(function()
                 pcall(function() if setclipboard then setclipboard(data.Source or "") end end)
@@ -5147,7 +6204,8 @@ do
             deleteBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
             deleteBtn.Font = Enum.Font.GothamBold
             deleteBtn.TextSize = 11
-            deleteBtn.ZIndex = 6
+            deleteBtn.TextStrokeTransparency = 1
+            deleteBtn.ZIndex = 8
             local deleteBtnCorner = Instance.new("UICorner", deleteBtn)
             deleteBtnCorner.CornerRadius = UDim.new(0, 6)
             deleteBtn.MouseButton1Click:Connect(function()
@@ -5183,46 +6241,45 @@ do
     rebuildScriptsSlotsUI()
 end
 
--- [[ AWD SCRIPT LIBRARY // ARCEUS TARZI YENİ TASARIM ]] --
--- Eski sayfa ve callback'ler görünmez halde tutuluyor; yeni library aynı kayıt dosyasını kullanır.
-do -- Büyük library kendi scope'unda; ana scriptin local register sayısını şişirmez.
+do
+_AWDLibrary = {}
 tDScripts.Btn.Visible = false
-local scriptLibrary, scriptLibraryData = CreateTab("Scriptler")
-scriptLibraryData.Btn.LayoutOrder = 12
-local oldScriptLayout = scriptLibrary:FindFirstChildOfClass("UIListLayout")
-if oldScriptLayout then oldScriptLayout:Destroy() end
-scriptLibrary.CanvasSize = UDim2.new(0, 0, 0, 610)
+_AWDLibrary.scriptLibrary, _AWDLibrary.scriptLibraryData = CreateTab("Scriptler")
+_AWDLibrary.scriptLibraryData.Btn.LayoutOrder = 12
+_AWDLibrary.oldScriptLayout = _AWDLibrary.scriptLibrary:FindFirstChildOfClass("UIListLayout")
+if _AWDLibrary.oldScriptLayout then _AWDLibrary.oldScriptLayout:Destroy() end
+_AWDLibrary.scriptLibrary.CanvasSize = UDim2.new(0, 0, 0, 610)
 function libNew(class, props, parent)
     local o = Instance.new(class)
     for k, v in pairs(props or {}) do o[k] = v end
     o.Parent = parent
     return o
 end
-local libTitle = libNew("TextLabel", {Size = UDim2.new(.55, 0, 0, 42), Position = UDim2.new(0, 8, 0, 4), BackgroundTransparency = 1, Text = "Script library", TextColor3 = Color3.fromRGB(245, 245, 250), Font = Enum.Font.GothamBold, TextSize = 25, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 6}, scriptLibrary)
-local libSub = libNew("TextLabel", {Size = UDim2.new(.56, 0, 0, 20), Position = UDim2.new(0, 10, 0, 43), BackgroundTransparency = 1, Text = "AWD HUB  /  kendi scriptlerini sakla ve yönet", TextColor3 = Color3.fromRGB(145, 145, 160), Font = Enum.Font.GothamMedium, TextSize = 10, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 6}, scriptLibrary)
-local libraryStatus = libNew("TextLabel", {Size = UDim2.new(.42, -10, 0, 22), Position = UDim2.new(.58, 0, 0, 12), BackgroundTransparency = 1, Text = "KAYITLI SCRIPT YOK", TextColor3 = Color3.fromRGB(155, 180, 255), Font = Enum.Font.Code, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Right, ZIndex = 6}, scriptLibrary)
-local newScriptBtn = libNew("TextButton", {Size = UDim2.new(0, 128, 0, 32), Position = UDim2.new(1, -136, 0, 38), BackgroundColor3 = Color3.fromRGB(36, 48, 78), Text = "the button that dont do anything", TextColor3 = Color3.fromRGB(245, 248, 255), Font = Enum.Font.GothamBold, TextSize = 11, BorderSizePixel = 0, ZIndex = 7}, scriptLibrary)
-libNew("UICorner", {CornerRadius = UDim.new(0, 8)}, newScriptBtn)
-local libLine = libNew("Frame", {Size = UDim2.new(1, -16, 0, 1), Position = UDim2.new(0, 8, 0, 78), BackgroundColor3 = Color3.fromRGB(75, 75, 90), BorderSizePixel = 0, ZIndex = 6}, scriptLibrary)
-local scriptGrid = libNew("ScrollingFrame", {Size = UDim2.new(1, -16, 0, 250), Position = UDim2.new(0, 8, 0, 92), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 3, ScrollBarImageColor3 = Color3.fromRGB(130, 140, 175), CanvasSize = UDim2.new(0, 0, 0, 0), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 6}, scriptLibrary)
-local scriptGridLayout = libNew("UIGridLayout", {CellSize = UDim2.new(0, 125, 0, 92), CellPadding = UDim2.new(0, 10, 0, 10), SortOrder = Enum.SortOrder.LayoutOrder}, scriptGrid)
-local editor = libNew("Frame", {Size = UDim2.new(1, -16, 0, 225), Position = UDim2.new(0, 8, 0, 362), BackgroundColor3 = Color3.fromRGB(10, 10, 13), BorderSizePixel = 0, ZIndex = 6}, scriptLibrary)
-libNew("UICorner", {CornerRadius = UDim.new(0, 12)}, editor)
-libNew("UIStroke", {Color = Color3.fromRGB(75, 80, 100), Transparency = .25}, editor)
-local editorTitle = libNew("TextLabel", {Size = UDim2.new(.5, 0, 0, 30), Position = UDim2.new(0, 12, 0, 8), BackgroundTransparency = 1, Text = "SCRIPT EDITOR", TextColor3 = Color3.fromRGB(220, 225, 245), Font = Enum.Font.GothamBold, TextSize = 12, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 7}, editor)
-local nameInput = libNew("TextBox", {Size = UDim2.new(1, -24, 0, 31), Position = UDim2.new(0, 12, 0, 40), BackgroundColor3 = Color3.fromRGB(20, 20, 25), BorderSizePixel = 0, PlaceholderText = "script adı", PlaceholderColor3 = Color3.fromRGB(115, 115, 130), Text = "", TextColor3 = Color3.fromRGB(240, 240, 245), Font = Enum.Font.GothamMedium, TextSize = 12, ClearTextOnFocus = false, ZIndex = 7}, editor)
-libNew("UICorner", {CornerRadius = UDim.new(0, 7)}, nameInput)
-local codeInput = libNew("TextBox", {Size = UDim2.new(1, -24, 0, 92), Position = UDim2.new(0, 12, 0, 79), BackgroundColor3 = Color3.fromRGB(15, 15, 19), BorderSizePixel = 0, PlaceholderText = "Lua kodunu buraya yapıştır...", PlaceholderColor3 = Color3.fromRGB(105, 105, 118), Text = "", TextColor3 = Color3.fromRGB(220, 225, 235), Font = Enum.Font.Code, TextSize = 12, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, MultiLine = true, ClearTextOnFocus = false, ZIndex = 7}, editor)
-libNew("UICorner", {CornerRadius = UDim.new(0, 7)}, codeInput)
+_AWDLibrary.libTitle = libNew("TextLabel", {Size = UDim2.new(.55, 0, 0, 42), Position = UDim2.new(0, 8, 0, 4), BackgroundTransparency = 1, Text = "Script library", TextColor3 = Color3.fromRGB(245, 245, 250), Font = Enum.Font.GothamBold, TextSize = 25, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8, TextStrokeTransparency = 1}, _AWDLibrary.scriptLibrary)
+_AWDLibrary.libSub = libNew("TextLabel", {Size = UDim2.new(.56, 0, 0, 20), Position = UDim2.new(0, 10, 0, 43), BackgroundTransparency = 1, Text = "AWD HUB  /  kendi scriptlerini sakla ve yönet", TextColor3 = Color3.fromRGB(145, 145, 160), Font = Enum.Font.GothamMedium, TextSize = 10, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8, TextStrokeTransparency = 1}, _AWDLibrary.scriptLibrary)
+_AWDLibrary.libraryStatus = libNew("TextLabel", {Size = UDim2.new(.42, -10, 0, 22), Position = UDim2.new(.58, 0, 0, 12), BackgroundTransparency = 1, Text = "KAYITLI SCRIPT YOK", TextColor3 = Color3.fromRGB(155, 180, 255), Font = Enum.Font.Code, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Right, ZIndex = 8, TextStrokeTransparency = 1}, _AWDLibrary.scriptLibrary)
+_AWDLibrary.newScriptBtn = libNew("TextButton", {Size = UDim2.new(0, 128, 0, 32), Position = UDim2.new(1, -136, 0, 38), BackgroundColor3 = Color3.fromRGB(36, 48, 78), Text = "the button that dont do anything", TextColor3 = Color3.fromRGB(245, 248, 255), Font = Enum.Font.GothamBold, TextSize = 11, BorderSizePixel = 0, ZIndex = 9}, _AWDLibrary.scriptLibrary)
+libNew("UICorner", {CornerRadius = UDim.new(0, 8)}, _AWDLibrary.newScriptBtn)
+_AWDLibrary.libLine = libNew("Frame", {Size = UDim2.new(1, -16, 0, 1), Position = UDim2.new(0, 8, 0, 78), BackgroundColor3 = Color3.fromRGB(75, 75, 90), BorderSizePixel = 0, ZIndex = 8}, _AWDLibrary.scriptLibrary)
+_AWDLibrary.scriptGrid = libNew("ScrollingFrame", {Size = UDim2.new(1, -16, 0, 250), Position = UDim2.new(0, 8, 0, 92), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 3, ScrollBarImageColor3 = Color3.fromRGB(130, 140, 175), CanvasSize = UDim2.new(0, 0, 0, 0), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 8}, _AWDLibrary.scriptLibrary)
+_AWDLibrary.scriptGridLayout = libNew("UIGridLayout", {CellSize = UDim2.new(0, 125, 0, 92), CellPadding = UDim2.new(0, 10, 0, 10), SortOrder = Enum.SortOrder.LayoutOrder}, _AWDLibrary.scriptGrid)
+_AWDLibrary.editor = libNew("Frame", {Size = UDim2.new(1, -16, 0, 225), Position = UDim2.new(0, 8, 0, 362), BackgroundColor3 = Color3.fromRGB(10, 10, 13), BorderSizePixel = 0, ZIndex = 8}, _AWDLibrary.scriptLibrary)
+libNew("UICorner", {CornerRadius = UDim.new(0, 12)}, _AWDLibrary.editor)
+libNew("UIStroke", {Color = Color3.fromRGB(75, 80, 100), Transparency = .25, ApplyStrokeMode = Enum.ApplyStrokeMode.Border}, _AWDLibrary.editor)
+_AWDLibrary.editorTitle = libNew("TextLabel", {Size = UDim2.new(.5, 0, 0, 30), Position = UDim2.new(0, 12, 0, 8), BackgroundTransparency = 1, Text = "SCRIPT EDITOR", TextColor3 = Color3.fromRGB(220, 225, 245), Font = Enum.Font.GothamBold, TextSize = 12, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 9, TextStrokeTransparency = 1}, _AWDLibrary.editor)
+_AWDLibrary.nameInput = libNew("TextBox", {Size = UDim2.new(1, -24, 0, 31), Position = UDim2.new(0, 12, 0, 40), BackgroundColor3 = Color3.fromRGB(20, 20, 25), BorderSizePixel = 0, PlaceholderText = "script adı", PlaceholderColor3 = Color3.fromRGB(115, 115, 130), Text = "", TextColor3 = Color3.fromRGB(240, 240, 245), Font = Enum.Font.GothamMedium, TextSize = 12, ClearTextOnFocus = false, ZIndex = 9, TextStrokeTransparency = 1}, _AWDLibrary.editor)
+libNew("UICorner", {CornerRadius = UDim.new(0, 7)}, _AWDLibrary.nameInput)
+_AWDLibrary.codeInput = libNew("TextBox", {Size = UDim2.new(1, -24, 0, 92), Position = UDim2.new(0, 12, 0, 79), BackgroundColor3 = Color3.fromRGB(15, 15, 19), BorderSizePixel = 0, PlaceholderText = "Lua kodunu buraya yapıştır...", PlaceholderColor3 = Color3.fromRGB(105, 105, 118), Text = "", TextColor3 = Color3.fromRGB(220, 225, 235), Font = Enum.Font.Code, TextSize = 12, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, MultiLine = true, ClearTextOnFocus = false, ZIndex = 9, TextStrokeTransparency = 1}, _AWDLibrary.editor)
+libNew("UICorner", {CornerRadius = UDim.new(0, 7)}, _AWDLibrary.codeInput)
 function libAction(text, x, color)
-    local b = libNew("TextButton", {Size = UDim2.new(0, 92, 0, 30), Position = UDim2.new(0, x, 1, -40), BackgroundColor3 = color, BorderSizePixel = 0, Text = text, TextColor3 = Color3.fromRGB(255, 255, 255), Font = Enum.Font.GothamBold, TextSize = 10, ZIndex = 7}, editor)
+    local b = libNew("TextButton", {Size = UDim2.new(0, 92, 0, 30), Position = UDim2.new(0, x, 1, -40), BackgroundColor3 = color, BorderSizePixel = 0, Text = text, TextColor3 = Color3.fromRGB(255, 255, 255), Font = Enum.Font.GothamBold, TextSize = 10, ZIndex = 9, TextStrokeTransparency = 1}, _AWDLibrary.editor)
     libNew("UICorner", {CornerRadius = UDim.new(0, 7)}, b); return b
 end
-local saveLibBtn = libAction("KAYDET", 12, Color3.fromRGB(50, 125, 75))
-local runLibBtn = libAction("ÇALIŞTIR", 112, Color3.fromRGB(55, 85, 145))
-local copyLibBtn = libAction("KOPYALA", 212, Color3.fromRGB(65, 65, 76))
-local deleteLibBtn = libAction("SİL", 312, Color3.fromRGB(145, 50, 55))
-local libraryData, editingLibraryName = {}, nil
+_AWDLibrary.saveLibBtn = libAction("KAYDET", 12, Color3.fromRGB(50, 125, 75))
+_AWDLibrary.runLibBtn = libAction("ÇALIŞTIR", 112, Color3.fromRGB(55, 85, 145))
+_AWDLibrary.copyLibBtn = libAction("KOPYALA", 212, Color3.fromRGB(65, 65, 76))
+_AWDLibrary.deleteLibBtn = libAction("SİL", 312, Color3.fromRGB(145, 50, 55))
+_AWDLibrary.libraryData, _AWDLibrary.editingLibraryName = {}, nil
 function loadLibraryData()
     if isfile and isfile("ananite_hub_scripts.json") then
         local ok, decoded = pcall(function() return HttpService:JSONDecode(readfile("ananite_hub_scripts.json")) end)
@@ -5231,43 +6288,43 @@ function loadLibraryData()
     return {}
 end
 function saveLibraryData()
-    if writefile then pcall(function() writefile("ananite_hub_scripts.json", HttpService:JSONEncode(libraryData)) end) end
+    if writefile then pcall(function() writefile("ananite_hub_scripts.json", HttpService:JSONEncode(_AWDLibrary.libraryData)) end) end
 end
 function clearGrid()
-    for _, child in ipairs(scriptGrid:GetChildren()) do if not child:IsA("UIGridLayout") then child:Destroy() end end
+    for _, child in ipairs(_AWDLibrary.scriptGrid:GetChildren()) do if not child:IsA("UIGridLayout") then child:Destroy() end end
 end
 function makeScriptCard(name, source, builtin)
-    local card = libNew("TextButton", {BackgroundColor3 = Color3.fromRGB(19, 19, 23), BorderSizePixel = 0, Text = "", AutoButtonColor = false, ZIndex = 7}, scriptGrid)
+    local card = libNew("TextButton", {BackgroundColor3 = Color3.fromRGB(19, 19, 23), BorderSizePixel = 0, Text = "", AutoButtonColor = false, ZIndex = 9}, _AWDLibrary.scriptGrid)
     libNew("UICorner", {CornerRadius = UDim.new(0, 10)}, card)
-    libNew("UIStroke", {Color = Color3.fromRGB(94, 94, 112), Transparency = .3}, card)
-    local icon = libNew("TextLabel", {Size = UDim2.new(0, 40, 0, 40), Position = UDim2.new(0, 10, 0, 10), BackgroundColor3 = Color3.fromRGB(240, 242, 250), Text = "AWD", TextColor3 = Color3.fromRGB(20, 24, 38), Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 8}, card)
+    libNew("UIStroke", {Color = Color3.fromRGB(94, 94, 112), Transparency = .3, ApplyStrokeMode = Enum.ApplyStrokeMode.Border}, card)
+    local icon = libNew("TextLabel", {Size = UDim2.new(0, 40, 0, 40), Position = UDim2.new(0, 10, 0, 10), BackgroundColor3 = Color3.fromRGB(240, 242, 250), Text = "AWD", TextColor3 = Color3.fromRGB(20, 24, 38), Font = Enum.Font.GothamBlack, TextSize = 10, ZIndex = 10, TextStrokeTransparency = 1}, card)
     libNew("UICorner", {CornerRadius = UDim.new(0, 8)}, icon)
-    libNew("TextLabel", {Size = UDim2.new(1, -16, 0, 28), Position = UDim2.new(0, 8, 0, 57), BackgroundTransparency = 1, Text = name, TextColor3 = Color3.fromRGB(235, 235, 245), Font = Enum.Font.GothamBold, TextSize = 10, TextWrapped = true, ZIndex = 8}, card)
+    libNew("TextLabel", {Size = UDim2.new(1, -16, 0, 28), Position = UDim2.new(0, 8, 0, 57), BackgroundTransparency = 1, Text = name, TextColor3 = Color3.fromRGB(235, 235, 245), Font = Enum.Font.GothamBold, TextSize = 10, TextWrapped = true, ZIndex = 10, TextStrokeTransparency = 1}, card)
     card.MouseButton1Click:Connect(function()
-        editingLibraryName = builtin and nil or name
-        nameInput.Text, codeInput.Text = name, source
-        libraryStatus.Text = builtin and ("HAZIR SCRIPT: " .. name) or ("DÜZENLENİYOR: " .. name)
+        _AWDLibrary.editingLibraryName = builtin and nil or name
+        _AWDLibrary.nameInput.Text, _AWDLibrary.codeInput.Text = name, source
+        _AWDLibrary.libraryStatus.Text = builtin and ("HAZIR SCRIPT: " .. name) or ("DÜZENLENİYOR: " .. name)
     end)
 end
 function rebuildLibrary()
     clearGrid()
     makeScriptCard("Bodycam", "loadstring(game:HttpGet(\"https://pastebin.com/raw/HSQ9dyXt\"))()", true)
     makeScriptCard("Telekinesis", "loadstring(game:HttpGet(\"https://pastebin.com/raw/QAsFzqSh\"))()", true)
-    for name, data in pairs(libraryData) do makeScriptCard(name, data.Source or "", false) end
-    local count = 0; for _ in pairs(libraryData) do count += 1 end
-    libraryStatus.Text = count > 0 and (count .. " KAYITLI SCRIPT") or "KAYITLI SCRIPT YOK"
+    for name, data in pairs(_AWDLibrary.libraryData) do makeScriptCard(name, data.Source or "", false) end
+    local count = 0; for _ in pairs(_AWDLibrary.libraryData) do count += 1 end
+    _AWDLibrary.libraryStatus.Text = count > 0 and (count .. " KAYITLI SCRIPT") or "KAYITLI SCRIPT YOK"
 end
-libraryData = loadLibraryData()
-newScriptBtn.MouseButton1Click:Connect(function() editingLibraryName = nil; nameInput.Text = ""; codeInput.Text = ""; libraryStatus.Text = "YENİ SCRIPT HAZIR" end)
-saveLibBtn.MouseButton1Click:Connect(function()
-    local name, code = nameInput.Text, codeInput.Text
+_AWDLibrary.libraryData = loadLibraryData()
+_AWDLibrary.newScriptBtn.MouseButton1Click:Connect(function() _AWDLibrary.editingLibraryName = nil; _AWDLibrary.nameInput.Text = ""; _AWDLibrary.codeInput.Text = ""; _AWDLibrary.libraryStatus.Text = "YENİ SCRIPT HAZIR" end)
+_AWDLibrary.saveLibBtn.MouseButton1Click:Connect(function()
+    local name, code = _AWDLibrary.nameInput.Text, _AWDLibrary.codeInput.Text
     if name == "" or code == "" then return end
-    if editingLibraryName and editingLibraryName ~= name then libraryData[editingLibraryName] = nil end
-    libraryData[name] = {Source = code}; editingLibraryName = name; saveLibraryData(); rebuildLibrary()
+    if _AWDLibrary.editingLibraryName and _AWDLibrary.editingLibraryName ~= name then _AWDLibrary.libraryData[_AWDLibrary.editingLibraryName] = nil end
+    _AWDLibrary.libraryData[name] = {Source = code}; _AWDLibrary.editingLibraryName = name; saveLibraryData(); rebuildLibrary()
 end)
-runLibBtn.MouseButton1Click:Connect(function() if codeInput.Text ~= "" then pcall(function() loadstring(codeInput.Text)() end) end end)
-copyLibBtn.MouseButton1Click:Connect(function() pcall(function() if setclipboard then setclipboard(codeInput.Text) end end) end)
-deleteLibBtn.MouseButton1Click:Connect(function() if editingLibraryName then libraryData[editingLibraryName] = nil; editingLibraryName = nil; nameInput.Text = ""; codeInput.Text = ""; saveLibraryData(); rebuildLibrary() end end)
+_AWDLibrary.runLibBtn.MouseButton1Click:Connect(function() if _AWDLibrary.codeInput.Text ~= "" then pcall(function() loadstring(_AWDLibrary.codeInput.Text)() end) end end)
+_AWDLibrary.copyLibBtn.MouseButton1Click:Connect(function() pcall(function() if setclipboard then setclipboard(_AWDLibrary.codeInput.Text) end end) end)
+_AWDLibrary.deleteLibBtn.MouseButton1Click:Connect(function() if _AWDLibrary.editingLibraryName then _AWDLibrary.libraryData[_AWDLibrary.editingLibraryName] = nil; _AWDLibrary.editingLibraryName = nil; _AWDLibrary.nameInput.Text = ""; _AWDLibrary.codeInput.Text = ""; saveLibraryData(); rebuildLibrary() end end)
 rebuildLibrary()
 end
 
@@ -5281,15 +6338,10 @@ AddButton(tabMain, "Script Reload", function()
     end)
 end)
 
+thirdPersonEnabled = false
+thirdPersonRenderName = "Hub_ThirdPersonVisibility"
 
--- Görseller
-
---// THIRD PERSON + CHARACTER VISIBILITY
-
-local thirdPersonEnabled = false
-local thirdPersonRenderName = "Hub_ThirdPersonVisibility"
-
-local function setThirdPerson(state)
+function setThirdPerson(state)
     thirdPersonEnabled = state
 
     RunService:UnbindFromRenderStep(thirdPersonRenderName)
@@ -5346,7 +6398,7 @@ end)
 
 AddLabel(tabVisuals, "Kamera")
 
-local thirdPersonToggle = AddToggle(
+thirdPersonToggle = AddToggle(
     tabVisuals,
     "Force Third Person + Character Visibility",
     false,
@@ -5355,14 +6407,12 @@ local thirdPersonToggle = AddToggle(
     end
 )
 
---// ESP
-
 AddLabel(tabVisuals, "ESP")
 
 espKeyBtn = AddButton(tabVisuals, "ESP Aç/Kapat: [T]", function() end)
 espKeyLabel = espKeyBtn:FindFirstChildOfClass("TextLabel")
 
-local updateESPUIs = {}
+updateESPUIs = {}
 
 updateESPUIs.master = AddToggle(tabVisuals, "ESP Aktif", espEnabled, function(state)
     espEnabled = state
@@ -5458,8 +6508,6 @@ end)
 
 AddLabel(tabVisuals, "ESP Mesafe Ayarı")
 
-local setDistSlider, distBox
-
 setDistSlider = AddSlider(tabVisuals, "Mesafe (Slider)", 0, 25000, espMaxDistance, function(val)
     espMaxDistance = val
     if distBox then distBox.Text = tostring(val) end
@@ -5477,8 +6525,6 @@ distBox = AddTextBox(tabVisuals, "Mesafe Gir (Sayı)", function(txt)
 end)
 
 distBox.Text = tostring(espMaxDistance)
-
---// WORKSPACE İSİM ESP
 
 AddLabel(tabVisuals, "Workspace İsim ESP")
 
@@ -5502,15 +6548,13 @@ AddButton(tabVisuals, "İsim ESP Temizle", function()
     end
 end)
 
---// ESP RENK YÖNETİMİ
-
 AddLabel(tabVisuals, "ESP Renk Yönetimi")
 
 updateESPUIs.friend = AddToggle(tabVisuals, "Arkadaş Rengi Kullan", espUseFriendColor, function(s)
     espUseFriendColor = s
 end)
 
-local setFriendColorUI = AddColorPicker(tabVisuals, "Arkadaş Rengi", espFriendColor, function(c)
+setFriendColorUI = AddColorPicker(tabVisuals, "Arkadaş Rengi", espFriendColor, function(c)
     espFriendColor = c
 end)
 
@@ -5523,7 +6567,7 @@ updateESPUIs.customColor = AddToggle(tabVisuals, "ESP Rengi Kullan", espUseCusto
     end
 end)
 
-local setEspColorUI = AddColorPicker(tabVisuals, "ESP Rengi", espCustomColor, function(c)
+setEspColorUI = AddColorPicker(tabVisuals, "ESP Rengi", espCustomColor, function(c)
     espCustomColor = c
     espUseCustomColor = true
     espUseTeamColor = false
@@ -5541,8 +6585,6 @@ updateESPUIs.teamColor = AddToggle(tabVisuals, "Takım Rengi Kullan", espUseTeam
     end
 end)
 
---// ÇEVRE
-
 AddLabel(tabVisuals, "Çevre")
 
 updateESPUIs.bright = AddToggle(tabVisuals, "FullBright", false, function(state)
@@ -5550,8 +6592,6 @@ updateESPUIs.bright = AddToggle(tabVisuals, "FullBright", false, function(state)
     fullbrightEnabled = not state
     runFullbright(fakeBtn)
 end)
-
---// ESP TUŞ ATAMA
 
 espKeyBtn.MouseButton1Click:Connect(function()
     if settingESPKey or settingMenuKey then return end
@@ -5581,7 +6621,6 @@ espKeyBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
--- Ayarlar (Yeni Tema Sistemi Buraya Eklendi)
 AddLabel(tabDesigner, "Temalar")
 AddLabel(tabDesigner, "Temalar — Strangers & Freaks")
 AddButton(tabDesigner, "ϟϟ Theme (Varsayılan)", function() applyTheme("ϟϟ Theme") end)
@@ -5709,7 +6748,6 @@ do
         local data = {
             version = 2,
             currentTheme = currentTheme,
-            -- Aimbot
             silentAim = AA and AA.silentAim or false,
             wallhack = AA and AA.wallhack or false,
             aimLock = AA and AA.aimLock or false,
@@ -5727,7 +6765,6 @@ do
             lockMethod = AA and AA.lockMethod or "Camera",
             prediction = AA and AA.prediction or false,
             predictionAmount = AA and AA.predictionAmount or 0.12,
-            -- ESP
             espEnabled = espEnabled and true or false,
             espShowNames = espShowNames and true or false,
             espShowChams = espShowChams and true or false,
@@ -5740,7 +6777,6 @@ do
             espUseFriendColor = espUseFriendColor and true or false,
             espCustomColor = colorToTable(espCustomColor),
             espFriendColor = colorToTable(espFriendColor),
-            -- Movement
             walkSpeed = movementWalkSpeed or 16,
             jumpPower = movementJumpPower or 50,
             gravity = movementGravity or workspace.Gravity,
@@ -5749,10 +6785,8 @@ do
             clickTP = clickTPEnabled and true or false,
             antiAFK = antiAFKEnabled and true or false,
             antiVoid = antiVoidEnabled and true or false,
-            -- Keys
             menuToggleKey = keyToString(menuToggleKey),
             espToggleKey = keyToString(espToggleKey),
-            -- Fullbright
             fullbright = fullbrightEnabled and true or false,
         }
         return data
@@ -5789,7 +6823,6 @@ do
     local function apply(data)
         if type(data) ~= "table" then return false end
 
-        -- Aimbot
         if AA then
             AA.silentAim = data.silentAim and true or false
             AA.wallhack = data.wallhack and true or false
@@ -5820,12 +6853,10 @@ do
             end)
         end
 
-        -- Theme
         if data.currentTheme and themeData[data.currentTheme] then
             pcall(function() applyTheme(data.currentTheme) end)
         end
 
-        -- Movement
         if data.walkSpeed then pcall(function() setWalkSpeed(tonumber(data.walkSpeed) or 16) end) end
         if data.jumpPower then pcall(function() setJumpPower(tonumber(data.jumpPower) or 50) end) end
         if data.gravity then pcall(function() setGravity(tonumber(data.gravity) or workspace.Gravity) end) end
@@ -5838,13 +6869,11 @@ do
             if antiVoidEnabled then pcall(startAntiVoid) else pcall(stopAntiVoid) end
         end
 
-        -- Keys
         local mk = stringToKey(data.menuToggleKey)
         if mk then menuToggleKey = mk end
         local ek = stringToKey(data.espToggleKey)
         if ek then espToggleKey = ek end
 
-        -- Fullbright
         if data.fullbright ~= nil then
             local want = data.fullbright and true or false
             if fullbrightEnabled ~= want then
@@ -5853,13 +6882,11 @@ do
             end
         end
 
-        -- ESP flags first, then master toggle
         applyESPFlags(data)
 
         if data.espEnabled ~= nil then
             local wantEsp = data.espEnabled and true or false
             if wantEsp and not espEnabled then
-                -- mirror keybind path: turn on
                 espEnabled = true
                 if updateESPUIs and updateESPUIs.master then pcall(updateESPUIs.master, true) end
                 pcall(function()
@@ -5959,7 +6986,6 @@ do
         return ok
     end
 
-    -- autoload last
     task.spawn(function()
         task.wait(0.6)
         pcall(function()
@@ -5992,7 +7018,8 @@ do
             entry.Size = UDim2.new(1, -10, 0, 42)
             entry.BackgroundColor3 = isActive and Color3.fromRGB(40, 70, 50) or Color3.fromRGB(32, 32, 45)
             entry.BorderSizePixel = 0
-            entry.ZIndex = 5
+            entry.ZIndex = 7
+            entry.LayoutOrder = #tabSettings:GetChildren()
             entry.Parent = tabSettings
             registerObj(entry, "ButtonBG")
             Instance.new("UICorner", entry).CornerRadius = UDim.new(0, 8)
@@ -6002,7 +7029,7 @@ do
             accent.Position = UDim2.new(0, 6, 0, 5)
             accent.BackgroundColor3 = isActive and Color3.fromRGB(80, 220, 120) or Color3.fromRGB(90, 90, 120)
             accent.BorderSizePixel = 0
-            accent.ZIndex = 6
+            accent.ZIndex = 8
             accent.Parent = entry
             Instance.new("UICorner", accent).CornerRadius = UDim.new(1, 0)
             registerObj(accent, "Accent")
@@ -6016,7 +7043,8 @@ do
             nameLbl.TextXAlignment = Enum.TextXAlignment.Left
             nameLbl.TextColor3 = Color3.fromRGB(230, 230, 245)
             nameLbl.Text = (isActive and "● " or "○ ") .. name
-            nameLbl.ZIndex = 6
+            nameLbl.TextStrokeTransparency = 1
+            nameLbl.ZIndex = 8
             nameLbl.Parent = entry
             registerObj(nameLbl, "Text")
 
@@ -6028,7 +7056,8 @@ do
             loadBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
             loadBtn.Font = Enum.Font.GothamBold
             loadBtn.TextSize = 12
-            loadBtn.ZIndex = 7
+            loadBtn.TextStrokeTransparency = 1
+            loadBtn.ZIndex = 9
             loadBtn.Parent = entry
             Instance.new("UICorner", loadBtn).CornerRadius = UDim.new(0, 6)
 
@@ -6040,16 +7069,16 @@ do
             delBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
             delBtn.Font = Enum.Font.GothamBold
             delBtn.TextSize = 12
-            delBtn.ZIndex = 7
+            delBtn.TextStrokeTransparency = 1
+            delBtn.ZIndex = 9
             delBtn.Parent = entry
             Instance.new("UICorner", delBtn).CornerRadius = UDim.new(0, 6)
 
-            -- select on row click
             local hit = Instance.new("TextButton")
             hit.Size = UDim2.new(0.45, 0, 1, 0)
             hit.BackgroundTransparency = 1
             hit.Text = ""
-            hit.ZIndex = 7
+            hit.ZIndex = 9
             hit.Parent = entry
             hit.MouseButton1Click:Connect(function()
                 nameBox.Text = name
@@ -6186,6 +7215,7 @@ do
         lbl.Font = Enum.Font.GothamBold
         lbl.TextSize = 14
         lbl.Text = "FPS: --"
+        lbl.TextStrokeTransparency = 1
         lbl.Parent = gui
         Instance.new("UICorner", lbl).CornerRadius = UDim.new(0, 6)
         local last, frames = tick(), 0
@@ -6222,7 +7252,6 @@ menuKeyBtn.MouseButton1Click:Connect(function()
     end)
 end)
 
--- [[ SCRIPT ISMINI DEGISME ]] --
 AddLabel(tabDesigner, "Script Başlığı Değiştir")
 AddTextBox(tabDesigner, "Örn: Ananistan Hub v3...", function(text)
     if text ~= "" then
@@ -6230,10 +7259,8 @@ AddTextBox(tabDesigner, "Örn: Ananistan Hub v3...", function(text)
     end
 end)
 
--- [[ RESİM & BULANIKLIK YÖNETİCİSİ AYARLARI ]] --
 AddLabel(tabDesigner, "Menü Arkaplan Resmi")
 
--- URL ile Arkaplan Resmi Yükleyici
 AddTextBox(tabDesigner, "Görsel URL veya AssetID girin...", function(url)
     pcall(function()
         if url == "" then
@@ -6242,7 +7269,6 @@ AddTextBox(tabDesigner, "Görsel URL veya AssetID girin...", function(url)
             themeData["Custom Designer"].BGImage = ""
             themeData["Custom Designer"].BGImageTrans = 1
         else
-            -- Decal ID'lerini de Image ID'ye dönüştürmek için rbxthumb API entegrasyonu yapıldı
             local cleanId = url:match("%d+")
             local finalImage = ""
             if cleanId then
@@ -6258,7 +7284,6 @@ AddTextBox(tabDesigner, "Görsel URL veya AssetID girin...", function(url)
     end)
 end)
 
--- Arkaplan Opaklığı (Resmin Saydamlığı)
 AddSlider(tabDesigner, "Resim Belirginliği (Opaklık)", 0, 100, 30, function(val)
     pcall(function()
         local trans = (100 - val) / 100
@@ -6267,7 +7292,6 @@ AddSlider(tabDesigner, "Resim Belirginliği (Opaklık)", 0, 100, 30, function(va
     end)
 end)
 
--- Bulanıklık Yumuşatma Kontrolü
 AddSlider(tabDesigner, "Resim Bulanıklığı (Blur Maske)", 0, 100, 0, function(val)
     pcall(function()
         local trans = (100 - val) / 100
@@ -6276,51 +7300,43 @@ AddSlider(tabDesigner, "Resim Bulanıklığı (Blur Maske)", 0, 100, 0, function
     end)
 end)
 
--- 1. Arkaplan Rengi (MainBG)
 AddColorPicker(tabDesigner, "Ana Arkaplan Rengi", themeData["Custom Designer"].MainBG, function(col)
     themeData["Custom Designer"].MainBG = col
     applyTheme("Custom Designer")
 end)
 
--- 2. Topbar Rengi (TopbarBG)
 AddColorPicker(tabDesigner, "Üst Bar (Topbar) Rengi", themeData["Custom Designer"].TopbarBG, function(col)
     themeData["Custom Designer"].TopbarBG = col
     applyTheme("Custom Designer")
 end)
 
--- 3. Buton Rengi (ButtonBG)
 AddColorPicker(tabDesigner, "Buton ve Panel Rengi", themeData["Custom Designer"].ButtonBG, function(col)
     themeData["Custom Designer"].ButtonBG = col
     themeData["Custom Designer"].UnselectedTabBtn = Color3.fromRGB(math.clamp(col.R*255-15,0,255), math.clamp(col.G*255-15,0,255), math.clamp(col.B*255-15,0,255))
     applyTheme("Custom Designer")
 end)
 
--- 4. Accent/Vurgu Rengi (Çizgiler, Aktif Slider'lar, Aktif Toggle'lar)
 AddColorPicker(tabDesigner, "Vurgu (Accent) Rengi", themeData["Custom Designer"].Accent, function(col)
     themeData["Custom Designer"].Accent = col
     applyTheme("Custom Designer")
 end)
 
--- 5. Yazı Rengi (Text)
 AddColorPicker(tabDesigner, "Yazı (Text) Rengi", themeData["Custom Designer"].Text, function(col)
     themeData["Custom Designer"].Text = col
     applyTheme("Custom Designer")
 end)
 
--- 6. Arkaplan Saydamlığı (MainTrans)
 AddSlider(tabDesigner, "Panel Saydamlığı (Opacity)", 0, 100, 10, function(val)
     themeData["Custom Designer"].MainTrans = val / 100
     themeData["Custom Designer"].TopbarTrans = math.clamp((val / 100) + 0.05, 0, 1)
     applyTheme("Custom Designer")
 end)
 
--- 7. Buton Saydamlığı (ButtonTrans)
 AddSlider(tabDesigner, "Buton Saydamlığı (Opacity)", 0, 100, 0, function(val)
     themeData["Custom Designer"].ButtonTrans = val / 100
     applyTheme("Custom Designer")
 end)
 
--- 8. Menü Köşe Yuvarlaklığı (UICorner Radius)
 AddSlider(tabDesigner, "Köşe Yuvarlaklığı (Corner)", 0, 50, 22, function(val)
     corner.CornerRadius = UDim.new(0, val)
     topCorner.CornerRadius = UDim.new(0, val)
@@ -6328,7 +7344,6 @@ AddSlider(tabDesigner, "Köşe Yuvarlaklığı (Corner)", 0, 50, 22, function(va
     overlayCorner.CornerRadius = UDim.new(0, val)
 end)
 
--- 9. Menü Boyut Ayarlayıcıları (Genişlik & Yükseklik)
 AddSlider(tabDesigner, "Menü Genişliği (Width)", 400, 1000, 800, function(val)
     mainFrame.Size = UDim2.new(0, val, 0, mainFrame.Size.Y.Offset)
     updateBlur()
@@ -6370,9 +7385,7 @@ end
 
 slotsData = loadSlotsFromFile()
 
--- Dynamic Slot Çizici
 function rebuildSlotsUI()
-    -- Mevcut dinamik slot kutularını temizle
     for _, child in pairs(tabSlots:GetChildren()) do
         if child:IsA("Frame") and child.Name == "SlotEntry" then
             child:Destroy()
@@ -6384,7 +7397,8 @@ function rebuildSlotsUI()
         entry.Name = "SlotEntry"
         entry.Size = UDim2.new(1, -10, 0, 45)
         entry.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
-        entry.ZIndex = 5
+        entry.ZIndex = 7
+        entry.LayoutOrder = #tabSlots:GetChildren()
         registerObj(entry, "ButtonBG")
         
         local entryCorner = Instance.new("UICorner", entry)
@@ -6399,10 +7413,10 @@ function rebuildSlotsUI()
         label.TextSize = 13
         label.Font = Enum.Font.GothamMedium
         label.TextXAlignment = Enum.TextXAlignment.Left
-        label.ZIndex = 6
+        label.TextStrokeTransparency = 1
+        label.ZIndex = 8
         registerObj(label, "Text")
 
-        -- YÜKLE BUTONU
         local loadBtn = Instance.new("TextButton", entry)
         loadBtn.Size = UDim2.new(0.2, -5, 0, 30)
         loadBtn.Position = UDim2.new(0.6, 0, 0.5, -15)
@@ -6411,7 +7425,8 @@ function rebuildSlotsUI()
         loadBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
         loadBtn.Font = Enum.Font.GothamBold
         loadBtn.TextSize = 11
-        loadBtn.ZIndex = 6
+        loadBtn.TextStrokeTransparency = 1
+        loadBtn.ZIndex = 8
         local loadBtnCorner = Instance.new("UICorner", loadBtn)
         loadBtnCorner.CornerRadius = UDim.new(0, 6)
 
@@ -6437,7 +7452,6 @@ function rebuildSlotsUI()
                     BlurTrans = data.BlurTrans or 1
                 }
                 
-                -- Görsel verilerini direkt olarak elementlere geçir
                 bgImageLabel.Image = themeData["Custom Designer"].BGImage
                 bgImageLabel.ImageTransparency = themeData["Custom Designer"].BGImageTrans
                 blurOverlay.BackgroundTransparency = themeData["Custom Designer"].BlurTrans
@@ -6459,7 +7473,6 @@ function rebuildSlotsUI()
             end)
         end)
 
-        -- SİL BUTONU
         local deleteBtn = Instance.new("TextButton", entry)
         deleteBtn.Size = UDim2.new(0.2, -5, 0, 30)
         deleteBtn.Position = UDim2.new(0.8, 5, 0.5, -15)
@@ -6468,7 +7481,8 @@ function rebuildSlotsUI()
         deleteBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
         deleteBtn.Font = Enum.Font.GothamBold
         deleteBtn.TextSize = 11
-        deleteBtn.ZIndex = 6
+        deleteBtn.TextStrokeTransparency = 1
+        deleteBtn.ZIndex = 8
         local deleteBtnCorner = Instance.new("UICorner", deleteBtn)
         deleteBtnCorner.CornerRadius = UDim.new(0, 6)
 
@@ -6480,7 +7494,6 @@ function rebuildSlotsUI()
     end
 end
 
--- Slotlar Tabının UI Elemanları
 AddLabel(tabSlots, "Tasarımı Kaydet")
 slotNameInput = AddTextBox(tabSlots, "Yeni Slot Adı Yaz...", function() end)
 
@@ -6488,7 +7501,6 @@ AddButton(tabSlots, "Şu Anki Tasarımı Bu Slota Kaydet", function()
     local name = slotNameInput.Text
     if name == "" then return end
     
-    -- O anki aktif temanın verilerini al (Böylece preset temalarda görsel ekleyip kaydettiğinde de çalışır)
     local activeThemeData = themeData[currentTheme] or themeData["Custom Designer"]
     local mainBG_C = activeThemeData.MainBG
     local topbarBG_C = activeThemeData.TopbarBG
@@ -6515,13 +7527,12 @@ AddButton(tabSlots, "Şu Anki Tasarımı Bu Slota Kaydet", function()
     
     saveSlotsToFile()
     rebuildSlotsUI()
-    slotNameInput.Text = "" -- Giriş alanını temizle
+    slotNameInput.Text = ""
 end)
 
 AddLabel(tabSlots, "Kayıtlı Profil Slotların")
-rebuildSlotsUI() -- İlk açılışta dosyadan yüklenenleri listele
+rebuildSlotsUI()
 
--- Ulaşım
 AddLabel(tabUlasim, "Konumum")
 coordLabel = AddLabel(tabUlasim, "X: 0  Y: 0  Z: 0")
 RunService.Heartbeat:Connect(function()
@@ -6536,7 +7547,8 @@ AddLabel(tabUlasim, "Koordinata Işınlan")
 coordInputFrame = Instance.new("Frame", tabUlasim)
 coordInputFrame.Size = UDim2.new(1, -10, 0, 35)
 coordInputFrame.BackgroundTransparency = 1
-coordInputFrame.ZIndex = 5
+coordInputFrame.ZIndex = 7
+coordInputFrame.LayoutOrder = #tabUlasim:GetChildren()
 
 function CreateCoordBox(label, pos, parent)
     local l = Instance.new("TextLabel", parent)
@@ -6547,14 +7559,15 @@ function CreateCoordBox(label, pos, parent)
     l.TextColor3 = Color3.fromRGB(220, 220, 240)
     l.Font = Enum.Font.GothamBold
     l.TextSize = 14
-    l.ZIndex = 6
+    l.TextStrokeTransparency = 1
+    l.ZIndex = 8
     registerObj(l, "Text")
     
     local b = AddTextBox(parent, "0", function() end)
     b.Size = UDim2.new(0.25, 0, 1, 0)
     b.Position = pos + UDim2.new(0, 20, 0, 0)
     b.Text = "0"
-    b.ZIndex = 6
+    b.ZIndex = 8
     return b
 end
 
@@ -6619,7 +7632,8 @@ explorerScroll.BorderSizePixel = 0
 explorerScroll.ScrollBarThickness = 5
 explorerScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
 explorerScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
-explorerScroll.ZIndex = 5
+explorerScroll.ZIndex = 7
+explorerScroll.LayoutOrder = #tabStudio:GetChildren()
 registerObj(explorerScroll, "ButtonBG")
 explorerCorner = Instance.new("UICorner", explorerScroll)
 explorerCorner.CornerRadius = UDim.new(0, 8)
@@ -6691,8 +7705,9 @@ function buildExplorer()
         nav.TextColor3 = Color3.fromRGB(230, 230, 240)
         nav.Font = Enum.Font.GothamBold
         nav.TextSize = 12
+        nav.TextStrokeTransparency = 1
         nav.Text = text
-        nav.ZIndex = 6
+        nav.ZIndex = 8
         local navCorner = Instance.new("UICorner", nav)
         navCorner.CornerRadius = UDim.new(0, 5)
         nav.MouseButton1Click:Connect(callback)
@@ -6715,8 +7730,9 @@ function buildExplorer()
         row.Font = Enum.Font.GothamMedium
         row.TextSize = 12
         row.TextXAlignment = Enum.TextXAlignment.Left
+        row.TextStrokeTransparency = 1
         row.Text = string.rep("   ", depth) .. (hasChildren and (expanded and "v " or "> ") or "• ") .. instance.Name .. "  [" .. instance.ClassName .. "]"
-        row.ZIndex = 6
+        row.ZIndex = 8
         local rowCorner = Instance.new("UICorner", row)
         rowCorner.CornerRadius = UDim.new(0, 5)
 
@@ -6782,7 +7798,6 @@ end
 AddButton(tabStudio, "Workspace Yenile", buildExplorer)
 AddButton(tabStudio, "Explorer'ı Unload", unloadWorkspaceExplorer)
 
--- [[ EK: WORKSPACE ESP ARA + SEÇİLİ OBJE ESP ]] --
 _G.ananistwaffendivisionWorkspaceESPObjects = _G.ananistwaffendivisionWorkspaceESPObjects or {}
 _G.ananistwaffendivisionWorkspaceNameESPHighlight = _G.ananistwaffendivisionWorkspaceNameESPHighlight or nil
 
@@ -6948,34 +7963,289 @@ AddButton(tabUlasim, "En Yakındaki Oyuncuya Işınlan", function()
 end)
 
 
--- Varsayılan aktif tab ayarla
 tD1.Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
 tD1.Btn.BackgroundTransparency = 0.2
 tD1.Indicator.Visible = true
 tD1.Frame.Visible = true
 
--- Varsayılan temayı menü ilk açıldığında yükle
 applyTheme("ϟϟ Theme")
+
+-- [[ AWD INTRO // interface itself animates in; visual effect stays behind UI ]] --
+function playAWDInterfaceIntro()
+    if not mainFrame or not mainFrame.Parent then return end
+    mainFrame.Visible = true
+    mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    mainFrame.Position = UDim2.fromScale(0.5, 0.53)
+    menuScale.Scale = 0.88
+    mainFrame.BackgroundTransparency = 0.22
+    topbar.BackgroundTransparency = 1
+    ambientWash.BackgroundTransparency = 1
+    ambientRail.Position = UDim2.new(-0.25, 0, 0.5, 0)
+    ambientTopLine.BackgroundTransparency = 1
+    glassSheen.BackgroundTransparency = 1
+    glassRim.Transparency = 1
+    ambientOrbA.BackgroundTransparency = 1
+    ambientOrbB.BackgroundTransparency = 1
+    ambientOrbC.BackgroundTransparency = 1
+    if glassFrost then glassFrost.BackgroundTransparency = 1 end
+    if glassSpecular then glassSpecular.BackgroundTransparency = 1 end
+    if glassChip then glassChip.BackgroundTransparency = 1 end
+
+    TweenService:Create(mainFrame, TweenInfo.new(0.52, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
+        Position = UDim2.fromScale(0.5, 0.5), BackgroundTransparency = 0.015
+    }):Play()
+    TweenService:Create(menuScale, TweenInfo.new(0.58, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
+    TweenService:Create(topbar, TweenInfo.new(0.42, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 0.02}):Play()
+    TweenService:Create(ambientWash, TweenInfo.new(0.65, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 0.91}):Play()
+    TweenService:Create(ambientTopLine, TweenInfo.new(0.48, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0.72}):Play()
+    TweenService:Create(glassSheen, TweenInfo.new(0.85, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 0.965}):Play()
+    TweenService:Create(glassRim, TweenInfo.new(0.72, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Transparency = 0.76}):Play()
+    TweenService:Create(ambientOrbA, TweenInfo.new(1.1, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 0.90}):Play()
+    TweenService:Create(ambientOrbB, TweenInfo.new(1.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 0.92}):Play()
+    TweenService:Create(ambientOrbC, TweenInfo.new(1.0, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 0.94}):Play()
+    TweenService:Create(ambientRail, TweenInfo.new(1.05, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
+        Position = UDim2.new(1.25, 0, 0.5, 0)
+    }):Play()
+    if glassFrost then TweenService:Create(glassFrost, TweenInfo.new(0.85, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 0.94}):Play() end
+    if glassSpecular then TweenService:Create(glassSpecular, TweenInfo.new(0.7, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 0.55}):Play() end
+    if glassChip then TweenService:Create(glassChip, TweenInfo.new(0.75, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 0.85}):Play() end
+    task.delay(0.72, function()
+        if ambientRail and ambientRail.Parent then
+            ambientRail.Position = UDim2.new(-0.25, 0, 0.5, 0)
+        end
+    end)
+    task.delay(0.85, function()
+        if mainFrame and mainFrame.Parent then
+            mainFrame.AnchorPoint = Vector2.new(0, 0)
+            mainFrame.Position = UDim2.new(0.5, -510, 0.5, -340)
+        end
+    end)
+end
+
+-- Intro sequence: fullscreen → interface
+task.spawn(function()
+    if AWD_ENABLE_FULLSCREEN_INTRO then
+        pcall(awdShowFullscreenIntro)
+    end
+    playAWDInterfaceIntro()
+end)
+
+-- [[ AWD SMART MOTION SYSTEM // AMBIENT PARALLAX + BREATHING GLASS ]] --
+awdAmbientMotionAlive = true
+function awdPlayAmbientCycle()
+    task.spawn(function()
+        while awdAmbientMotionAlive and screenGui and screenGui.Parent do
+            if mainFrame.Visible and screenGui.Enabled then
+                local duration = 7.5
+                local orbATween = TweenService:Create(ambientOrbA, TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                    Position = UDim2.new(0.23, 0, 0.29, 0),
+                    Size = UDim2.fromOffset(360, 360),
+                    BackgroundTransparency = 0.925
+                })
+                local orbBTween = TweenService:Create(ambientOrbB, TweenInfo.new(duration + 1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                    Position = UDim2.new(0.78, 0, 0.68, 0),
+                    Size = UDim2.fromOffset(300, 300),
+                    BackgroundTransparency = 0.935
+                })
+                local orbCTween = TweenService:Create(ambientOrbC, TweenInfo.new(duration + 0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                    Position = UDim2.new(0.63, 0, 0.20, 0),
+                    Size = UDim2.fromOffset(230, 230),
+                    BackgroundTransparency = 0.95
+                })
+                local rimTween = TweenService:Create(glassRim, TweenInfo.new(3.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                    Transparency = 0.58
+                })
+                local sheenTween = TweenService:Create(glassSheenGradient, TweenInfo.new(9, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                    Rotation = 142
+                })
+                orbATween:Play()
+                orbBTween:Play()
+                orbCTween:Play()
+                rimTween:Play()
+                sheenTween:Play()
+                task.wait(duration + 1.6)
+                if not (screenGui and screenGui.Parent) then break end
+
+                TweenService:Create(ambientOrbA, TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                    Position = UDim2.new(0.12, 0, 0.18, 0),
+                    Size = UDim2.fromOffset(310, 310),
+                    BackgroundTransparency = 0.90
+                }):Play()
+                TweenService:Create(ambientOrbB, TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                    Position = UDim2.new(0.88, 0, 0.78, 0),
+                    Size = UDim2.fromOffset(250, 250),
+                    BackgroundTransparency = 0.92
+                }):Play()
+                TweenService:Create(ambientOrbC, TweenInfo.new(duration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                    Position = UDim2.new(0.72, 0, 0.12, 0),
+                    Size = UDim2.fromOffset(190, 190),
+                    BackgroundTransparency = 0.94
+                }):Play()
+                TweenService:Create(glassRim, TweenInfo.new(3.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                    Transparency = 0.78
+                }):Play()
+                TweenService:Create(glassSheenGradient, TweenInfo.new(9, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                    Rotation = 112
+                }):Play()
+                task.wait(duration + 1.6)
+            else
+                task.wait(0.6)
+            end
+        end
+    end)
+end
+awdPlayAmbientCycle()
+
+-- Glassmorphism nefes alma döngüsü
+task.spawn(function()
+    while screenGui and screenGui.Parent do
+        if mainFrame.Visible and screenGui.Enabled then
+            TweenService:Create(glassFrost, TweenInfo.new(4.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                BackgroundTransparency = 0.90
+            }):Play()
+            TweenService:Create(glassSpecular, TweenInfo.new(2.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                Position = UDim2.new(0.42, 0, 0, 92),
+                BackgroundTransparency = 0.35
+            }):Play()
+            task.wait(4.2)
+            if not (screenGui and screenGui.Parent) then break end
+            TweenService:Create(glassFrost, TweenInfo.new(4.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                BackgroundTransparency = 0.94
+            }):Play()
+            TweenService:Create(glassSpecular, TweenInfo.new(2.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                Position = UDim2.new(0.62, 0, 0, 92),
+                BackgroundTransparency = 0.65
+            }):Play()
+            task.wait(4.2)
+        else
+            task.wait(0.6)
+        end
+    end
+end)
+
+-- Hover watchdog
+task.spawn(function()
+    while screenGui and screenGui.Parent do
+        task.wait(0.12)
+        if not screenGui.Enabled then continue end
+        local mousePos = UIS:GetMouseLocation()
+        local cfg = themeData[currentTheme] or themeData["ϟϟ Theme"]
+        for _, obj in ipairs(registry.ButtonBG) do
+            if obj and obj.Parent and obj:GetAttribute("AWD_Hovered") then
+                local pos, size = obj.AbsolutePosition, obj.AbsoluteSize
+                local inside = mousePos.X >= pos.X and mousePos.X <= pos.X + size.X
+                    and mousePos.Y >= pos.Y and mousePos.Y <= pos.Y + size.Y
+                if not inside then
+                    obj:SetAttribute("AWD_Hovered", false)
+                    local base = (cfg and cfg.ButtonBG) or Color3.fromRGB(17, 21, 29)
+                    smoothTween(obj, {BackgroundColor3 = base, BackgroundTransparency = (cfg and cfg.ButtonTrans) or 0}, 0.12)
+                    local stroke = obj:FindFirstChildOfClass("UIStroke")
+                    if stroke then
+                        smoothTween(stroke, {Transparency = obj:IsA("Frame") and 0.62 or 0.58}, 0.12)
+                    end
+                end
+            end
+        end
+        for _, item in ipairs(registry.TabBtns) do
+            local btn = item.Btn
+            if btn and btn.Parent and btn:GetAttribute("AWD_Hovered") and activeTab ~= item then
+                local pos, size = btn.AbsolutePosition, btn.AbsoluteSize
+                local inside = mousePos.X >= pos.X and mousePos.X <= pos.X + size.X
+                    and mousePos.Y >= pos.Y and mousePos.Y <= pos.Y + size.Y
+                if not inside then
+                    btn:SetAttribute("AWD_Hovered", false)
+                    smoothTween(btn, {
+                        BackgroundColor3 = Color3.fromRGB(9, 12, 18),
+                        TextColor3 = (cfg and cfg.Text) or Color3.fromRGB(178, 178, 199)
+                    }, 0.12)
+                    local stroke = btn:FindFirstChildOfClass("UIStroke")
+                    if stroke then smoothTween(stroke, {Transparency = 1}, 0.12) end
+                end
+            end
+        end
+    end
+end)
+
+-- Ambient sweep loop
+task.spawn(function()
+    while screenGui and screenGui.Parent do
+        if mainFrame.Visible and screenGui.Enabled then
+            ambientRail.Position = UDim2.new(-0.25, 0, 0.5, 0)
+            TweenService:Create(ambientRail, TweenInfo.new(5.5, Enum.EasingStyle.Linear), {
+                Position = UDim2.new(1.25, 0, 0.5, 0)
+            }):Play()
+            task.wait(5.7)
+        else
+            task.wait(0.5)
+        end
+    end
+end)
 
 -- Insert ve ESP tuşları dinleyicileri
 if _G.AnanistanInsert then _G.AnanistanInsert:Disconnect() end
 _G.AnanistanInsert = UIS.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
+    -- Insert menü kısayolu GUI odağı/processed durumundan bağımsız çalışır.
     
     if input.KeyCode == menuToggleKey and not settingMenuKey then
+        -- Insert tek basışta aç/kapatır; gameProcessed kontrolüne takılmaz.
         pcall(function()
-            if screenGui.Enabled then
-                screenGui.Enabled = false
-                mainFrame.Visible = false
-            else
+            local shouldOpen = not mainFrame.Visible
+            if shouldOpen then
                 screenGui.Enabled = true
                 mainFrame.Visible = true
-                applyTheme(currentTheme) -- Açılışta güncel temayı tazele
-                updateBlur()
+                mainFrame.BackgroundTransparency = 1
+                menuScale.Scale = 0.86
+                topbar.BackgroundTransparency = 1
+                glassSheen.BackgroundTransparency = 1
+                glassRim.Transparency = 1
+                ambientOrbA.BackgroundTransparency = 1
+                ambientOrbB.BackgroundTransparency = 1
+                ambientOrbC.BackgroundTransparency = 1
+                if glassFrost then glassFrost.BackgroundTransparency = 1 end
+                if glassSpecular then glassSpecular.BackgroundTransparency = 1 end
+                if glassChip then glassChip.BackgroundTransparency = 1 end
+                mainFrame.Position = UDim2.new(0.5, -510, 0.5, -340)
+                applyTheme(currentTheme)
+                -- Insert ile menü açılırken arka plan blur uygulanmaz.
+                if blurEffect then
+                    pcall(function()
+                        blurEffect.Size = 0
+                    end)
+                end
+                smoothTween(mainFrame, {
+                    Position = UDim2.new(0.5, -510, 0.5, -340),
+                    BackgroundTransparency = 0.015
+                }, 0.38)
+                smoothTween(menuScale, {Scale = 1}, 0.44)
+                smoothTween(topbar, {BackgroundTransparency = 0.02}, 0.3)
+                smoothTween(glassSheen, {BackgroundTransparency = 0.965}, 0.5)
+                smoothTween(glassRim, {Transparency = 0.76}, 0.5)
+                smoothTween(ambientOrbA, {BackgroundTransparency = 0.90}, 0.55)
+                smoothTween(ambientOrbB, {BackgroundTransparency = 0.92}, 0.6)
+                smoothTween(ambientOrbC, {BackgroundTransparency = 0.94}, 0.5)
+                if glassFrost then smoothTween(glassFrost, {BackgroundTransparency = 0.94}, 0.55) end
+                if glassSpecular then smoothTween(glassSpecular, {BackgroundTransparency = 0.55}, 0.5) end
+                if glassChip then smoothTween(glassChip, {BackgroundTransparency = 0.85}, 0.55) end
+                -- Menü açılışında blur tween'i kaldırıldı.
+            else
+                -- Blur kapanışla aynı anda sıfırlanır; ekranda kalıcı bulanıklık bırakılmaz.
+                pcall(function()
+                    if blurEffect then
+                        TweenService:Create(blurEffect, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = 0}):Play()
+                    end
+                end)
+                mainFrame.Visible = false
+                menuScale.Scale = 1
+                mainFrame.BackgroundTransparency = 0.015
+                topbar.BackgroundTransparency = 0.02
+                glassRim.Transparency = 0.76
+                if glassFrost then glassFrost.BackgroundTransparency = 0.94 end
+                if glassSpecular then glassSpecular.BackgroundTransparency = 0.55 end
+                if glassChip then glassChip.BackgroundTransparency = 0.85 end
             end
         end)
     end
-    
+
     if input.KeyCode == espToggleKey and not settingESPKey then
         espEnabled = not espEnabled
         if updateESPUIs and updateESPUIs.master then
@@ -7034,7 +8304,7 @@ UIS.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
--- Reload kancası: Script dışarıdan _G.ananistwaffendivisionReloadSource = scriptText atayabilir.
+-- Reload kancası
 _G.ananistwaffendivisionReload = function()
     if type(_G.ananistwaffendivisionReloadSource) ~= "string" then
         pcall(function()
@@ -7055,4 +8325,3 @@ _G.ananistwaffendivisionReload = function()
         loadstring(_G.ananistwaffendivisionReloadSource)()
     end)
 end
-
