@@ -7,13 +7,210 @@ Players = game:GetService("Players")
 RunService = game:GetService("RunService")
 HttpService = game:GetService("HttpService")
 TeleportService = game:GetService("TeleportService")
-player = Players.LocalPlayer
+-- LocalPlayer bazı istemcilerde script ilk çalıştığında henüz hazır olmayabilir.
+player = Players.LocalPlayer or Players.PlayerAdded:Wait()
 
-task.spawn(function()
-    pcall(function()
-        game:HttpGet("https://pastebin.com/raw/PASTE_ID")
-    end)
+-- Önceki çalıştırmadan kalan arayüzleri/bağlantıları temizle; çift yükleme bellek ve FPS çökmesine yol açabilir.
+pcall(function()
+    if type(_G.ananistwaffendivisionCleanup) == "function" then
+        _G.ananistwaffendivisionCleanup()
+    end
 end)
+pcall(function()
+    local containers = {CoreGui, player:FindFirstChildOfClass("PlayerGui")}
+    for _, container in ipairs(containers) do
+        if container then
+            for _, child in ipairs(container:GetChildren()) do
+                if child.Name == "ananistwaffendivisionUI"
+                    or child.Name == "AWD_OptimizedIntro"
+                    or child.Name == "AWD_FullscreenIntro"
+                    or child.Name == "AWD_PresenceConsent" then
+                    pcall(function() child:Destroy() end)
+                end
+            end
+        end
+    end
+end)
+
+-- AWD HUB: kalıcı kullanıcı dizini izni + dil tercihi. İzin sürümü değişirse tekrar sorulur.
+local AWD_CONSENT_FILE = "AWD_PRESENCE_CONSENT_V1.txt"
+local AWD_LANGUAGE_FILE = "AWD_LANGUAGE_V1.txt"
+local AWD_Language = "Türkçe"
+pcall(function()
+    if type(isfile) == "function" and type(readfile) == "function" and isfile(AWD_LANGUAGE_FILE) then
+        local saved = tostring(readfile(AWD_LANGUAGE_FILE))
+        if saved == "English" or saved == "Türkçe" then AWD_Language = saved end
+    end
+end)
+local AWD_ConsentAcceptedThisRun = false
+local function AWD_HasSavedConsent()
+    local ok, accepted = pcall(function()
+        return type(isfile) == "function" and type(readfile) == "function"
+            and isfile(AWD_CONSENT_FILE) and tostring(readfile(AWD_CONSENT_FILE)) == "AWD_CONSENT_V1_ACCEPTED"
+    end)
+    return ok and accepted == true
+end
+local function AWD_SaveConsent()
+    local ok = pcall(function()
+        assert(type(writefile) == "function", "writefile desteklenmiyor")
+        writefile(AWD_CONSENT_FILE, "AWD_CONSENT_V1_ACCEPTED")
+    end)
+    return ok
+end
+local function AWD_ShowPresenceConsent()
+    local english = AWD_Language == "English"
+    local consentGui = Instance.new("ScreenGui")
+    consentGui.Name = "AWD_PresenceConsent"
+    consentGui.ResetOnSpawn = false
+    consentGui.IgnoreGuiInset = true
+    consentGui.DisplayOrder = 1000000
+    pcall(function() consentGui.Parent = CoreGui end)
+    if not consentGui.Parent then pcall(function() consentGui.Parent = player:WaitForChild("PlayerGui") end) end
+    if not consentGui.Parent then return false end
+
+    local backdrop = Instance.new("Frame")
+    backdrop.Size = UDim2.fromScale(1, 1)
+    backdrop.BackgroundColor3 = Color3.fromRGB(4, 7, 13)
+    backdrop.BackgroundTransparency = 0.22
+    backdrop.BorderSizePixel = 0
+    backdrop.Parent = consentGui
+
+    local panel = Instance.new("Frame")
+    panel.Size = UDim2.fromOffset(500, 350)
+    panel.Position = UDim2.new(0.5, -250, 0.5, -175)
+    panel.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+    panel.BorderSizePixel = 0
+    panel.Parent = backdrop
+    Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 18)
+    local stroke = Instance.new("UIStroke", panel)
+    stroke.Color = Color3.fromRGB(255, 255, 255)
+    stroke.Transparency = 0.08
+    stroke.Thickness = 1.2
+
+    local accent = Instance.new("Frame")
+    accent.Size = UDim2.new(1, 0, 0, 4)
+    accent.BackgroundColor3 = Color3.fromRGB(235, 235, 235)
+    accent.BorderSizePixel = 0
+    accent.Parent = panel
+    Instance.new("UICorner", accent).CornerRadius = UDim.new(0, 18)
+
+    local eyebrow = Instance.new("TextLabel")
+    eyebrow.Size = UDim2.new(1, -40, 0, 18)
+    eyebrow.Position = UDim2.fromOffset(22, 20)
+    eyebrow.BackgroundTransparency = 1
+    eyebrow.Font = Enum.Font.GothamBold
+    eyebrow.Text = "AWD HUB  /  PRIVACY CENTER"
+    eyebrow.TextColor3 = Color3.fromRGB(190, 190, 190)
+    eyebrow.TextSize = 10
+    eyebrow.TextXAlignment = Enum.TextXAlignment.Left
+    eyebrow.Parent = panel
+
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, -40, 0, 34)
+    title.Position = UDim2.fromOffset(22, 45)
+    title.BackgroundTransparency = 1
+    title.Font = Enum.Font.GothamBold
+    title.Text = english and "USER DIRECTORY PERMISSION" or "KULLANICI DİZİNİ İZNİ"
+    title.TextColor3 = Color3.fromRGB(242, 246, 255)
+    title.TextSize = 19
+    title.TextXAlignment = Enum.TextXAlignment.Left
+    title.Parent = panel
+
+    local info = Instance.new("TextLabel")
+    info.Size = UDim2.new(1, -44, 0, 150)
+    info.Position = UDim2.fromOffset(22, 91)
+    info.BackgroundTransparency = 1
+    info.Font = Enum.Font.Gotham
+    info.Text = english
+        and "By accepting, this session will be listed in the AWD HUB user directory while the hub is running. Your Roblox UserId, username (masked in the list), experience/place ID and server session ID are sent to the Cloudflare Worker. Other participants can see your masked name, avatar and session details required for JOIN. Choose Decline if you do not want to participate."
+        or "‘Okudum, kabul ediyorum’ seçersen AWD HUB açık olduğu sürece bu oturum AWD HUB kullanıcı dizininde listelenir. Roblox UserId'n, kullanıcı adın (listede maskelenir), oyun/place ID ve sunucu oturum ID bilgilerin Cloudflare Worker'a gönderilir. Diğer katılımcılar maskeli adını, avatarını ve JOIN için gereken oturum bilgisini görebilir. Katılmak istemiyorsan Reddet'i seç."
+    info.TextColor3 = Color3.fromRGB(181, 193, 213)
+    info.TextSize = 12
+    info.TextWrapped = true
+    info.TextYAlignment = Enum.TextYAlignment.Top
+    info.TextXAlignment = Enum.TextXAlignment.Left
+    info.Parent = panel
+
+    local note = Instance.new("TextLabel")
+    note.Size = UDim2.new(1, -44, 0, 20)
+    note.Position = UDim2.fromOffset(22, 250)
+    note.BackgroundTransparency = 1
+    note.Font = Enum.Font.Gotham
+    note.Text = english and "Your choice is saved on this device." or "Tercihin bu cihazda saklanır."
+    note.TextColor3 = Color3.fromRGB(125, 140, 164)
+    note.TextSize = 10
+    note.TextXAlignment = Enum.TextXAlignment.Left
+    note.Parent = panel
+
+    local accept = Instance.new("TextButton")
+    accept.Size = UDim2.new(0.58, -8, 0, 44)
+    accept.Position = UDim2.new(0, 22, 1, -62)
+    accept.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
+    accept.BorderSizePixel = 0
+    accept.Font = Enum.Font.GothamBold
+    accept.Text = english and "I UNDERSTAND & ACCEPT" or "OKUDUM, KABUL EDİYORUM"
+    accept.TextColor3 = Color3.new(1, 1, 1)
+    accept.TextSize = 11
+    accept.Parent = panel
+    Instance.new("UICorner", accept).CornerRadius = UDim.new(0, 10)
+
+    local decline = Instance.new("TextButton")
+    decline.Size = UDim2.new(0.42, -8, 0, 44)
+    decline.Position = UDim2.new(0.58, 0, 1, -62)
+    decline.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
+    decline.BorderSizePixel = 0
+    decline.Font = Enum.Font.GothamBold
+    decline.Text = english and "DECLINE" or "REDDET"
+    decline.TextColor3 = Color3.fromRGB(230, 235, 245)
+    decline.TextSize = 12
+    decline.Parent = panel
+    Instance.new("UICorner", decline).CornerRadius = UDim.new(0, 10)
+
+    local termsBtn = Instance.new("TextButton")
+    termsBtn.Size = UDim2.fromOffset(112, 22)
+    termsBtn.Position = UDim2.new(1, -134, 0, 248)
+    termsBtn.BackgroundTransparency = 1
+    termsBtn.Font = Enum.Font.GothamBold
+    termsBtn.Text = "TERMS OF SERVICE"
+    termsBtn.TextColor3 = Color3.fromRGB(190, 190, 190)
+    termsBtn.TextSize = 9
+    termsBtn.Parent = panel
+    local showingTerms = false
+    local originalInfoText = info.Text
+    termsBtn.MouseButton1Click:Connect(function()
+        showingTerms = not showingTerms
+        if showingTerms then
+            info.Text = "TERMS OF SERVICE\n\nAWD HUB arayüzündeki özellikleri kendi sorumluluğunda kullan. Oyun deneyimini, diğer oyuncuları veya Roblox hizmetlerini olumsuz etkileyebilecek kullanımlardan kaçın. Üçüncü taraf executor, ağ bağlantısı ve oyun güncellemelerinden kaynaklanan hatalar garanti kapsamında değildir. Kullanıcı dizinine katılım yalnızca bu formdaki açık rızanla etkinleşir. İstediğin zaman HUB'ı kapatabilirsin."
+            termsBtn.Text = "GERİ DÖN"
+        else
+            info.Text = originalInfoText
+            termsBtn.Text = "TERMS OF SERVICE"
+        end
+    end)
+
+    local choice = nil
+    accept.MouseButton1Click:Connect(function() choice = true; AWD_SaveConsent() end)
+    decline.MouseButton1Click:Connect(function() choice = false end)
+    repeat task.wait() until choice ~= nil or not consentGui.Parent
+    pcall(function() consentGui:Destroy() end)
+    return choice == true
+end
+
+if AWD_HasSavedConsent() then
+    AWD_ConsentAcceptedThisRun = true
+else
+    AWD_ConsentAcceptedThisRun = AWD_ShowPresenceConsent()
+    if not AWD_ConsentAcceptedThisRun then return end
+    -- If executor file APIs are unavailable, the session still works but consent cannot persist across executions.
+    AWD_SaveConsent()
+end
+if not AWD_ConsentAcceptedThisRun then return end
+_G.AWD_PresenceConsentAccepted = true
+
+-- Kullanıcı dizini izni bu cihazda kaydedildi; presence kaydı aşağıdaki modülde başlatılır.
+
+-- Başlangıçta kullanılmayan HTTP isteği kaldırıldı.
+-- Gereksiz ağ beklemesi ve executor yükü oluşturuyordu.
 
 -- [[ ϟϟ AWD HUB INTRO // OVERDRIVE v2 (legacy, inactive) ]] --
 function awdShowIntroLegacy()
@@ -560,7 +757,7 @@ function awdShowIntroLegacyV5()
 end
 
 -- [[ ϟϟ AWD HUB // FULLSCREEN INTRO v6 — COMMAND CENTER ϟϟ ]] --
-AWD_ENABLE_FULLSCREEN_INTRO = true
+AWD_ENABLE_FULLSCREEN_INTRO = false
 
 function awdShowFullscreenIntro()
     local parentGui = CoreGui
@@ -1768,12 +1965,12 @@ end)
 
 themeData = {
   ["ϟϟ Theme"] = {
-        MainBG = Color3.fromRGB(0, 0, 0),
-        TopbarBG = Color3.fromRGB(0, 0, 0),
+        MainBG = Color3.fromRGB(8, 8, 8),
+        TopbarBG = Color3.fromRGB(15, 15, 15),
         ButtonBG = Color3.fromRGB(35, 35, 35),
-        Accent = Color3.fromRGB(255, 255, 255),
-        Text = Color3.fromRGB(220, 220, 240),
-        UnselectedTabBtn = Color3.fromRGB(30, 30, 45),
+        Accent = Color3.fromRGB(235, 235, 235),
+        Text = Color3.fromRGB(235, 235, 235),
+        UnselectedTabBtn = Color3.fromRGB(22, 22, 22),
         MainTrans = 0, TopbarTrans = 0, ButtonTrans = 0
     },
     ["Kırmızı theme"] = {
@@ -2094,8 +2291,20 @@ screenGui = Instance.new("ScreenGui")
 screenGui.Name = "ananistwaffendivisionUI"
 screenGui.ResetOnSpawn = false
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-screenGui.Parent = CoreGui
+local _awdGuiParented = pcall(function() screenGui.Parent = CoreGui end)
+if not _awdGuiParented or not screenGui.Parent then
+    local _awdPlayerGui = player:FindFirstChildOfClass("PlayerGui") or player:WaitForChild("PlayerGui", 8)
+    if _awdPlayerGui then
+        local _awdFallbackOk = pcall(function() screenGui.Parent = _awdPlayerGui end)
+        if not _awdFallbackOk or not screenGui.Parent then
+            error("AWD HUB arayüzü CoreGui veya PlayerGui içine yerleştirilemedi.")
+        end
+    else
+        error("AWD HUB yüklenemedi: PlayerGui bulunamadı.")
+    end
+end
 
+local AWD_Panic, AWD_SetPanicMode
 _G.ananistwaffendivisionCleanup = function()
     pcall(function()
         if _G.ananistwaffendivisionBodycamStopPlayback then _G.ananistwaffendivisionBodycamStopPlayback() end
@@ -2122,6 +2331,10 @@ _G.ananistwaffendivisionCleanup = function()
         if espLoopThread then task.cancel(espLoopThread); espLoopThread = nil end
         for _, conn in pairs(espConnections or {}) do if conn then conn:Disconnect() end end
         espConnections = {}
+    end)
+    pcall(function()
+        if AWD_Panic and AWD_Panic.connection then AWD_Panic.connection:Disconnect(); AWD_Panic.connection = nil end
+        if AWD_Panic and AWD_Panic.active then AWD_SetPanicMode(false) end
     end)
     pcall(function()
         if screenGui then screenGui:Destroy() end
@@ -2362,8 +2575,8 @@ imgCorner.CornerRadius = UDim.new(0, 22)
 overlayCorner = Instance.new("UICorner", blurOverlay)
 overlayCorner.CornerRadius = UDim.new(0, 22)
 
-blurEffect = Instance.new("BlurEffect", game:GetService("Lighting"))
-blurEffect.Size = 0
+-- BlurEffect kullanılmıyor; her zaman 0 olan Lighting efekti gereksizdi.
+blurEffect = nil
 
 blurHolder = Instance.new("Frame")
 blurHolder.Size = mainFrame.Size
@@ -2401,7 +2614,7 @@ shadow.Position = UDim2.new(0, -30, 0, -30)
 shadow.BackgroundTransparency = 1
 shadow.Image = "rbxassetid://1316115263"
 shadow.ImageColor3 = Color3.new(0,0,0)
-shadow.ImageTransparency = 0.7
+shadow.ImageTransparency = 1
 shadow.ZIndex = -1
 
 topbar = Instance.new("Frame", mainFrame)
@@ -2686,31 +2899,8 @@ closeBtn.MouseLeave:Connect(function()
     smoothTween(closeStroke, {Transparency = 0.72}, 0.16)
 end)
 
-minBtn = Instance.new("TextButton", topbar)
-minBtn.Size = UDim2.new(0, 38, 0, 38)
-minBtn.Position = UDim2.new(1, -96, 0, 13)
-minBtn.BackgroundTransparency = 1
-minBtn.Text = "—"
-minBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
-minBtn.TextSize = 22
-minBtn.Font = Enum.Font.GothamBold
-minBtn.ZIndex = 6
-minBtn:SetAttribute("IsCloseButton", true)
+-- Küçültme düğmesi kaldırıldı; pencere tek boyutlu ana görünümde kalır.
 
-isMinimized = false
-beforeMinSize = mainFrame.Size
-minBtn.MouseButton1Click:Connect(function()
-    isMinimized = not isMinimized
-    if isMinimized then
-        beforeMinSize = mainFrame.Size
-        smoothTween(mainFrame, {Size = UDim2.new(0, beforeMinSize.X.Offset, 0, 64)}, 0.3)
-        mainFrame.ClipsDescendants = true
-    else
-        smoothTween(mainFrame, {Size = beforeMinSize}, 0.3)
-        task.wait(0.35)
-        mainFrame.ClipsDescendants = false
-    end
-end)
 
 dragging = false
 topbar.InputBegan:Connect(function(input)
@@ -2826,7 +3016,7 @@ statusFPS.Position = UDim2.new(1, -100, 0, 0)
 statusFPS.TextXAlignment = Enum.TextXAlignment.Right
 
 fpsFrames, fpsElapsed = 0, 0
-fpsConnection = RunService.RenderStepped:Connect(function(dt)
+fpsConnection = RunService.Heartbeat:Connect(function(dt)
     fpsFrames += 1
     fpsElapsed += dt
     if fpsElapsed >= 0.5 then
@@ -2834,10 +3024,59 @@ fpsConnection = RunService.RenderStepped:Connect(function(dt)
         fpsFrames, fpsElapsed = 0, 0
     end
 end)
+
+-- [[ AWD PANIC MODE // FPS GUARD + RESTORE ]] --
+-- Roblox LocalScripts cannot force the client's global Graphics Quality slider. This guard
+-- temporarily disables expensive visual effects and restores their exact prior states.
+AWD_Panic = {active = false, lowTime = 0, recoverTime = 0, saved = {}, connection = nil}
+AWD_SetPanicMode = function(enabled)
+    if AWD_Panic.active == enabled then return end
+    AWD_Panic.active = enabled
+    local Lighting = game:GetService("Lighting")
+    local Terrain = workspace:FindFirstChildOfClass("Terrain")
+    if enabled then
+        AWD_Panic.saved.globalShadows = Lighting.GlobalShadows
+        AWD_Panic.saved.terrainDecoration = Terrain and Terrain.Decoration
+        AWD_Panic.saved.effects = {}
+        for _, obj in ipairs(Lighting:GetDescendants()) do
+            if obj:IsA("PostEffect") then
+                AWD_Panic.saved.effects[obj] = obj.Enabled
+                pcall(function() obj.Enabled = false end)
+            end
+        end
+        pcall(function() Lighting.GlobalShadows = false end)
+        if Terrain then pcall(function() Terrain.Decoration = false end) end
+        pcall(function() notify("PANİK MODU", "Performans koruması etkinleştirildi.") end)
+    else
+        if AWD_Panic.saved.globalShadows ~= nil then pcall(function() Lighting.GlobalShadows = AWD_Panic.saved.globalShadows end) end
+        if Terrain and AWD_Panic.saved.terrainDecoration ~= nil then pcall(function() Terrain.Decoration = AWD_Panic.saved.terrainDecoration end) end
+        for obj, oldEnabled in pairs(AWD_Panic.saved.effects or {}) do
+            if obj and obj.Parent then pcall(function() obj.Enabled = oldEnabled end) end
+        end
+        AWD_Panic.saved = {}
+        pcall(function() notify("PANİK MODU", "Performans normale döndü; grafik ayarları geri yüklendi.") end)
+    end
+end
+AWD_Panic.connection = RunService.Heartbeat:Connect(function(dt)
+    if not screenGui or not screenGui.Parent then return end
+    local currentFPS = 1 / math.max(dt, 0.001)
+    if currentFPS < 15 then
+        AWD_Panic.lowTime += dt
+        AWD_Panic.recoverTime = 0
+        if AWD_Panic.lowTime >= 2.0 then AWD_SetPanicMode(true) end
+    elseif currentFPS > 28 then
+        AWD_Panic.recoverTime += dt
+        AWD_Panic.lowTime = 0
+        if AWD_Panic.recoverTime >= 7.0 then AWD_SetPanicMode(false) end
+    else
+        AWD_Panic.lowTime = math.max(0, AWD_Panic.lowTime - dt * 0.5)
+        AWD_Panic.recoverTime = 0
+    end
+end)
 screenGui.AncestryChanged:Connect(function(_, parent)
-    if parent == nil and fpsConnection then
-        fpsConnection:Disconnect()
-        fpsConnection = nil
+    if parent == nil then
+        if fpsConnection then fpsConnection:Disconnect(); fpsConnection = nil end
+        if AWD_Panic and AWD_Panic.connection then AWD_Panic.connection:Disconnect(); AWD_Panic.connection = nil end
     end
 end)
 
@@ -2988,7 +3227,7 @@ function CreateTab(name)
         scroll.Position = UDim2.new(0, 10, 0, 5)
         scroll.ZIndex = 6
         smoothTween(scroll, {Position = UDim2.new(0, 0, 0, 0)}, 0.28)
-        applyTheme(currentTheme)
+        -- Tema zaten uygulandı; sekme değişiminde tüm arayüzü tekrar tweenleme.
     end
     tabBtn.MouseButton1Click:Connect(selectTab)
     tabBtn.MouseEnter:Connect(function()
@@ -3009,7 +3248,44 @@ function CreateTab(name)
     return scroll, tabData
 end
 
+-- UI localization registry. Existing control callbacks and values are not modified by language switching.
+local AWD_LocalizedObjects = {}
+local AWD_Translations = {
+    ["Ayarlar"] = "Settings", ["Ana Sayfa"] = "Home", ["Oyuncu"] = "Player", ["Ulaşım"] = "Travel",
+    ["Studio"] = "Studio", ["Oyunlar"] = "Games", ["Grapple"] = "Grapple", ["Görseller"] = "Visuals",
+    ["Aimbot"] = "Aimbot", ["Dizayn"] = "Design", ["Oyuncular"] = "Players", ["Kullanıcılar"] = "Users",
+    ["Scriptler"] = "Scripts", ["Stil"] = "Style", ["Menü Bilgileri"] = "Menu Information",
+    ["Seçtiğin Tuşlar:"] = "Your Keybinds:", ["AWD Config Manager"] = "AWD Config Manager",
+    ["Kayıtlı Configler (tıkla = yükle)"] = "Saved Configs (click to load)", ["Kaydet"] = "Save",
+    ["Yükle"] = "Load", ["Sil"] = "Delete", ["Listeyi Yenile"] = "Refresh List",
+    ["Auto Execute"] = "Auto Execute", ["Ekstra"] = "Extras",
+    ["Executor Açılınca Hub Otomatik Çalışsın"] = "Run Hub Automatically When Executor Starts",
+    ["Tüm Aimbot + ESP Kapat"] = "Disable All Aimbot + ESP",
+    ["Ayarlar ve Profil Yönetimi"] = "Settings and Profile Management",
+    ["Dil Ayarları"] = "Language Settings", ["Arayüz dili"] = "Interface language",
+    ["Türkçe"] = "Turkish", ["İngilizce"] = "English"
+}
+local function AWD_Localize(text)
+    if AWD_Language ~= "English" then return text end
+    local leading, body = tostring(text):match("^(%s*)(.*)$")
+    return leading .. (AWD_Translations[body] or body)
+end
+local function AWD_RegisterLocalized(object, original)
+    table.insert(AWD_LocalizedObjects, {object = object, original = tostring(original or "")})
+    object.Text = AWD_Localize(original)
+end
+local function AWD_ApplyLanguage(language)
+    AWD_Language = language == "English" and "English" or "Türkçe"
+    for _, item in ipairs(AWD_LocalizedObjects) do
+        if item.object and item.object.Parent then item.object.Text = AWD_Localize(item.original) end
+    end
+    pcall(function() if writefile then writefile(AWD_LANGUAGE_FILE, AWD_Language) end end)
+    if _G.AWD_ApplyTabLanguage then _G.AWD_ApplyTabLanguage() end
+end
+
+AWD_ControlRegistry = AWD_ControlRegistry or {}
 function AddButton(parent, text, callback)
+    table.insert(AWD_ControlRegistry, {kind = "Button", name = tostring(text), callback = callback, parent = parent})
     local btn = Instance.new("TextButton", parent)
     btn.Size = UDim2.new(1, -12, 0, 46)
     btn.BackgroundColor3 = Color3.fromRGB(17, 21, 29)
@@ -3041,7 +3317,7 @@ function AddButton(parent, text, callback)
     label.Position = UDim2.new(0, 17, 0, 0)
     label.BackgroundTransparency = 1
     label.BackgroundColor3 = Color3.new(0, 0, 0)
-    label.Text = text
+    AWD_RegisterLocalized(label, text)
     label.TextColor3 = Color3.fromRGB(224, 231, 243)
     label.TextSize = 14
     label.Font = Enum.Font.GothamMedium
@@ -3078,6 +3354,7 @@ function AddButton(parent, text, callback)
 end
 
 function AddToggle(parent, text, defaultState, callback)
+    table.insert(AWD_ControlRegistry, {kind = "Toggle", name = tostring(text), callback = callback, parent = parent})
     local frame = Instance.new("Frame", parent)
     frame.Size = UDim2.new(1, -10, 0, 38)
     frame.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
@@ -3097,7 +3374,7 @@ function AddToggle(parent, text, defaultState, callback)
     label.Position = UDim2.new(0, 10, 0, 0)
     label.BackgroundTransparency = 1
     label.BackgroundColor3 = Color3.new(0, 0, 0)
-    label.Text = text
+    AWD_RegisterLocalized(label, text)
     label.TextColor3 = Color3.fromRGB(220, 220, 240)
     label.TextSize = 13
     label.Font = Enum.Font.GothamMedium
@@ -3475,7 +3752,7 @@ function AddLabel(parent, text, tall)
     box.Size = UDim2.new(1, 0, 0, tall and 60 or 28)
     box.BackgroundTransparency = 1
     box.BackgroundColor3 = Color3.new(0, 0, 0)
-    box.Text = " " .. text
+    AWD_RegisterLocalized(box, " " .. text)
     box.TextColor3 = Color3.fromRGB(200, 200, 220)
     box.TextSize = 14
     box.Font = Enum.Font.GothamBold
@@ -3884,10 +4161,37 @@ function requestJson(url)
 end
 
 function rejoinServer()
-    pcall(function()
-        TeleportService:Teleport(game.PlaceId, player)
+    if not player or not TeleportService then
+        notify("Rejoin", "Teleport servisi veya LocalPlayer bulunamadı.")
+        return
+    end
+    if not game.JobId or game.JobId == "" then
+        notify("Rejoin", "Sunucu kimliği alınamadı; normal teleport deneniyor.")
+        local ok, err = pcall(function() TeleportService:Teleport(game.PlaceId, player) end)
+        if not ok then notify("Rejoin başarısız", tostring(err)) end
+        return
+    end
+    local ok, err = pcall(function()
+        TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, player)
     end)
+    if ok then
+        notify("Rejoin", "Mevcut sunucuya yeniden bağlanma isteği gönderildi.")
+    else
+        notify("Rejoin", "Aynı sunucuya katılma başarısız; normal teleport deneniyor.")
+        local fallbackOk, fallbackErr = pcall(function()
+            TeleportService:Teleport(game.PlaceId, player)
+        end)
+        if not fallbackOk then notify("Rejoin başarısız", tostring(fallbackErr or err)) end
+    end
 end
+
+pcall(function()
+    TeleportService.TeleportInitFailed:Connect(function(failedPlayer, result, message)
+        if failedPlayer == player then
+            notify("Teleport başarısız", tostring(message or result or "Bilinmeyen teleport hatası"))
+        end
+    end)
+end)
 
 function getPublicServers(placeId, cursor)
     local url = string.format("https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100", tostring(placeId))
@@ -4008,12 +4312,16 @@ tabSettings, tD4 = CreateTab("Ayarlar")
 tabDesigner, tD8 = CreateTab("Dizayn")
 tabSlots, tD9 = tabDesigner, tD8
 _G.ananistwaffendivisionTabPlayers, _G.ananistwaffendivisionTabPlayersData = CreateTab("Oyuncular")
+tabUsers, tDUsers = CreateTab("Kullanıcılar")
 tabScripts, tDScripts = CreateTab("Scriptler")
+tabScan, tDScan = CreateTab("Tarama")
 _G.ananistwaffendivisionTabPlayersData.Btn.TextSize = 12
 tD1.Btn.LayoutOrder, tD2.Btn.LayoutOrder, tD6.Btn.LayoutOrder = 1, 2, 3
 tDStudio.Btn.LayoutOrder, tDGames.Btn.LayoutOrder, tD5.Btn.LayoutOrder = 4, 5, 6
 tD3.Btn.LayoutOrder, tDAimbot.Btn.LayoutOrder, tD4.Btn.LayoutOrder = 7, 8, 9
 tD8.Btn.LayoutOrder, _G.ananistwaffendivisionTabPlayersData.Btn.LayoutOrder, tDScripts.Btn.LayoutOrder = 10, 11, 12
+tDUsers.Btn.LayoutOrder = 13
+tDScan.Btn.LayoutOrder = 14
 
 
 -- [[ AWD UI STYLES: layout + visual presets ]] --
@@ -4287,6 +4595,163 @@ function awdMakePanel(parent, name, size, position, z)
     return frame
 end
 
+-- [[ ANA SAYFA // KULLANICI PROFİL KARTI ]] --
+local function awdCreateProfileHeader(parent)
+    local card = Instance.new("Frame")
+    card.Name = "AWD_UserProfileHeader"
+    card.Size = UDim2.new(1, 0, 0, 174)
+    card.BackgroundColor3 = Color3.fromRGB(13, 13, 13)
+    card.BorderSizePixel = 0
+    card.LayoutOrder = -100
+    card.ZIndex = 8
+    card.Parent = parent
+    Instance.new("UICorner", card).CornerRadius = UDim.new(0, 12)
+
+    local border = Instance.new("UIStroke")
+    border.Color = Color3.fromRGB(85, 85, 85)
+    border.Thickness = 1
+    border.Transparency = 0.2
+    border.Parent = card
+
+    local avatar = Instance.new("ImageLabel")
+    avatar.Name = "UserAvatar"
+    avatar.Size = UDim2.fromOffset(112, 112)
+    avatar.Position = UDim2.fromOffset(16, 27)
+    avatar.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+    avatar.BorderSizePixel = 0
+    avatar.ScaleType = Enum.ScaleType.Crop
+    avatar.ZIndex = 9
+    avatar.Parent = card
+    Instance.new("UICorner", avatar).CornerRadius = UDim.new(0, 10)
+    local avatarStroke = Instance.new("UIStroke", avatar)
+    avatarStroke.Color = Color3.fromRGB(145, 145, 145)
+    avatarStroke.Thickness = 1
+
+    local welcome = Instance.new("TextLabel")
+    welcome.Name = "WelcomeText"
+    welcome.BackgroundTransparency = 1
+    welcome.Position = UDim2.fromOffset(144, 16)
+    welcome.Size = UDim2.new(1, -160, 0, 29)
+    welcome.Font = Enum.Font.GothamBold
+    welcome.Text = "Welcome, " .. tostring(player.Name)
+    welcome.TextColor3 = Color3.fromRGB(245, 245, 245)
+    welcome.TextSize = 21
+    welcome.TextXAlignment = Enum.TextXAlignment.Left
+    welcome.TextTruncate = Enum.TextTruncate.AtEnd
+    welcome.ZIndex = 9
+    welcome.Parent = card
+
+    local username = Instance.new("TextLabel")
+    username.Name = "UsernameText"
+    username.BackgroundTransparency = 1
+    username.Position = UDim2.fromOffset(145, 45)
+    username.Size = UDim2.new(1, -160, 0, 18)
+    username.Font = Enum.Font.Gotham
+    username.Text = "@" .. tostring(player.Name)
+    username.TextColor3 = Color3.fromRGB(160, 160, 160)
+    username.TextSize = 12
+    username.TextXAlignment = Enum.TextXAlignment.Left
+    username.ZIndex = 9
+    username.Parent = card
+
+    local sharingStatus = Instance.new("TextLabel")
+    sharingStatus.Name = "UserSharingStatus"
+    sharingStatus.BackgroundTransparency = 1
+    sharingStatus.Position = UDim2.fromOffset(145, 69)
+    sharingStatus.Size = UDim2.new(1, -160, 0, 20)
+    sharingStatus.Font = Enum.Font.GothamBold
+    sharingStatus.Text = "KULLANICILAR PAYLAŞILIYOR: HAYIR"
+    sharingStatus.TextColor3 = Color3.fromRGB(225, 170, 95)
+    sharingStatus.TextSize = 10
+    sharingStatus.TextXAlignment = Enum.TextXAlignment.Left
+    sharingStatus.TextTruncate = Enum.TextTruncate.AtEnd
+    sharingStatus.ZIndex = 9
+    sharingStatus.Parent = card
+    _G.AWD_SharingStatusLabel = sharingStatus
+
+    local stats = Instance.new("Frame")
+    stats.Name = "ProfileStats"
+    stats.BackgroundTransparency = 1
+    stats.Position = UDim2.fromOffset(144, 96)
+    stats.Size = UDim2.new(1, -160, 0, 66)
+    stats.ZIndex = 9
+    stats.Parent = card
+    local grid = Instance.new("UIGridLayout", stats)
+    grid.CellSize = UDim2.new(0.5, -5, 0, 29)
+    grid.CellPadding = UDim2.fromOffset(8, 4)
+    grid.SortOrder = Enum.SortOrder.LayoutOrder
+
+    local statLabels = {}
+    local statData = {
+        {key = "Age", title = "ACCOUNT AGE", value = tostring(player.AccountAge) .. " days"},
+        {key = "Friends", title = "FRIENDS", value = "Loading..."},
+        {key = "Followers", title = "FOLLOWERS", value = "Loading..."},
+        {key = "Following", title = "FOLLOWING", value = "Loading..."},
+    }
+    for index, item in ipairs(statData) do
+        local tile = Instance.new("Frame")
+        tile.Name = item.key .. "Stat"
+        tile.BackgroundColor3 = Color3.fromRGB(27, 27, 27)
+        tile.BorderSizePixel = 0
+        tile.LayoutOrder = index
+        tile.ZIndex = 9
+        tile.Parent = stats
+        Instance.new("UICorner", tile).CornerRadius = UDim.new(0, 6)
+
+        local title = Instance.new("TextLabel")
+        title.BackgroundTransparency = 1
+        title.Position = UDim2.fromOffset(8, 3)
+        title.Size = UDim2.new(1, -12, 0, 12)
+        title.Font = Enum.Font.GothamBold
+        title.Text = item.title
+        title.TextColor3 = Color3.fromRGB(145, 145, 145)
+        title.TextSize = 8
+        title.TextXAlignment = Enum.TextXAlignment.Left
+        title.ZIndex = 10
+        title.Parent = tile
+
+        local value = Instance.new("TextLabel")
+        value.Name = "Value"
+        value.BackgroundTransparency = 1
+        value.Position = UDim2.fromOffset(8, 15)
+        value.Size = UDim2.new(1, -12, 0, 16)
+        value.Font = Enum.Font.GothamSemibold
+        value.Text = item.value
+        value.TextColor3 = Color3.fromRGB(235, 235, 235)
+        value.TextSize = 12
+        value.TextXAlignment = Enum.TextXAlignment.Left
+        value.ZIndex = 10
+        value.Parent = tile
+        statLabels[item.key] = value
+    end
+
+    task.spawn(function()
+        local ok, image = pcall(function()
+            return Players:GetUserThumbnailAsync(player.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size150x150)
+        end)
+        if ok and avatar and avatar.Parent then avatar.Image = image end
+    end)
+
+    -- Count endpoints are fetched independently so a slow endpoint cannot freeze UI creation.
+    local function fetchCount(endpoint, key)
+        task.spawn(function()
+            local ok, result = pcall(function()
+                local body = game:HttpGet("https://friends.roblox.com/v1/users/" .. tostring(player.UserId) .. "/" .. endpoint .. "/count")
+                local decoded = HttpService:JSONDecode(body)
+                return tonumber(decoded.count)
+            end)
+            if statLabels[key] and statLabels[key].Parent then
+                statLabels[key].Text = (ok and result) and tostring(result) or "Unavailable"
+            end
+        end)
+    end
+    fetchCount("friends", "Friends")
+    fetchCount("followers", "Followers")
+    fetchCount("followings", "Following")
+    return card
+end
+
+awdCreateProfileHeader(tabMain)
 AddLabel(tabMain, "AWD COMMAND CENTER", false)
 AddLabel(tabMain, "Kontrol paneli • canlı oturum bilgileri • hızlı erişim", true)
 dashboardStats = AddLabel(tabMain, "Yükleniyor...", true)
@@ -4529,23 +4994,23 @@ end)
 AddLabel(tabSettings, "PROFILE SYSTEM", false)
 AddLabel(tabSettings, "Mevcut AWD Config Manager; profil kaydetme, yükleme, silme ve liste yenileme işlemlerini yönetir.", true)
 
-dashboardLastUpdate = 0
-dashboardConnection = RunService.Heartbeat:Connect(function(dt)
-    dashboardLastUpdate += dt
-    if dashboardLastUpdate < 1 then return end
-    dashboardLastUpdate = 0
-    local fpsText = statusFPS and statusFPS.Text or "FPS / --"
-    local memoryText = "-- MB"
-    pcall(function() memoryText = string.format("%.1f MB", StatsService:GetTotalMemoryUsageMb()) end)
-    local playerCount = #Players:GetPlayers()
-    if dashboardStats and dashboardStats.Parent then
-        dashboardStats.Text = "LIVE SESSION\nOyuncu: " .. playerCount .. "/" .. tostring(Players.MaxPlayers)
-            .. "\n" .. fpsText .. "\nBellek: " .. memoryText
-            .. "\nPlace ID: " .. tostring(game.PlaceId)
+dashboardRunning = true
+task.spawn(function()
+    while dashboardRunning and screenGui and screenGui.Parent do
+        task.wait(2)
+        local fpsText = statusFPS and statusFPS.Text or "FPS / --"
+        local memoryText = "-- MB"
+        pcall(function() memoryText = string.format("%.1f MB", StatsService:GetTotalMemoryUsageMb()) end)
+        local playerCount = #Players:GetPlayers()
+        if dashboardStats and dashboardStats.Parent then
+            dashboardStats.Text = "LIVE SESSION\nOyuncu: " .. playerCount .. "/" .. tostring(Players.MaxPlayers)
+                .. "\n" .. fpsText .. "\nBellek: " .. memoryText
+                .. "\nPlace ID: " .. tostring(game.PlaceId)
+        end
     end
 end)
 screenGui.AncestryChanged:Connect(function(_, parent)
-    if parent == nil and dashboardConnection then dashboardConnection:Disconnect(); dashboardConnection = nil end
+    if parent == nil then dashboardRunning = false end
 end)
 awdLog("AWD Command Center initialized")
 
@@ -4901,10 +5366,16 @@ _G.ananistwaffendivisionBodycamRefreshList = function()
             cam.CameraType = Enum.CameraType.Scriptable
             local started = os.clock()
             local frames = rec.frames
+            -- Playback cursor: avoid scanning every recorded frame on every render frame.
+            local frameIndex = 1
+            local lastHudUpdate = 0
             st.playbackConn = RunService.RenderStepped:Connect(function()
                 if not st.playback then return end
                 local elapsed = os.clock() - started
-                _G.ananistwaffendivisionBodycamSetHUD(true, "PLAYBACK", elapsed)
+                if elapsed - lastHudUpdate >= 0.15 then
+                    lastHudUpdate = elapsed
+                    _G.ananistwaffendivisionBodycamSetHUD(true, "PLAYBACK", elapsed)
+                end
                 if elapsed >= (rec.duration or 0) then
                     st.playback = false
                     _G.ananistwaffendivisionBodycamSetHUD(false)
@@ -4916,13 +5387,12 @@ _G.ananistwaffendivisionBodycamRefreshList = function()
                     end)
                     return
                 end
-                local a, b = frames[1], frames[#frames]
-                for i = 1, #frames - 1 do
-                    if elapsed >= frames[i].t and elapsed <= frames[i+1].t then
-                        a, b = frames[i], frames[i+1]
-                        break
-                    end
+                while frameIndex < #frames - 1 and elapsed > frames[frameIndex + 1].t do
+                    frameIndex += 1
                 end
+                local a = frames[frameIndex]
+                local b = frames[math.min(frameIndex + 1, #frames)]
+                if not a or not b then return end
                 local span = math.max(0.0001, (b.t - a.t))
                 local alpha = math.clamp((elapsed - a.t) / span, 0, 1)
                 cam.CFrame = a.cf:Lerp(b.cf, alpha)
@@ -4996,9 +5466,9 @@ _G.ananistwaffendivisionBodycamStart = function()
     st.recordingConn = RunService.RenderStepped:Connect(function()
         if not st.recording then return end
         local now = os.clock() - st.recordingStarted
-        _G.ananistwaffendivisionBodycamSetHUD(true, "REC", now)
         if now < nextSample then return end
         nextSample = now + (1/12)
+        _G.ananistwaffendivisionBodycamSetHUD(true, "REC", now)
         if now >= 3600 then
             _G.ananistwaffendivisionBodycamStop()
             return
@@ -5079,6 +5549,231 @@ _G.ananistwaffendivisionTabPlayersHint =
         "Oyuncuları görüntüle ve karakter kontrollerini yönet",
         true
     )
+
+-- [[ KULLANICILAR SEKME UI - CLOUDFLARE PRESENCE ]] --
+-- Bu sürüm yalnızca dizini görüntüler; bu istemciden otomatik kullanıcı kaydı gönderilmez.
+local AWD_PRESENCE_URL = "https://awd-presence.utkuatayilmaz.workers.dev"
+local AWD_PresenceSessionId = HttpService:GenerateGUID(false)
+local AWD_PresenceOptIn = (_G.AWD_PresenceConsentAccepted == true)
+local AWD_PresenceHeartbeatRunning = false
+local AWD_UserDirectoryCards = {}
+local AWD_UserDirectoryTitle = AddLabel(tabUsers, "AWD KULLANICILARI")
+local AWD_UserDirectoryHint = AddLabel(
+    tabUsers,
+    "Onay veren AWD HUB kullanıcıları burada listelenir. İsimler maskelenir; avatar Roblox profilinden yüklenir. Liste ve JOIN, harici Worker erişimine ve Roblox teleport izinlerine bağlıdır.",
+    true
+)
+local AWD_UserDirectoryStatus = Instance.new("TextLabel")
+AWD_UserDirectoryStatus.Name = "UserDirectoryStatus"
+AWD_UserDirectoryStatus.Size = UDim2.new(1, -12, 0, 38)
+AWD_UserDirectoryStatus.BackgroundTransparency = 1
+AWD_UserDirectoryStatus.Font = Enum.Font.Gotham
+AWD_UserDirectoryStatus.Text = "Onay durumuna göre kullanıcı dizini etkinleştiriliyor..."
+AWD_UserDirectoryStatus.TextColor3 = Color3.fromRGB(175, 185, 205)
+AWD_UserDirectoryStatus.TextSize = 12
+AWD_UserDirectoryStatus.TextWrapped = true
+AWD_UserDirectoryStatus.LayoutOrder = 9998
+AWD_UserDirectoryStatus.Parent = tabUsers
+
+local function AWD_PresenceRequest(method, path, payload)
+    local req = getRequestFunction and getRequestFunction() or nil
+    if not req then return nil, "Executor HTTP isteği desteklemiyor." end
+    local requestData = {
+        Url = AWD_PRESENCE_URL .. path,
+        Method = method,
+        Headers = { ["Content-Type"] = "application/json" }
+    }
+    if payload then requestData.Body = HttpService:JSONEncode(payload) end
+    local ok, response = pcall(function() return req(requestData) end)
+    if not ok or not response then return nil, tostring(response or "HTTP isteği başarısız") end
+    local statusCode = tonumber(response.StatusCode or response.Status or 0) or 0
+    local responseBody = response.Body or response.body or "{}"
+    local decodedOk, decoded = pcall(function() return HttpService:JSONDecode(responseBody) end)
+    if statusCode < 200 or statusCode >= 300 then
+        return nil, decodedOk and tostring(decoded.error or ("HTTP " .. statusCode)) or ("HTTP " .. statusCode)
+    end
+    if not decodedOk then return nil, "Sunucudan geçersiz JSON geldi." end
+    return decoded
+end
+
+local function AWD_MaskUsername(username)
+    username = tostring(username or "User")
+    if #username <= 1 then return username .. "*****" end
+    return string.sub(username, 1, 1) .. string.rep("*", math.max(5, #username - 1))
+end
+
+local function AWD_ClearUserDirectoryCards()
+    for _, card in ipairs(AWD_UserDirectoryCards) do
+        pcall(function() card:Destroy() end)
+    end
+    table.clear(AWD_UserDirectoryCards)
+end
+
+local function AWD_JoinDirectoryUser(placeId, jobId)
+    placeId = tonumber(placeId)
+    jobId = tostring(jobId or "")
+    if not placeId or placeId <= 0 or jobId == "" then
+        notify("Kullanıcılar", "Bu kullanıcının sunucu bilgisi geçersiz.")
+        return
+    end
+    task.spawn(function()
+        local joined, joinError = pcall(function()
+            TeleportService:TeleportToPlaceInstance(placeId, jobId, player)
+        end)
+        if not joined then
+            notify("Kullanıcılar", "Katılma başarısız: " .. tostring(joinError))
+        end
+    end)
+end
+
+local function AWD_RenderUserDirectory(users)
+    AWD_ClearUserDirectoryCards()
+    -- Keep UI creation and avatar requests bounded to prevent large directory responses freezing the client.
+    local maxVisibleUsers = 30
+    for index, entry in ipairs(users or {}) do
+        if index > maxVisibleUsers then break end
+        local userId = tonumber(entry.userId or entry.UserId)
+        local maskedName = tostring(entry.maskedName or "AWD User")
+        if userId and tonumber(entry.placeId) and tostring(entry.jobId or "") ~= "" then
+            local card = Instance.new("Frame")
+            card.Name = "AWDUser_" .. tostring(userId)
+            card.Size = UDim2.new(1, -12, 0, 66)
+            card.BackgroundColor3 = Color3.fromRGB(27, 30, 42)
+            card.BorderSizePixel = 0
+            card.LayoutOrder = 10000 + index
+            card.Parent = tabUsers
+            Instance.new("UICorner", card).CornerRadius = UDim.new(0, 8)
+
+            local avatar = Instance.new("ImageLabel")
+            avatar.Name = "Avatar"
+            avatar.Size = UDim2.fromOffset(48, 48)
+            avatar.Position = UDim2.new(0, 9, 0.5, -24)
+            avatar.BackgroundColor3 = Color3.fromRGB(42, 46, 60)
+            avatar.BorderSizePixel = 0
+            avatar.Parent = card
+            Instance.new("UICorner", avatar).CornerRadius = UDim.new(0, 8)
+            task.spawn(function()
+                local okThumb, imageUrl = pcall(function()
+                    return Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
+                end)
+                if okThumb and avatar.Parent then avatar.Image = imageUrl end
+            end)
+
+            local nameLabel = Instance.new("TextLabel")
+            nameLabel.Size = UDim2.new(1, -150, 0, 26)
+            nameLabel.Position = UDim2.new(0, 66, 0, 7)
+            nameLabel.BackgroundTransparency = 1
+            nameLabel.Font = Enum.Font.GothamBold
+            nameLabel.Text = maskedName
+            nameLabel.TextColor3 = Color3.fromRGB(230, 235, 245)
+            nameLabel.TextSize = 13
+            nameLabel.TextXAlignment = Enum.TextXAlignment.Left
+            nameLabel.Parent = card
+
+            local statusLabel = Instance.new("TextLabel")
+            statusLabel.Size = UDim2.new(1, -150, 0, 20)
+            statusLabel.Position = UDim2.new(0, 66, 0, 34)
+            statusLabel.BackgroundTransparency = 1
+            statusLabel.Font = Enum.Font.Gotham
+            statusLabel.Text = tostring(entry.placeName or "Roblox deneyimi")
+            statusLabel.TextColor3 = Color3.fromRGB(145, 175, 205)
+            statusLabel.TextSize = 10
+            statusLabel.TextXAlignment = Enum.TextXAlignment.Left
+            statusLabel.TextTruncate = Enum.TextTruncate.AtEnd
+            statusLabel.Parent = card
+
+            local joinButton = Instance.new("TextButton")
+            joinButton.Size = UDim2.new(0, 66, 0, 32)
+            joinButton.Position = UDim2.new(1, -76, 0.5, -16)
+            joinButton.BackgroundColor3 = Color3.fromRGB(45, 105, 75)
+            joinButton.BorderSizePixel = 0
+            joinButton.Font = Enum.Font.GothamBold
+            joinButton.Text = "JOIN"
+            joinButton.TextColor3 = Color3.new(1, 1, 1)
+            joinButton.TextSize = 11
+            joinButton.Parent = card
+            Instance.new("UICorner", joinButton).CornerRadius = UDim.new(0, 7)
+            joinButton.MouseButton1Click:Connect(function()
+                AWD_JoinDirectoryUser(entry.placeId, entry.jobId)
+            end)
+            table.insert(AWD_UserDirectoryCards, card)
+        end
+    end
+end
+
+local AWD_DirectoryRefreshing = false
+_G.AWD_RefreshUserDirectory = function()
+    if AWD_DirectoryRefreshing then return end
+    AWD_DirectoryRefreshing = true
+    if AWD_UserDirectoryStatus and AWD_UserDirectoryStatus.Parent then
+        AWD_UserDirectoryStatus.Text = "Kullanıcı dizini yenileniyor..."
+    end
+    -- Ağ isteğini ana yükleme akışından ayır; yavaş Worker yanıtı arayüzün açılmasını kilitlemesin.
+    task.spawn(function()
+        local ok, data, err = pcall(function()
+            local result, requestError = AWD_PresenceRequest("GET", "/list")
+            return result, requestError
+        end)
+        if AWD_UserDirectoryStatus and AWD_UserDirectoryStatus.Parent then
+            if not ok or not data or type(data.users) ~= "table" then
+                AWD_UserDirectoryStatus.Text = "Dizin bağlantısı başarısız: " .. tostring(err or data or "yanıt hatalı") .. " | HTTP/Worker erişimini kontrol et."
+            else
+                AWD_UserDirectoryStatus.Text = #data.users > 0 and (tostring(#data.users) .. " katılımcı çevrimiçi.") or "Şu anda katılımcı yok."
+                pcall(AWD_RenderUserDirectory, data.users)
+            end
+        end
+        AWD_DirectoryRefreshing = false
+    end)
+end
+
+AddButton(tabUsers, "Listeyi Yenile", function()
+    AWD_UserDirectoryStatus.Text = "Kullanıcı dizini yenileniyor..."
+    _G.AWD_RefreshUserDirectory()
+end)
+_G.AWD_RefreshUserDirectory()
+
+-- Onay verildiyse bu çalıştırmada otomatik presence heartbeat başlat.
+if AWD_PresenceOptIn then
+    AWD_UserDirectoryStatus.Text = "Paylaşım açık: AWD HUB oturumun dizine kaydediliyor."
+    if _G.AWD_SharingStatusLabel then
+        _G.AWD_SharingStatusLabel.Text = "KULLANICILAR PAYLAŞILIYOR: EVET"
+        _G.AWD_SharingStatusLabel.TextColor3 = Color3.fromRGB(100, 210, 135)
+    end
+    task.spawn(function()
+        while AWD_PresenceOptIn do
+            local payload = {
+                userId = tostring(player.UserId),
+                username = tostring(player.Name),
+                sessionId = AWD_PresenceSessionId,
+                placeId = tonumber(game.PlaceId),
+                jobId = tostring(game.JobId),
+                placeName = tostring(game.Name)
+            }
+            if payload.placeId and payload.placeId > 0 and payload.jobId ~= "" then
+                local ok = AWD_PresenceRequest("POST", "/heartbeat", payload)
+                if ok then
+                    AWD_PresenceHeartbeatRunning = true
+                    AWD_UserDirectoryStatus.Text = "Paylaşım açık. Kullanıcı dizinine bağlısın."
+                else
+                    AWD_UserDirectoryStatus.Text = "Paylaşım izni açık; sunucuya bağlanılamadı."
+                end
+            else
+                AWD_UserDirectoryStatus.Text = "Bu sunucuda paylaşım yapılamıyor (sunucu ID yok)."
+            end
+            task.wait(25)
+        end
+    end)
+    task.spawn(function()
+        while AWD_PresenceOptIn do
+            task.wait(20)
+            if _G.AWD_RefreshUserDirectory then _G.AWD_RefreshUserDirectory() end
+        end
+    end)
+else
+    if _G.AWD_SharingStatusLabel then
+        _G.AWD_SharingStatusLabel.Text = "KULLANICILAR PAYLAŞILIYOR: HAYIR"
+    end
+end
 
 _G.ananistwaffendivisionTabPlayersRefresh = AddButton(
     _G.ananistwaffendivisionTabPlayers,
@@ -5675,6 +6370,16 @@ task.spawn(function()
     end
 end)
 AddButton(tabMain, "Rejoin", rejoinServer)
+AddButton(tabMain, "Rıza Formu", function()
+    task.spawn(function()
+        local accepted = AWD_ShowPresenceConsent()
+        if accepted then
+            AWD_ConsentAcceptedThisRun = true
+            _G.AWD_PresenceConsentAccepted = true
+            notify("Rıza Formu", "Tercihin kaydedildi.")
+        end
+    end)
+end)
 AddButton(tabMain, "Hub Öldür", function() 
     stopAimbot()
     stopKosatka()
@@ -6652,6 +7357,31 @@ AddButton(tabDesigner, "Dracula", function() applyTheme("Dracula") end)
 AddButton(tabDesigner, "One Dark (Atom)", function() applyTheme("One Dark") end)
 AddButton(tabDesigner, "Synthwave (Outrun)", function() applyTheme("Synthwave") end)
 
+AddLabel(tabSettings, "Dil Ayarları")
+local awdLanguageStatus = AddLabel(tabSettings, AWD_Language == "English" and "Interface language: English" or "Arayüz dili: Türkçe", false)
+local awdLanguageButton
+awdLanguageButton = AddButton(tabSettings, AWD_Language == "English" and "Language: English  •  Switch" or "Dil: Türkçe  •  Değiştir", function()
+    AWD_ApplyLanguage(AWD_Language == "English" and "Türkçe" or "English")
+    awdLanguageStatus.Text = AWD_Language == "English" and " Interface language: English" or " Arayüz dili: Türkçe"
+    local awdLanguageButtonLabel = awdLanguageButton:FindFirstChildWhichIsA("TextLabel")
+    if awdLanguageButtonLabel then
+        awdLanguageButtonLabel.Text = AWD_Language == "English" and "Language: English  •  Switch" or "Dil: Türkçe  •  Değiştir"
+    end
+end)
+local function AWD_RefreshTabLanguage()
+    local tabNames = {
+        {tD1, "Ana Sayfa"}, {tD2, "Oyuncu"}, {tD6, "Ulaşım"}, {tDStudio, "Studio"},
+        {tDGames, "Oyunlar"}, {tD5, "Grapple"}, {tD3, "Görseller"}, {tDAimbot, "Aimbot"},
+        {tD4, "Ayarlar"}, {tD8, "Dizayn"}, {_G.ananistwaffendivisionTabPlayersData, "Oyuncular"},
+        {tDScripts, "Scriptler"}, {tDUsers, "Kullanıcılar"}, {styleTabData, "Stil"}
+    }
+    for _, item in ipairs(tabNames) do
+        if item[1] and item[1].Btn then item[1].Btn.Text = AWD_Localize("   " .. item[2]) end
+    end
+end
+_G.AWD_ApplyTabLanguage = AWD_RefreshTabLanguage
+AWD_RefreshTabLanguage()
+
 AddLabel(tabSettings, "Menü Bilgileri")
 AddLabel(tabSettings, "Seçtiğin Tuşlar:\nMenü Gizle/Aç: Ayarlar / Dizayn\nESP Aktif Etme: Görseller sekmesine bak\nAimbot: Aimbot sekmesinden ayarlanır\nW/S: Duvara Tırman (Aktifken)\nGrapple 2: E (Çek) / Q (Sal)", true)
 
@@ -7535,11 +8265,14 @@ rebuildSlotsUI()
 
 AddLabel(tabUlasim, "Konumum")
 coordLabel = AddLabel(tabUlasim, "X: 0  Y: 0  Z: 0")
-RunService.Heartbeat:Connect(function()
-    local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-    if root and coordLabel then
-        local p = root.Position
-        coordLabel.Text = string.format(" X: %.1f  Y: %.1f  Z: %.1f", p.X, p.Y, p.Z)
+task.spawn(function()
+    while coordLabel and coordLabel.Parent do
+        local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if root and coordLabel then
+            local p = root.Position
+            coordLabel.Text = string.format(" X: %.1f  Y: %.1f  Z: %.1f", p.X, p.Y, p.Z)
+        end
+        task.wait(0.2)
     end
 end)
 
@@ -7970,55 +8703,175 @@ tD1.Frame.Visible = true
 
 applyTheme("ϟϟ Theme")
 
+-- [[ BLACK & WHITE PASS // UI öğelerindeki mavi tonları griye çevir ]] --
+local function awdGray(color)
+    local luminance = math.floor(
+        color.R * 0.299 * 255 +
+        color.G * 0.587 * 255 +
+        color.B * 0.114 * 255 + 0.5
+    )
+    return Color3.fromRGB(luminance, luminance, luminance)
+end
+
+pcall(function()
+    for _, object in ipairs(screenGui:GetDescendants()) do
+        if object:IsA("GuiObject") then
+            object.BackgroundColor3 = awdGray(object.BackgroundColor3)
+            if object:IsA("TextLabel") or object:IsA("TextButton") or object:IsA("TextBox") then
+                object.TextColor3 = awdGray(object.TextColor3)
+                object.TextStrokeColor3 = awdGray(object.TextStrokeColor3)
+            end
+            if object:IsA("ImageLabel") or object:IsA("ImageButton") then
+                object.ImageColor3 = awdGray(object.ImageColor3)
+            end
+        end
+        if object:IsA("UIStroke") then
+            object.Color = awdGray(object.Color)
+        elseif object:IsA("UIGradient") then
+            local oldSequence = object.Color
+            local keypoints = {}
+            for _, point in ipairs(oldSequence.Keypoints) do
+                table.insert(keypoints, ColorSequenceKeypoint.new(point.Time, awdGray(point.Value)))
+            end
+            object.Color = ColorSequence.new(keypoints)
+        end
+    end
+end)
+
 -- [[ AWD INTRO // interface itself animates in; visual effect stays behind UI ]] --
 function playAWDInterfaceIntro()
     if not mainFrame or not mainFrame.Parent then return end
+
+    -- Hafif siyah-beyaz açılış: tek overlay, az sayıda UI öğesi ve kısa tween'ler.
+    local introGui = Instance.new("ScreenGui")
+    introGui.Name = "AWD_OptimizedIntro"
+    introGui.ResetOnSpawn = false
+    introGui.IgnoreGuiInset = true
+    introGui.DisplayOrder = 2147483000
+    introGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+
+    local introParent = screenGui and screenGui.Parent
+    if not introParent then return end
+    introGui.Parent = introParent
+
+    local introSound
+    pcall(function()
+        introSound = Instance.new("Sound")
+        introSound.Name = "AWD_OptimizedIntroSound"
+        introSound.SoundId = "rbxassetid://127997181362733"
+        introSound.Volume = 0.8
+        introSound.Looped = false
+        introSound.Parent = game:GetService("SoundService")
+        introSound:Play()
+    end)
+
+    local overlay = Instance.new("Frame")
+    overlay.Name = "Overlay"
+    overlay.Size = UDim2.fromScale(1, 1)
+    overlay.BackgroundColor3 = Color3.fromRGB(5, 5, 5)
+    overlay.BackgroundTransparency = 0
+    overlay.BorderSizePixel = 0
+    overlay.Parent = introGui
+
+    local panel = Instance.new("Frame")
+    panel.Name = "IntroPanel"
+    panel.AnchorPoint = Vector2.new(0.5, 0.5)
+    panel.Position = UDim2.fromScale(0.5, 0.5)
+    panel.Size = UDim2.fromOffset(390, 132)
+    panel.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    panel.BackgroundTransparency = 0.08
+    panel.BorderSizePixel = 0
+    panel.Parent = overlay
+    Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 9)
+
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Color3.fromRGB(105, 105, 105)
+    stroke.Transparency = 0.35
+    stroke.Thickness = 1
+    stroke.Parent = panel
+
+    local title = Instance.new("TextLabel")
+    title.BackgroundTransparency = 1
+    title.Position = UDim2.fromOffset(22, 19)
+    title.Size = UDim2.new(1, -44, 0, 34)
+    title.Font = Enum.Font.GothamBold
+    title.Text = "AWD HUB"
+    title.TextColor3 = Color3.fromRGB(245, 245, 245)
+    title.TextSize = 25
+    title.TextXAlignment = Enum.TextXAlignment.Left
+    title.TextTransparency = 1
+    title.Parent = panel
+
+    local subtitle = Instance.new("TextLabel")
+    subtitle.BackgroundTransparency = 1
+    subtitle.Position = UDim2.fromOffset(23, 55)
+    subtitle.Size = UDim2.new(1, -46, 0, 20)
+    subtitle.Font = Enum.Font.Gotham
+    subtitle.Text = "COMMAND CENTER  /  INITIALIZING"
+    subtitle.TextColor3 = Color3.fromRGB(165, 165, 165)
+    subtitle.TextSize = 11
+    subtitle.TextXAlignment = Enum.TextXAlignment.Left
+    subtitle.TextTransparency = 1
+    subtitle.Parent = panel
+
+    local track = Instance.new("Frame")
+    track.Position = UDim2.fromOffset(23, 94)
+    track.Size = UDim2.new(1, -46, 0, 3)
+    track.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+    track.BorderSizePixel = 0
+    track.Parent = panel
+
+    local progress = Instance.new("Frame")
+    progress.Size = UDim2.new(0, 0, 1, 0)
+    progress.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
+    progress.BorderSizePixel = 0
+    progress.Parent = track
+
     mainFrame.Visible = true
     mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-    mainFrame.Position = UDim2.fromScale(0.5, 0.53)
-    menuScale.Scale = 0.88
-    mainFrame.BackgroundTransparency = 0.22
-    topbar.BackgroundTransparency = 1
-    ambientWash.BackgroundTransparency = 1
-    ambientRail.Position = UDim2.new(-0.25, 0, 0.5, 0)
-    ambientTopLine.BackgroundTransparency = 1
-    glassSheen.BackgroundTransparency = 1
-    glassRim.Transparency = 1
-    ambientOrbA.BackgroundTransparency = 1
-    ambientOrbB.BackgroundTransparency = 1
-    ambientOrbC.BackgroundTransparency = 1
-    if glassFrost then glassFrost.BackgroundTransparency = 1 end
-    if glassSpecular then glassSpecular.BackgroundTransparency = 1 end
-    if glassChip then glassChip.BackgroundTransparency = 1 end
+    mainFrame.Position = UDim2.fromScale(0.5, 0.5)
+    menuScale.Scale = 0.96
 
-    TweenService:Create(mainFrame, TweenInfo.new(0.52, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-        Position = UDim2.fromScale(0.5, 0.5), BackgroundTransparency = 0.015
-    }):Play()
-    TweenService:Create(menuScale, TweenInfo.new(0.58, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
-    TweenService:Create(topbar, TweenInfo.new(0.42, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 0.02}):Play()
-    TweenService:Create(ambientWash, TweenInfo.new(0.65, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 0.91}):Play()
-    TweenService:Create(ambientTopLine, TweenInfo.new(0.48, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0.72}):Play()
-    TweenService:Create(glassSheen, TweenInfo.new(0.85, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 0.965}):Play()
-    TweenService:Create(glassRim, TweenInfo.new(0.72, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Transparency = 0.76}):Play()
-    TweenService:Create(ambientOrbA, TweenInfo.new(1.1, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 0.90}):Play()
-    TweenService:Create(ambientOrbB, TweenInfo.new(1.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 0.92}):Play()
-    TweenService:Create(ambientOrbC, TweenInfo.new(1.0, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 0.94}):Play()
-    TweenService:Create(ambientRail, TweenInfo.new(1.05, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-        Position = UDim2.new(1.25, 0, 0.5, 0)
-    }):Play()
-    if glassFrost then TweenService:Create(glassFrost, TweenInfo.new(0.85, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 0.94}):Play() end
-    if glassSpecular then TweenService:Create(glassSpecular, TweenInfo.new(0.7, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 0.55}):Play() end
-    if glassChip then TweenService:Create(glassChip, TweenInfo.new(0.75, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {BackgroundTransparency = 0.85}):Play() end
-    task.delay(0.72, function()
-        if ambientRail and ambientRail.Parent then
-            ambientRail.Position = UDim2.new(-0.25, 0, 0.5, 0)
-        end
-    end)
-    task.delay(0.85, function()
-        if mainFrame and mainFrame.Parent then
-            mainFrame.AnchorPoint = Vector2.new(0, 0)
-            mainFrame.Position = UDim2.new(0.5, -510, 0.5, -340)
-        end
+    local function tween(object, duration, properties, style)
+        local animation = TweenService:Create(
+            object,
+            TweenInfo.new(duration, style or Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+            properties
+        )
+        animation:Play()
+        return animation
+    end
+
+    title.TextTransparency = 0
+    subtitle.TextTransparency = 0
+    panel.Position = UDim2.fromScale(0.5, 0.53)
+    tween(panel, 0.28, {Position = UDim2.fromScale(0.5, 0.5)}, Enum.EasingStyle.Quart)
+    tween(progress, 0.72, {Size = UDim2.new(1, 0, 1, 0)}, Enum.EasingStyle.Sine)
+    tween(menuScale, 0.42, {Scale = 1}, Enum.EasingStyle.Quart)
+
+    task.delay(0.88, function()
+        if not introGui or not introGui.Parent then return end
+        tween(overlay, 0.24, {BackgroundTransparency = 1})
+        tween(panel, 0.2, {BackgroundTransparency = 1})
+        tween(title, 0.16, {TextTransparency = 1})
+        tween(subtitle, 0.16, {TextTransparency = 1})
+        tween(track, 0.16, {BackgroundTransparency = 1})
+        tween(progress, 0.16, {BackgroundTransparency = 1})
+        tween(stroke, 0.16, {Transparency = 1})
+        task.delay(0.27, function()
+            if introSound then
+                pcall(function()
+                    introSound:Stop()
+                    introSound:Destroy()
+                end)
+                introSound = nil
+            end
+            if introGui and introGui.Parent then introGui:Destroy() end
+            if mainFrame and mainFrame.Parent then
+                mainFrame.AnchorPoint = Vector2.new(0, 0)
+                mainFrame.Position = UDim2.new(0.5, -510, 0.5, -340)
+            end
+        end)
     end)
 end
 
@@ -8027,7 +8880,12 @@ task.spawn(function()
     if AWD_ENABLE_FULLSCREEN_INTRO then
         pcall(awdShowFullscreenIntro)
     end
-    playAWDInterfaceIntro()
+    -- Intro efektindeki bir tween/ses hatası ana arayüzü düşürmesin.
+    local introOk, introErr = pcall(playAWDInterfaceIntro)
+    if not introOk then
+        pcall(function() awdLog("Intro atlandı: " .. tostring(introErr), "warning") end)
+        pcall(function() if mainFrame and mainFrame.Parent then mainFrame.Visible = true end end)
+    end
 end)
 
 -- [[ AWD SMART MOTION SYSTEM // AMBIENT PARALLAX + BREATHING GLASS ]] --
@@ -8094,11 +8952,13 @@ function awdPlayAmbientCycle()
         end
     end)
 end
-awdPlayAmbientCycle()
+-- Ağır ambient/parallax animasyonu kapalı: UI açılışındaki GPU yükünü azaltır.
+awdAmbientMotionAlive = false
+if ambientLayer then ambientLayer.Visible = false end
 
 -- Glassmorphism nefes alma döngüsü
 task.spawn(function()
-    while screenGui and screenGui.Parent do
+    while false and screenGui and screenGui.Parent do
         if mainFrame.Visible and screenGui.Enabled then
             TweenService:Create(glassFrost, TweenInfo.new(4.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
                 BackgroundTransparency = 0.90
@@ -8126,8 +8986,8 @@ end)
 -- Hover watchdog
 task.spawn(function()
     while screenGui and screenGui.Parent do
-        task.wait(0.12)
-        if not screenGui.Enabled then continue end
+        task.wait(0.35)
+        if not screenGui.Enabled or not mainFrame.Visible then continue end
         local mousePos = UIS:GetMouseLocation()
         local cfg = themeData[currentTheme] or themeData["ϟϟ Theme"]
         for _, obj in ipairs(registry.ButtonBG) do
@@ -8168,7 +9028,7 @@ end)
 
 -- Ambient sweep loop
 task.spawn(function()
-    while screenGui and screenGui.Parent do
+    while false and screenGui and screenGui.Parent do
         if mainFrame.Visible and screenGui.Enabled then
             ambientRail.Position = UDim2.new(-0.25, 0, 0.5, 0)
             TweenService:Create(ambientRail, TweenInfo.new(5.5, Enum.EasingStyle.Linear), {
@@ -8205,7 +9065,8 @@ _G.AnanistanInsert = UIS.InputBegan:Connect(function(input, gameProcessed)
                 if glassSpecular then glassSpecular.BackgroundTransparency = 1 end
                 if glassChip then glassChip.BackgroundTransparency = 1 end
                 mainFrame.Position = UDim2.new(0.5, -510, 0.5, -340)
-                applyTheme(currentTheme)
+                -- Açılışta tüm UI nesnelerine yeniden tema tween'i uygulama.
+                -- Bu işlem büyük arayüzlerde takılmaya neden oluyordu.
                 -- Insert ile menü açılırken arka plan blur uygulanmaz.
                 if blurEffect then
                     pcall(function()
@@ -8277,9 +9138,9 @@ _G.AnanistanInsert = UIS.InputBegan:Connect(function(input, gameProcessed)
                     local refreshTimer = 0
                     while espEnabled do
                         pcall(updateAllESP)
-                        refreshTimer = refreshTimer + 0.2
+                        refreshTimer = refreshTimer + 0.5
                         if refreshTimer >= 30 then refreshTimer = 0; clearESP() end
-                        task.wait(0.2)
+                        task.wait(0.5)
                     end
                 end)
             end
@@ -8323,5 +9184,126 @@ _G.ananistwaffendivisionReload = function()
         if screenGui then screenGui:Destroy() end
         if _G.AnanistanInsert then _G.AnanistanInsert:Disconnect(); _G.AnanistanInsert = nil end
         loadstring(_G.ananistwaffendivisionReloadSource)()
+    end)
+end
+
+-- [[ AWD SCRIPT TARAMA / RUNTIME INTEGRITY REPORT ]] --
+do
+    local scanTitle = AddLabel(tabScan, "AWD SCRIPT TARAMA")
+    local scanHint = AddLabel(tabScan,
+        "Çalışma anında erişilebilen servisleri, sekmeleri ve arayüz callback bağlantılarını denetler. Kaynak kodu Roblox tarafından çalışma anında okunamadığı için bu bir statik kaynak kodu garantisi değildir.", true)
+    local scanStatus = Instance.new("TextLabel")
+    scanStatus.Name = "AWDScanStatus"
+    scanStatus.Size = UDim2.new(1, -12, 0, 34)
+    scanStatus.BackgroundTransparency = 1
+    scanStatus.Font = Enum.Font.GothamMedium
+    scanStatus.Text = "Tarama başlatılmadı."
+    scanStatus.TextColor3 = Color3.fromRGB(175, 190, 215)
+    scanStatus.TextSize = 12
+    scanStatus.TextWrapped = true
+    scanStatus.LayoutOrder = 9990
+    scanStatus.Parent = tabScan
+
+    local scanOutput = Instance.new("TextBox")
+    scanOutput.Name = "AWDScanLog"
+    scanOutput.Size = UDim2.new(1, -12, 0, 260)
+    scanOutput.BackgroundColor3 = Color3.fromRGB(13, 17, 25)
+    scanOutput.BorderSizePixel = 0
+    scanOutput.ClearTextOnFocus = false
+    scanOutput.MultiLine = true
+    scanOutput.TextEditable = false
+    scanOutput.TextXAlignment = Enum.TextXAlignment.Left
+    scanOutput.TextYAlignment = Enum.TextYAlignment.Top
+    scanOutput.TextWrapped = true
+    scanOutput.Font = Enum.Font.Code
+    scanOutput.TextSize = 11
+    scanOutput.TextColor3 = Color3.fromRGB(205, 215, 230)
+    scanOutput.Text = "Tarama sonucunuz burada görünecek."
+    scanOutput.LayoutOrder = 9991
+    scanOutput.Parent = tabScan
+    Instance.new("UICorner", scanOutput).CornerRadius = UDim.new(0, 8)
+    local scanPadding = Instance.new("UIPadding", scanOutput)
+    scanPadding.PaddingTop = UDim.new(0, 8)
+    scanPadding.PaddingBottom = UDim.new(0, 8)
+    scanPadding.PaddingLeft = UDim.new(0, 8)
+    scanPadding.PaddingRight = UDim.new(0, 8)
+
+    local lastScanLog = ""
+    local function runAWDScan()
+        local lines = {}
+        local passed, failed, warnings = 0, 0, 0
+        local function record(ok, label, detail)
+            if ok then
+                passed += 1
+                table.insert(lines, "[OK] " .. label .. (detail and (" — " .. tostring(detail)) or ""))
+            else
+                failed += 1
+                table.insert(lines, "[HATA] " .. label .. (detail and (" — " .. tostring(detail)) or ""))
+            end
+        end
+        local function warn(label, detail)
+            warnings += 1
+            table.insert(lines, "[UYARI] " .. label .. (detail and (" — " .. tostring(detail)) or ""))
+        end
+        table.insert(lines, "AWD HUB RUNTIME TARAMA RAPORU")
+        table.insert(lines, "Tarih: " .. os.date("%Y-%m-%d %H:%M:%S"))
+        table.insert(lines, "PlaceId: " .. tostring(game.PlaceId) .. " | JobId: " .. tostring(game.JobId))
+        table.insert(lines, "")
+
+        local serviceNames = {"Players", "RunService", "TweenService", "HttpService", "TeleportService", "UserInputService"}
+        for _, serviceName in ipairs(serviceNames) do
+            local ok, service = pcall(function() return game:GetService(serviceName) end)
+            record(ok and service ~= nil, "Servis: " .. serviceName)
+        end
+        record(player ~= nil and player.Parent == Players, "LocalPlayer", player and player.Name or "LocalPlayer yok")
+        record(type(CreateTab) == "function" and type(AddButton) == "function" and type(AddToggle) == "function", "UI çekirdek fonksiyonları")
+        record(type(rejoinServer) == "function", "Rejoin fonksiyonu")
+        record(type(_G.AWD_RefreshUserDirectory) == "function", "Kullanıcı dizini yenileme fonksiyonu")
+        if type(getRequestFunction) ~= "function" or not getRequestFunction() then
+            warn("HTTP isteği", "Executor request/syn.request/http_request sağlamıyor; çevrimiçi dizin gibi ağ özellikleri çalışmayabilir.")
+        else
+            record(true, "HTTP request fonksiyonu")
+        end
+        record(type(tabs) == "table" and #tabs >= 10, "Sekme kayıtları", tostring(type(tabs) == "table" and #tabs or 0) .. " sekme")
+
+        local scanned, missingCallbacks, orphaned = 0, 0, 0
+        for _, item in ipairs(AWD_ControlRegistry or {}) do
+            scanned += 1
+            local parentOk = item.parent ~= nil and item.parent.Parent ~= nil
+            local callbackOk = type(item.callback) == "function"
+            if not parentOk then orphaned += 1 end
+            if not callbackOk then missingCallbacks += 1 end
+            if not parentOk or not callbackOk then
+                record(false, item.kind .. ": " .. tostring(item.name), not parentOk and "UI öğesi artık bağlı değil" or "callback fonksiyonu yok")
+            end
+        end
+        record(missingCallbacks == 0 and orphaned == 0,
+            "Arayüz callback denetimi",
+            string.format("%d kontrol incelendi; %d callback eksik; %d UI öğesi kopuk", scanned, missingCallbacks, orphaned))
+
+        -- Tarama butonu ve rapor kutusu da kontrol listesine dahil edildiğinden raporu ürettikten sonra kendisini de sayar.
+        table.insert(lines, "")
+        table.insert(lines, string.format("ÖZET: %d başarılı | %d hata | %d uyarı | %d kontrol", passed, failed, warnings, scanned))
+        table.insert(lines, "Not: Callback'ler güvenlik için otomatik çalıştırılmaz. Dış servislerin, oyun içi koşulların ve teleport'un gerçek başarısı yalnızca bu statik/runtime kontrollerle garanti edilemez.")
+        lastScanLog = table.concat(lines, "\n")
+        scanOutput.Text = lastScanLog
+        scanStatus.Text = string.format("Tarama tamamlandı: %d başarılı / %d hata / %d uyarı", passed, failed, warnings)
+        scanStatus.TextColor3 = failed > 0 and Color3.fromRGB(255, 125, 125) or Color3.fromRGB(115, 220, 155)
+        local copied = false
+        local saved = false
+        pcall(function() if writefile then writefile("AWD_SCAN_LOG.txt", lastScanLog); saved = true end end)
+        pcall(function() if setclipboard then setclipboard(lastScanLog); copied = true end end)
+        if not copied then pcall(function() if toclipboard then toclipboard(lastScanLog); copied = true end end) end
+        local delivery = copied and "Rapor panoya kopyalandı" or "Rapor Tarama sekmesinde hazır"
+        if saved then delivery = delivery .. " ve AWD_SCAN_LOG.txt dosyasına kaydedildi" end
+        notify("AWD Tarama", delivery .. ".")
+    end
+    AddButton(tabScan, "Tüm Scripti Tara", runAWDScan)
+    AddButton(tabScan, "Logu Panoya Kopyala", function()
+        if lastScanLog == "" then notify("AWD Tarama", "Önce tarama yap."); return end
+        local copied = false
+        pcall(function() if setclipboard then setclipboard(lastScanLog); copied = true end end)
+        if not copied then pcall(function() if toclipboard then toclipboard(lastScanLog); copied = true end end) end
+        notify("AWD Tarama", copied and "Log kopyalandı." or "Clipboard desteği yok; log kutusundan kopyala.")
     end)
 end
