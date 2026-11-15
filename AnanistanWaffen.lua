@@ -2335,6 +2335,8 @@ _G.ananistwaffendivisionCleanup = function()
     pcall(function()
         if AWD_Panic and AWD_Panic.connection then AWD_Panic.connection:Disconnect(); AWD_Panic.connection = nil end
         if AWD_Panic and AWD_Panic.active then AWD_SetPanicMode(false) end
+        if AWD_CursorGuardConnection then AWD_CursorGuardConnection:Disconnect(); AWD_CursorGuardConnection = nil end
+        if AWD_CursorFree then AWD_SetCursorFree(false) end
     end)
     pcall(function()
         if screenGui then screenGui:Destroy() end
@@ -4553,6 +4555,60 @@ applyUILayout(awdSelectedStyle)
 StatsService = game:GetService("Stats")
 paletteKey = Enum.KeyCode.K
 paletteCapture = false
+
+-- Cursor unlock keybind (persisted independently from profile configs).
+local AWD_CURSOR_KEY_FILE = "AWD_CURSOR_UNLOCK_KEY_V1.txt"
+local AWD_CursorUnlockKey = Enum.KeyCode.P
+local AWD_CursorKeyCapture = false
+local AWD_CursorFree = false
+local AWD_CursorSavedBehavior = nil
+local AWD_CursorSavedIcon = nil
+pcall(function()
+    if type(isfile) == "function" and type(readfile) == "function" and isfile(AWD_CURSOR_KEY_FILE) then
+        local keyName = tostring(readfile(AWD_CURSOR_KEY_FILE)):gsub("%s+", "")
+        local keyCode = Enum.KeyCode[keyName]
+        if keyCode and keyCode ~= Enum.KeyCode.Unknown then AWD_CursorUnlockKey = keyCode end
+    end
+end)
+
+local function AWD_IsMainUIVisible()
+    return screenGui and screenGui.Parent and screenGui.Enabled and mainFrame and mainFrame.Visible
+end
+
+local function AWD_SetCursorFree(enabled)
+    enabled = enabled == true
+    if enabled and not AWD_CursorFree then
+        AWD_CursorSavedBehavior = UIS.MouseBehavior
+        AWD_CursorSavedIcon = UIS.MouseIconEnabled
+    end
+    AWD_CursorFree = enabled
+    if enabled then
+        pcall(function()
+            UIS.MouseBehavior = Enum.MouseBehavior.Default
+            UIS.MouseIconEnabled = true
+        end)
+    else
+        pcall(function()
+            if AWD_CursorSavedBehavior then UIS.MouseBehavior = AWD_CursorSavedBehavior end
+            UIS.MouseIconEnabled = AWD_CursorSavedIcon ~= false
+        end)
+        AWD_CursorSavedBehavior, AWD_CursorSavedIcon = nil, nil
+    end
+end
+
+-- Keep the pointer free while the hub is visible; restore the prior game state when hidden.
+local AWD_CursorGuardConnection = RunService.RenderStepped:Connect(function()
+    if not AWD_CursorFree then return end
+    if AWD_IsMainUIVisible() then
+        pcall(function()
+            UIS.MouseBehavior = Enum.MouseBehavior.Default
+            UIS.MouseIconEnabled = true
+        end)
+    else
+        AWD_SetCursorFree(false)
+    end
+end)
+
 awdNotificationHistory = {}
 awdDeveloperLog = {}
 paletteCommands = {}
@@ -4913,6 +4969,21 @@ _G.AWD_OpenCommandPalette = openPalette
 
 UIS.InputBegan:Connect(function(input, processed)
     if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
+    if AWD_CursorKeyCapture then
+        if input.KeyCode ~= Enum.KeyCode.Unknown then
+            AWD_CursorUnlockKey = input.KeyCode
+            AWD_CursorKeyCapture = false
+            pcall(function() if type(writefile) == "function" then writefile(AWD_CURSOR_KEY_FILE, AWD_CursorUnlockKey.Name) end end)
+            if _G.AWD_CursorKeyLabel then _G.AWD_CursorKeyLabel.Text = "İmleç serbest bırakma: " .. AWD_CursorUnlockKey.Name end
+            awdNotify("Keybind güncellendi", "İmleç tuşu: " .. AWD_CursorUnlockKey.Name, 2)
+        end
+        return
+    end
+    if input.KeyCode == AWD_CursorUnlockKey and AWD_IsMainUIVisible() then
+        AWD_SetCursorFree(not AWD_CursorFree)
+        awdNotify("İmleç", AWD_CursorFree and "Serbest: imleç görünür ve hareket ettirilebilir." or "Oyun imleç davranışı geri yüklendi.", 2)
+        return
+    end
     if paletteCapture then
         if input.KeyCode ~= Enum.KeyCode.Unknown then
             paletteKey = input.KeyCode
@@ -4982,6 +5053,13 @@ AddButton(tabSettings, "Komut paleti tuşunu değiştir", function()
     paletteKeyLabel.Text = "Komut paleti için bir tuşa bas..."
     awdNotify("Keybind", "Şimdi yeni tuşa bas.", 3)
 end)
+_G.AWD_CursorKeyLabel = AddLabel(tabSettings, "İmleç serbest bırakma: " .. AWD_CursorUnlockKey.Name, false)
+AddButton(tabSettings, "İmleç serbest bırakma tuşunu değiştir", function()
+    AWD_CursorKeyCapture = true
+    _G.AWD_CursorKeyLabel.Text = "İmleç tuşu için yeni bir tuşa bas..."
+    awdNotify("Keybind", "İmleç serbest bırakma için yeni tuşa bas.", 3)
+end)
+AddLabel(tabSettings, "Kullanım: UI açıkken atanmış tuşa basınca imleç serbest kalır; tekrar basınca önceki davranışına döner.", true)
 AddLabel(tabSettings, "DEVELOPER CONSOLE", false)
 developerLogLabel = AddLabel(tabSettings, "Kayıt bekleniyor...", true)
 AddButton(tabSettings, "Son sistem kayıtlarını göster", function()
